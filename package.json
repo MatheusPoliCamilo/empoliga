@@ -9,11 +9,19 @@
     "express": "^4.17.1",
     "next": "^10.0.8",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "tsc": "^1.20150623.0"
   },
   "scripts": {
-    "dev": "node server.js",
+    "dev": "ts-node-dev server.ts",
     "build": "next build",
     "start": "next start"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/node": "^14.14.32",
+    "@types/react": "^17.0.3",
+    "ts-node-dev": "^1.1.6",
+    "typescript": "^4.2.3"
   }
 }
