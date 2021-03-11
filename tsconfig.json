@@ -60,7 +60,7 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext",
+      "esnext"
     ],
     "allowJs": true,
     "noEmit": true,
@@ -69,13 +69,13 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
+  "exclude": [
+    "node_modules"
+  ],
+  "rulesDirectory": [],
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
-  "rulesDirectory": []
+  ]
 }
