@@ -26,9 +26,11 @@ export default {
   coverageDirectory: "coverage",
 
   // An array of regexp pattern strings used to skip coverage collection
-  // coveragePathIgnorePatterns: [
-  //   "/node_modules/"
-  // ],
+  coveragePathIgnorePatterns: [
+    "/node_modules/",
+    "/.next/",
+    "/tests"
+  ],
 
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: "v8",
@@ -75,7 +77,7 @@ export default {
   //   "js",
   //   "json",
   //   "jsx",
-  //   "ts",
+  // "ts",
   //   "tsx",
   //   "node"
   // ],
@@ -172,7 +174,9 @@ export default {
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
-  // transform: undefined,
+  // transform: {
+  //   "^.+\\.tsx?$": "ts-jest",
+  // },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
@@ -194,7 +198,7 @@ export default {
 
   // Default configuration for Jest
   "roots": [
-    "<rootDir>/src"
+    "<rootDir>"
   ],
   "testMatch": [
     "**/__tests__/**/*.+(ts|tsx|js)",

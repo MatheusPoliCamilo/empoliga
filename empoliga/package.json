@@ -2,10 +2,11 @@
   "name": "empoliga-frontend",
   "description": "Front end do sistema da Empoliga",
   "version": "0.0.0",
-  "main": "index.js",
+  "main": "pages/index.tsx",
   "repository": "git@github.com:MatheusPoliCamilo/empoliga-node.git",
   "author": "Matheus Poli <matheuspolicamilo@gmail.com>",
   "license": "MIT",
+  "type": "module",
   "dependencies": {
     "next": "^10.0.8",
     "react": "^17.0.1",
@@ -15,7 +16,8 @@
   "scripts": {
     "build": "next build",
     "start": "next start",
-    "test": "jest"
+    "test": "jest",
+    "compile": "tsc"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
