@@ -1,5 +1,5 @@
 {
-  "name": "empoliga-node",
+  "name": "empoliga-backend",
   "description": "Back end do sistema da Empoliga",
   "version": "0.0.0",
   "main": "index.js",
