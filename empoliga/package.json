@@ -1,6 +1,6 @@
 {
   "name": "empoliga-node",
-  "description": "Back end do sistema da Empoliga",
+  "description": "Front end do sistema da Empoliga",
   "version": "0.0.0",
   "main": "index.js",
   "repository": "git@github.com:MatheusPoliCamilo/empoliga-node.git",
@@ -14,17 +14,21 @@
     "graphql-compose-mongoose": "^9.1.0",
     "mongodb": "^3.6.4",
     "mongoose": "^5.11.19",
-    "reflect-metadata": "^0.1.13",
+    "next": "^10.0.8",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "tsc": "^1.20150623.0"
   },
   "scripts": {
-    "dev": "ts-node-dev src/server.ts",
+    "build": "next build",
+    "start": "next start",
     "test": "jest"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.32",
+    "@types/react": "^17.0.3",
     "cypress": "^6.6.0",
     "jest": "^26.6.3",
     "ts-jest": "^26.5.3",
