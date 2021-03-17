@@ -6,6 +6,7 @@
   "repository": "git@github.com:MatheusPoliCamilo/empoliga-node.git",
   "author": "Matheus Poli <matheuspolicamilo@gmail.com>",
   "license": "MIT",
+  "type": "module",
   "dependencies": {
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",

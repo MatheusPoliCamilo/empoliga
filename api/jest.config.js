@@ -194,7 +194,7 @@ export default {
 
   // Default configuration for Jest
   "roots": [
-    "<rootDir>/src"
+    "<rootDir>"
   ],
   "testMatch": [
     "**/__tests__/**/*.+(ts|tsx|js)",
