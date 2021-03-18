@@ -19,19 +19,15 @@
     "tsc": "^1.20150623.0"
   },
   "scripts": {
-    "dev": "ts-node-dev src/server.ts",
-    "build": "next build",
-    "start": "next start",
-    "test": "jest"
+    "dev": "ts-node-dev ../api/src/server.ts",
+    "build": "../empoliga next build",
+    "start": "../empoliga next start"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
-    "@types/jest": "^26.0.20",
     "@types/node": "^14.14.32",
     "@types/react": "^17.0.3",
     "cypress": "^6.6.0",
-    "jest": "^26.6.3",
-    "ts-jest": "^26.5.3",
     "ts-node-dev": "^1.1.6",
     "typescript": "^4.2.3"
   }
