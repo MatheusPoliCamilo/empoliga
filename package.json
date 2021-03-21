@@ -6,7 +6,6 @@
   "repository": "git@github.com:MatheusPoliCamilo/empoliga-node.git",
   "author": "Matheus Poli <matheuspolicamilo@gmail.com>",
   "license": "MIT",
-  "type": "module",
   "dependencies": {
     "next": "^10.0.8",
     "react": "^17.0.1",
