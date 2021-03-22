@@ -1,14 +1,3 @@
-import { Request, Response } from 'express';
-
-// const MongoClient = require('mongodb').MongoClient;
-// const uri = "mongodb+srv://empoliga:<password>@southamerica-east1-0.pcdng.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-// client.connect(err => {
-//   const collection = client.db("test").collection("devices");
-//   // perform actions on the collection object
-//   client.close();
-// });
-
 enum Genre {
   male,
   female,
@@ -46,11 +35,7 @@ interface User {
 const users: Array<User> = []
 
 class UserController {
-  async index(request: Request, response: Response) {
-    return response.json(users)
-  }
-
-  async new(request: Request, response: Response) {
+  async new(_request, response) {
     const user: User = {
       id: null,
       firstName: '',
@@ -70,18 +55,15 @@ class UserController {
     return response.json(user)
   }
 
-  async show(request: Request, response: Response) {
+  async show(request, response) {
     const userId = parseInt(request.params.userId)
     response.json(users.find(user => user.id === userId))
   }
 
-  async create(request: Request, response: Response) {
+  async create(request, response) {
     const user = request.body.user;
     users.push(user);
     response.json('Usuário criado com sucesso!')
-  }
-
-  async update(request: Request, response: Response) {
   }
 }
 
