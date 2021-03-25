@@ -1,4 +1,4 @@
-import { connectToDatabase } from "../../src/database";
+import { connectToDatabase } from '../../src/database'
 
 enum Genre {
   male,
@@ -37,16 +37,16 @@ interface User {
 // The main, exported, function of the endpoint,
 // dealing with the request and subsequent response
 export default async (_request, response) => {
-    // Get a database connection, cached or otherwise,
-    // using the connection string environment variable as the argument
-    const db = await connectToDatabase(process.env.MONGODB_URI)
+  // Get a database connection, cached or otherwise,
+  // using the connection string environment variable as the argument
+  const db = await connectToDatabase(process.env.MONGODB_URI)
 
-    // Select the "users" collection from the database
-    const collection = await db.collection('users')
+  // Select the "users" collection from the database
+  const collection = await db.collection('users')
 
-    // Select the users collection from the database
-    const users: Array<User> = await collection.find({}).toArray()
+  // Select the users collection from the database
+  const users: Array<User> = await collection.find({}).toArray()
 
-    // Respond with a JSON string of all users in the collection
-    return response.status(200).json({ users })
+  // Respond with a JSON string of all users in the collection
+  return response.status(200).json({ users })
 }

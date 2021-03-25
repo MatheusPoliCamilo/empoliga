@@ -35,7 +35,7 @@ interface User {
 const users: Array<User> = []
 
 class UserController {
-  async new(_request, response) {
+  async new (_request, response) {
     const user: User = {
       id: null,
       firstName: '',
@@ -55,14 +55,14 @@ class UserController {
     return response.json(user)
   }
 
-  async show(request, response) {
+  async show (request, response) {
     const userId = parseInt(request.params.userId)
     response.json(users.find(user => user.id === userId))
   }
 
-  async create(request, response) {
-    const user = request.body.user;
-    users.push(user);
+  async create (request, response) {
+    const user = request.body.user
+    users.push(user)
     response.json('Usuário criado com sucesso!')
   }
 }
