@@ -16,6 +16,7 @@
   },
   "scripts": {
     "test": "jest",
+    "coverage": "jest --collectCoverage",
     "build": "next build",
     "start": "next start",
     "compile": "tsc"
