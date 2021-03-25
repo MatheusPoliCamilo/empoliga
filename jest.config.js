@@ -4,6 +4,9 @@
  */
 
 module.exports = {
+  // A preset that is used as a base for Jest's configuration
+  preset: "ts-jest",
+
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -94,9 +97,6 @@ module.exports = {
   // An enum that specifies notification mode. Requires { notify: true }
   // notifyMode: "failure-change",
 
-  // A preset that is used as a base for Jest's configuration
-  preset: "ts-jest",
-
   // Run tests from one or more projects
   // projects: undefined,
 
@@ -119,9 +119,9 @@ module.exports = {
   // rootDir: undefined,
 
   // A list of paths to directories that Jest should use to search for files in
-  // roots: [
-  //   "<rootDir>"
-  // ],
+  roots: [
+    "<rootDir>/__tests__"
+  ],
 
   // Allows you to use a custom runner instead of Jest's default test runner
   // runner: "jest-runner",
@@ -148,15 +148,15 @@ module.exports = {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  // testMatch: [
-  //   "**/__tests__/**/*.[jt]s?(x)",
-  //   "**/?(*.)+(spec|test).[tj]s?(x)"
-  // ],
+  "testMatch": [
+    "**/__tests__/**/*.+(ts|tsx|js)",
+    "**/?(*.)+(spec|test).+(ts|tsx|js)"
+  ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  // testPathIgnorePatterns: [
-  //   "/node_modules/"
-  // ],
+  testPathIgnorePatterns: [
+    "/node_modules/",
+  ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
   // testRegex: [],
@@ -174,8 +174,8 @@ module.exports = {
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
-  // transform: {
-  //   "^.+\\.tsx?$": "ts-jest",
+  // "transform": {
+  //   "^.+\\.(js|ts|tsx)$": "ts-jest"
   // },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
@@ -195,16 +195,4 @@ module.exports = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-
-  // Default configuration for Jest
-  "roots": [
-    "<rootDir>/__tests__"
-  ],
-  "testMatch": [
-    "**/__tests__/**/*.+(ts|tsx|js)",
-    "**/?(*.)+(spec|test).+(ts|tsx|js)"
-  ],
-  "transform": {
-    "^.+\\.(ts|tsx)$": "ts-jest"
-  },
 };
