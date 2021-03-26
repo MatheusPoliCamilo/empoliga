@@ -23,7 +23,8 @@
         "react/react-in-jsx-scope": "off",
         "no-undef": "off",
         "no-unused-expressions": "warn",
-        "no-unused-vars": "warn"
+        "no-unused-vars": "warn",
+        "node/no-deprecated-api": "warn"
     },
     "settings": {
         "react": {
