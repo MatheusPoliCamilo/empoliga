@@ -4,7 +4,7 @@ name: CI
 
 # Controls when the action will run. 
 # Triggers the workflow for every project push
-on: [push]
+on: push
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -36,9 +36,3 @@ jobs:
       - uses: cypress-io/github-action@v2
         with:
           browser: chrome
-          record: true
-        env:
-          # pass the Dashboard record key as an environment variable
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          # pass GitHub token to allow accurately detecting a build vs a re-run build
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
