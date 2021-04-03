@@ -20,7 +20,13 @@ const userSchema = new Schema({
   },
   whatsapp: {
     type: String,
-    unique: true
+    unique: true,
+    validate: {
+      validator: function (number) {
+        return /^(?:(?:\+|00)?(55)\s?)?(?:\(?([1-9][0-9])\)?\s?)?(?:((?:9\d|[2-9])\d{3})-?(\d{4}))$/.test(number)
+      },
+      message: props => `${props.value} não é um telefone válido`
+    }
   },
   twitter: {
     type: String,

@@ -6,7 +6,7 @@ export default async (request, response) => {
   const database = await connectToDatabase(process.env.MONGODB_URI)
 
   database.on('error', (error) => {
-    return response.status(500).json({ errors: [error] })
+    return response.status(500).json(error)
   })
 
   switch (request.method) {
@@ -18,19 +18,21 @@ export default async (request, response) => {
 
       return response.status(200).json({ users })
     }
+
     case 'POST': {
       const User = mongoose.model('User', userSchema)
 
-      User.create(request.body, (error, user) => {
-        if (error) {
-          return response.status(422).json({ errors: error })
+      return await User.create(request.body, (errors, user) => {
+        database.close()
+
+        if (errors) {
+          return response.status(422).json(errors)
         }
 
         return response.status(201).json(user)
       })
-
-      break
     }
+
     default: {
       database.close()
       return response.status(404).json({})

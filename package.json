@@ -26,6 +26,7 @@
     "coverage": "jest --collectCoverage",
     "build": "next build",
     "start": "next start",
+    "dev": "next dev",
     "compile": "tsc",
     "lint": "yarn eslint '**/*.{js,ts,tsx}'",
     "css-build": "node-sass --omit-source-map-url styles/index.scss css/index.css",
