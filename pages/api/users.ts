@@ -1,4 +1,4 @@
-import { connectToDatabase, client } from '../../src/database'
+import { connectToDatabase } from '../../src/database'
 
 enum Genre {
   male,
@@ -37,21 +37,25 @@ interface User {
 export default async (request, response) => {
   const database = await connectToDatabase(process.env.MONGODB_URI)
 
+  database.on('error', (error) => {
+    return response.status(500).json({ errors: [error] })
+  })
+
   switch (request.method) {
     case 'GET': {
       const getCollection = await database.collection('users')
-
       const users: Array<User> = await getCollection.find({}).toArray()
-      client.close()
+
+      database.close()
 
       return response.status(200).json({ users })
     }
     case 'POST': {
-      client.close()
+      database.close()
       return response.status(404).json({})
     }
     default: {
-      client.close()
+      database.close()
       return response.status(404).json({})
     }
   }

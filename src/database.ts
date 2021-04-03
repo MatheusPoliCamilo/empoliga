@@ -1,12 +1,11 @@
-import url from 'url'
-import { MongoClient } from 'mongodb'
+import mongoose from 'mongoose'
 
 let client = null
 
 async function connectToDatabase (uri) {
-  client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  client = await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 
-  return await client.db(url.parse(uri).pathname.substr(1))
+  return client.connection
 }
 
-export { connectToDatabase, client }
+export { connectToDatabase }
