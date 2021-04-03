@@ -24,7 +24,8 @@
         "no-undef": "off",
         "no-unused-expressions": "warn",
         "no-unused-vars": "warn",
-        "node/no-deprecated-api": "warn"
+        "node/no-deprecated-api": "warn",
+        "react/prop-types": "warn"
     },
     "settings": {
         "react": {
