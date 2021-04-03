@@ -38,18 +38,21 @@ export default async (request, response) => {
   const database = await connectToDatabase(process.env.MONGODB_URI)
 
   switch (request.method) {
-    case 'GET':
+    case 'GET': {
       const getCollection = await database.collection('users')
 
       const users: Array<User> = await getCollection.find({}).toArray()
       client.close()
 
       return response.status(200).json({ users })
-    case 'POST':
+    }
+    case 'POST': {
       client.close()
       return response.status(404).json({})
-    default:
+    }
+    default: {
       client.close()
       return response.status(404).json({})
+    }
   }
 }
