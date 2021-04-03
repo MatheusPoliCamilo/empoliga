@@ -1,5 +1,5 @@
-import { connectToDatabase } from '../../src/database'
-import { userSchema } from '../../src/schemas/user'
+import { connectToDatabase } from '../../../src/database'
+import { userSchema } from '../../../src/schemas/user'
 import mongoose from 'mongoose'
 
 export default async (request, response) => {
