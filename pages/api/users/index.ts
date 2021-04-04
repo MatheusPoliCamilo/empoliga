@@ -1,6 +1,5 @@
 import { connectToDatabase } from '../../../src/database'
-import { userSchema } from '../../../src/schemas/user'
-import mongoose from 'mongoose'
+import { User } from '../../../src/schemas/user'
 
 export default async (request, response) => {
   const database = await connectToDatabase(process.env.MONGODB_URI)
@@ -20,16 +19,14 @@ export default async (request, response) => {
     }
 
     case 'POST': {
-      const User = mongoose.model('User', userSchema)
-
       return await User.create(request.body, (errors, user) => {
         database.close()
 
         if (errors) {
           return response.status(422).json(errors)
+        } else {
+          return response.status(201).json(user)
         }
-
-        return response.status(201).json(user)
       })
     }
 

@@ -1,6 +1,5 @@
 import { connectToDatabase } from '../../../src/database'
-import { userSchema } from '../../../src/schemas/user'
-import mongoose from 'mongoose'
+import { User } from '../../../src/schemas/user'
 
 export default async (request, response) => {
   const database = await connectToDatabase(process.env.MONGODB_URI)
@@ -12,7 +11,6 @@ export default async (request, response) => {
   switch (request.method) {
     case 'GET': {
       const { userId } = request.query
-      const User = mongoose.model('User', userSchema)
 
       return User.findById(userId, (error, user) => {
         database.close()
@@ -29,6 +27,30 @@ export default async (request, response) => {
       })
     }
 
-    // case 'POST': {}
+    case 'PATCH': {
+      const { userId } = request.query
+      const condition = { _id: userId }
+      const update = request.body
+      const options = { new: true }
+
+      return User.findOneAndUpdate(condition, update, options, (error, user) => {
+        database.close()
+
+        if (error) {
+          return response.status(500).json(error)
+        }
+
+        if (!user) {
+          return response.status(422).json({ erros: { message: 'Usuário não encontrado' } })
+        }
+
+        return response.status(200).json(user)
+      })
+    }
+
+    default: {
+      database.close()
+      return response.status(404).json({})
+    }
   }
 }
