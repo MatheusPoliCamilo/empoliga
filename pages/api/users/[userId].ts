@@ -48,13 +48,11 @@ export default async (request, response) => {
       })
     }
 
-    case 'PUT': {
+    case 'DELETE' : {
       const { userId } = request.query
       const condition = { _id: userId }
-      const update = request.body
-      const options = { new: true }
 
-      return User.findOneAndReplace(condition, update, options, (error, user) => {
+      return User.findOneAndDelete(condition, {}, (error, user) => {
         database.close()
 
         if (error) {
