@@ -76,8 +76,8 @@ function Navbar() {
         <div className='navbar-end mr-6'>
           <div className='navbar-item'>
             <div className='buttons'>
-              <a className='button is-text has-text-white pl-5 pr-5'>Login</a>
-              <a className='button is-primary'>
+              <a className='button is-dark pl-5 pr-5'>Login</a>
+              <a className='button is-primary p-5' style={{ borderRadius: 'unset' }}>
                 <strong>Cadastre-se</strong>
               </a>
             </div>
