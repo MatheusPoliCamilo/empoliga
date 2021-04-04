@@ -1,2 +1,9 @@
 @charset "utf-8";
+@import "../node_modules/bulma/sass/utilities/initial-variables.sass";
+@import "../node_modules/bulma/sass/utilities/functions.sass";
+
+$primary: #b27826;
+$dark: #191919;
+$navbar-height: 5rem;
+
 @import "../node_modules/bulma/bulma.sass";
