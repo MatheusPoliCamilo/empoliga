@@ -48,7 +48,7 @@ export default async (request, response) => {
       })
     }
 
-    case 'DELETE' : {
+    case 'DELETE': {
       const { userId } = request.query
       const condition = { _id: userId }
 
