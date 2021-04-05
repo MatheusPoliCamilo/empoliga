@@ -1,8 +1,13 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { hotjar } from 'react-hotjar'
 
 export default function Index() {
+  useEffect(() => {
+    hotjar.initialize(2333536, 6)
+  })
+
   return (
     <body className='has-text-weight-bold'>
       <Head>
