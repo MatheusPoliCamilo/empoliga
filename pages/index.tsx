@@ -1,10 +1,11 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { useState } from 'react'
+import styles from './index.module.scss'
 
 export default function Index() {
   return (
-    <body className='has-navbar-fixed-top has-text-weight-bold'>
+    <body className='has-text-weight-bold'>
       <Head>
         <title>Empoliga</title>
         <meta charSet='utf-8' />
@@ -13,17 +14,22 @@ export default function Index() {
 
       <Navbar />
 
-      <div className='section is-large has-background-black' />
+      <div className='has-background-black' style={{ height: '46rem' }}>
+        <video width={1280} autoPlay loop muted style={{ position: 'absolute', top: '7rem', left: '19rem' }}>
+          <source src='/abertura_empoliga.mp4' type='video/mp4' />
+        </video>
+      </div>
+
+      {/* <Image src='/image.jfif' width={1680} height={800} alt='Logo da Empoliga' className={styles.poster} /> */}
 
       <div
         className='pt-6'
-        // style={{ height: '43rem', background: 'repeating-linear-gradient(45deg, #fff 4px, #fff 20px, #e8d7be 23px)' }}
         style={{
           height: '50rem',
-          background: 'repeating-linear-gradient(45deg, transparent 0 20px, #e8d7be 0px 23px)',
+          background: 'repeating-linear-gradient(45deg, transparent 0px 21px, #e8d7be 0px 23px)',
         }}
       >
-        <div className='pt-6 is-flex is-justify-content-center'>
+        <div className='is-flex is-justify-content-center' style={{ paddingTop: '7rem' }}>
           <Image src='/logo.svg' width={200} height={200} alt='Logo da Empoliga' />
         </div>
 
