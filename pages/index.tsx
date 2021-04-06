@@ -14,6 +14,20 @@ export default function Index() {
         <title>Empoliga</title>
         <meta charSet='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
+
+        {/* Global site tag (gtag.js) - Google Analytics */}
+        <script async src='https://www.googletagmanager.com/gtag/js?id=G-J0356FEWDD' />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+          
+            gtag('config', 'G-J0356FEWDD');
+            `,
+          }}
+        />
       </Head>
 
       <Navbar />
