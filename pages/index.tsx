@@ -48,48 +48,43 @@ export default function Index() {
           <source src='/abertura_empoliga.mp4' type='video/mp4' />
         </video>
 
-        <h2
-          className='subtitle has-text-white is-size-3-desktop'
+        <div
           style={{
             position: 'absolute',
-            top: '84%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            minWidth: '52vw',
-            textAlign: 'center',
-            textShadow: '4px 3px 2px #000000',
-          }}
-        >
-          Entre na Empoliga
-        </h2>
-        <h1
-          className='title has-text-white is-size-1-desktop'
-          style={{
-            position: 'absolute',
-            top: '95%',
+            top: '75vh',
             left: '50%',
             transform: 'translate(-50%, -50%)',
             minWidth: '91vw',
             textAlign: 'center',
-            textShadow: '4px 3px 2px #000000',
           }}
         >
-          Torne-se pro player
-        </h1>
+          <h2
+            className='subtitle has-text-white is-size-3-desktop'
+            style={{
+              textShadow: '4px 3px 2px #000000',
+            }}
+          >
+            Entre na Empoliga
+          </h2>
 
-        <a
-          className='button is-primary is-medium p-5'
-          style={{
-            borderRadius: 'unset',
-            position: 'absolute',
-            top: '103%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            textAlign: 'center',
-          }}
-        >
-          <strong>Cadastre-se</strong>
-        </a>
+          <h1
+            className='title has-text-white is-size-1-desktop'
+            style={{
+              textShadow: '4px 3px 2px #000000',
+            }}
+          >
+            Torne-se pro player
+          </h1>
+
+          <a
+            className='button is-primary is-medium p-5'
+            style={{
+              borderRadius: 'unset',
+            }}
+          >
+            <strong>Cadastre-se</strong>
+          </a>
+        </div>
       </div>
 
       <div
