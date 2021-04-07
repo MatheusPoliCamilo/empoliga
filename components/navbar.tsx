@@ -7,7 +7,7 @@ function Navbar() {
   return (
     <nav className='navbar is-fixed-top is-dark' role='navigation' aria-label='main navigation'>
       <div className='navbar-brand ml-5 mr-5'>
-        <a href='https://empoliga.vercel.app' className='pt-1'>
+        <a href='/' className='pt-1'>
           <Image src='/logo.svg' width={75} height={70} alt='Logo da Empoliga' />
         </a>
 
@@ -43,9 +43,9 @@ function Navbar() {
             <a className='navbar-link pl-5'>Ligas</a>
 
             <div className='navbar-dropdown'>
-              <a className='navbar-item'>Minor</a>
-              <a className='navbar-item'>Tradicional</a>
-              <a className='navbar-item'>Major</a>
+              <a className='navbar-item has-text-grey-light'>Minor</a>
+              <a className='navbar-item has-text-grey-light'>Tradicional</a>
+              <a className='navbar-item has-text-grey-light'>Major</a>
               <hr className='navbar-divider' />
               <a className='navbar-item has-text-grey-light' style={{ pointerEvents: 'none' }}>
                 Wild Rift
@@ -53,9 +53,32 @@ function Navbar() {
             </div>
           </div>
 
-          <a className='navbar-item is-justify-content-center pl-5 pr-5'>Equipes</a>
+          <a
+            className='navbar-item is-justify-content-center pl-5 pr-5 has-text-grey-light'
+            style={{ pointerEvents: 'none' }}
+          >
+            Equipes
+          </a>
 
-          <a className='navbar-item pl-5 pr-5'>Jogadores</a>
+          <a
+            className='navbar-item pl-5 pr-5'
+            href='https://docs.google.com/spreadsheets/d/1zHBjBAClwuRTw8rpYaPNwJROTKKPzQjnH29vkAdIuEc/edit?usp=sharing'
+          >
+            Jogadores
+          </a>
+
+          <div className='navbar-item has-dropdown is-hoverable'>
+            <a className='navbar-link pl-5'>Informações</a>
+
+            <div className='navbar-dropdown'>
+              <a className='navbar-item' href='https://empoliga.com/'>
+                Noticias
+              </a>
+              <a className='navbar-item' href='https://empoliga.com/category/empoliga/comunicados-de-penalidade/'>
+                Penalidades
+              </a>
+            </div>
+          </div>
         </div>
 
         <div className='navbar-end mr-6'>
