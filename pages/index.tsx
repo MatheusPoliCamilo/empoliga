@@ -73,7 +73,7 @@ export default function Index() {
               textShadow: '4px 3px 2px #000000',
             }}
           >
-            Torne-se pro player
+            Sinta a experiência de ser pro player
           </h1>
 
           <a
