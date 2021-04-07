@@ -98,17 +98,29 @@ export default function Index() {
         }}
       >
         <div className='is-flex is-justify-content-center' style={{ paddingTop: '7rem' }}>
-          <Image src='/logo.svg' width={200} height={200} alt='Logo da Empoliga' />
+          <Image src='/logo.svg' width={230} height={230} alt='Logo da Empoliga' />
         </div>
 
         <div className='pt-5 is-flex is-justify-content-space-around'>
-          <span style={{ height: '6rem', border: '2px solid #b27826' }} />
+          <span style={{ height: '6rem', borderRight: '4px solid #b27826' }} />
         </div>
 
         <div className='pt-5 is-flex is-justify-content-space-around'>
-          <Image src='/logo.svg' width={200} height={200} alt='Logo da Empoliga' />
-          <Image src='/tradicional.svg' width={200} height={200} alt='Logo da Empoliga' />
-          <Image src='/major.svg' width={200} height={200} alt='Logo da Empoliga' />
+          <div className='grow-on-hover' style={{ cursor: 'pointer' }} title='Empoliga Minor'>
+            <Image src='/logo.svg' width={200} height={200} alt='Logo da Empoliga' />
+          </div>
+          <div className='grow-on-hover' style={{ cursor: 'pointer' }}>
+            <Image
+              src='/tradicional.svg'
+              width={200}
+              height={200}
+              alt='Logo da Empoliga'
+              title='Empoliga Tradicional'
+            />
+          </div>
+          <div className='grow-on-hover' style={{ cursor: 'pointer' }}>
+            <Image src='/major.svg' width={200} height={200} alt='Logo da Empoliga' title='Empoliga Major' />
+          </div>
         </div>
       </div>
     </body>

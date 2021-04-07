@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Image from 'next/image'
+// import styles from './navbar.module.scss'
 
 function Navbar() {
   const [active, setActive] = useState(false)
@@ -7,7 +8,7 @@ function Navbar() {
   return (
     <nav className='navbar is-fixed-top is-dark' role='navigation' aria-label='main navigation'>
       <div className='navbar-brand ml-5 mr-5'>
-        <a href='/' className='pt-1'>
+        <a href='/' className='pt-1 grow-on-hover'>
           <Image src='/logo.svg' width={75} height={70} alt='Logo da Empoliga' />
         </a>
 
