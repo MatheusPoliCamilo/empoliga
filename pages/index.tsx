@@ -32,7 +32,9 @@ export default function Index() {
 
       <Navbar />
 
-      <div className='has-background-black' style={{ height: '80vh', position: 'relative' }}>
+      <div className='has-background-black is-hidden-tablet' style={{ paddingTop: '22vw' }} />
+
+      <div className='has-background-black' style={{ height: '40vw', position: 'relative' }}>
         <video
           width={1280}
           autoPlay
@@ -51,7 +53,7 @@ export default function Index() {
         <div
           style={{
             position: 'absolute',
-            top: '75vh',
+            top: '38vw',
             left: '50%',
             transform: 'translate(-50%, -50%)',
             minWidth: '91vw',
