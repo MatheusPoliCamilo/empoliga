@@ -7,30 +7,11 @@ import { Navbar } from '../components/navbar'
 export default function Index() {
   useEffect(() => {
     hotjar.initialize(2333536, 6)
+    hotjar.initialize(2338557, 6)
   })
 
   return (
     <body className='has-text-weight-bold'>
-      <Head>
-        <title>Empoliga</title>
-        <meta charSet='utf-8' />
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
-
-        {/* Global site tag (gtag.js) - Google Analytics */}
-        <script async src='https://www.googletagmanager.com/gtag/js?id=G-J0356FEWDD' />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-          
-            gtag('config', 'G-J0356FEWDD');
-            `,
-          }}
-        />
-      </Head>
-
       <Navbar />
 
       <div className='has-background-black is-hidden-tablet' style={{ paddingTop: '22vw' }} />
