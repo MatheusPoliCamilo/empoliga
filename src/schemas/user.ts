@@ -44,10 +44,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
   },
-  nickname: {
-    type: String,
-    unique: true,
-  },
+  nickname: [
+    {
+      type: String,
+      unique: true,
+      index: true,
+    },
+  ],
   role: {
     type: String,
     index: true,
