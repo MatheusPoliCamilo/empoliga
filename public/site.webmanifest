@@ -1,6 +1,7 @@
 {
     "name": "Empoliga",
     "short_name": "Empoliga",
+    "description": "O maior campeonato amador de League of Legends do Brasil!", 
     "icons": [
         {
             "src": "/android-chrome-192x192.png",

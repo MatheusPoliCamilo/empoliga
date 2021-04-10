@@ -16,6 +16,10 @@ export default function MyApp({ Component, pageProps }) {
         <meta name='theme-color' content='#ff0000' />
         <meta charSet='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <meta property='og:title' content='Empoliga' />
+        <meta property='og:description' content='O maior campeonato de League of Legends do Brasil!' />
+        <meta property='og:image' content='/mstile-310x310' />
+        <meta property='og:locale' content='pt_BR' />
 
         {/* Global site tag (gtag.js) - Google Analytics */}
         <script async src='https://www.googletagmanager.com/gtag/js?id=G-J0356FEWDD' />
