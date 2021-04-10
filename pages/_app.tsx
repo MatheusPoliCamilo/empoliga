@@ -17,9 +17,18 @@ export default function MyApp({ Component, pageProps }) {
         <meta charSet='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <meta property='og:title' content='Empoliga' />
+        <meta property='og:url' content='https://www.empoliga.games/' />
         <meta property='og:description' content='O maior campeonato de League of Legends do Brasil!' />
-        <meta property='og:image' content='/mstile-310x310.png' />
+        <meta property='og:image' content='https://www.empoliga.games/mstile-310x310.png' />
         <meta property='og:locale' content='pt_BR' />
+
+        <meta name='twitter:card' content='summary' />
+        <meta name='twitter:site' content='@empoligaoficial' />
+        <meta name='twitter:creator' content='@matheuspcamilo' />
+        <meta property='og:url' content='https://www.empoliga.games/' />
+        <meta property='og:title' content='Empoliga' />
+        <meta property='og:description' content='O maior campeonato de League of Legends do Brasil!' />
+        <meta property='og:image' content='https://www.empoliga.games/mstile-310x310.png' />
 
         {/* Global site tag (gtag.js) - Google Analytics */}
         <script async src='https://www.googletagmanager.com/gtag/js?id=G-J0356FEWDD' />
