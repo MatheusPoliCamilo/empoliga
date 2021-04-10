@@ -22,7 +22,7 @@ export default function MyApp({ Component, pageProps }) {
         <meta property='og:title' content='Empoliga' />
         <meta property='og:url' content='https://www.empoliga.games/' />
         <meta property='og:description' content='O maior campeonato amador de League of Legends do Brasil!' />
-        <meta property='og:image' content='https://www.empoliga.games/mstile-310x310.png' />
+        <meta property='og:image' content='https://www.empoliga.games/android-chrome-512x512.png' />
         <meta property='og:locale' content='pt_BR' />
 
         <meta name='twitter:card' content='Empoliga - O maior campeonato amador de League of Legends do Brasil!' />
