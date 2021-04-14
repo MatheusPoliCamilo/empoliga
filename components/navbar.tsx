@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import Image from 'next/image'
-// import styles from './navbar.module.scss'
 
 function Navbar() {
   const [active, setActive] = useState(false)
