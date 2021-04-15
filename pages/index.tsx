@@ -10,7 +10,7 @@ export default function Index() {
   })
 
   return (
-    <body className='has-text-weight-bold'>
+    <div className='has-text-weight-bold'>
       <Navbar />
 
       <div className='has-background-black is-hidden-tablet' style={{ paddingTop: '22vw' }} />
@@ -103,6 +103,6 @@ export default function Index() {
           </div>
         </div>
       </div>
-    </body>
+    </div>
   )
 }
