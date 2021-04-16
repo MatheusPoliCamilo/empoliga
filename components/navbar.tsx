@@ -85,7 +85,7 @@ function Navbar() {
           <div className='navbar-item'>
             <div className='buttons'>
               <a className='button is-dark pl-5 pr-5'>Login</a>
-              <a className='button is-primary p-5' style={{ borderRadius: 'unset' }}>
+              <a className='button is-primary p-5' style={{ borderRadius: 'unset' }} href='/cadastrar'>
                 <strong>Cadastre-se</strong>
               </a>
             </div>

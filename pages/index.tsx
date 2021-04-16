@@ -57,6 +57,7 @@ export default function Index() {
             style={{
               borderRadius: 'unset',
             }}
+            href='/cadastrar'
           >
             <strong>Cadastre-se</strong>
           </a>

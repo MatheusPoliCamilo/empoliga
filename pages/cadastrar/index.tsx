@@ -1,11 +1,14 @@
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import MaskedInput from 'react-text-mask'
 
 export default function MyApp({ Component, pageProps }) {
-  const [user, setUser] = useState({ genre: 'M', birthDate: '' })
+  const [user, setUser] = useState({ gender: 'M', birthDate: '' })
   const [step, setStep] = useState('firstStep')
-  const [phone, setPhone] = useState('')
+
+  useEffect(() => {
+    document.querySelector('html').classList.add('has-background-dark')
+  })
 
   return (
     <div className='has-background-dark has-text-weight-bold' style={{ height: '100vh' }}>
@@ -25,7 +28,8 @@ export default function MyApp({ Component, pageProps }) {
       {step === 'secondStep' && SecondStep(user, setUser)}
       {step === 'thirdStep' && ThirdStep(user, setUser)}
       {step === 'fourthStep' && FourthStep(user, setUser)}
-      {step === 'fifthStep' && FifthStep(user, setUser, phone, setPhone)}
+      {step === 'fifthStep' && FifthStep(user, setUser)}
+      {step === 'sixthStep' && SixthStep(user, setUser)}
 
       <div className='mt-6 mb-6'>
         {step === 'firstStep' && (
@@ -171,8 +175,12 @@ export default function MyApp({ Component, pageProps }) {
             </button>
 
             <button
-              className='button is-large is-primary ml-5'
+              className='button is-large is-primary ml-5 has-text-weight-semibold'
+              id='create-account'
               onClick={() => {
+                const button = document.querySelector('#create-account')
+                button.classList.add('is-loading')
+
                 fetch('/api/users', {
                   method: 'POST',
                   headers: {
@@ -182,9 +190,12 @@ export default function MyApp({ Component, pageProps }) {
                 })
                   .then((response) => response.json())
                   .then((data) => {
+                    button.classList.remove('is-loading')
                     console.log('Success:', data)
+                    window.location.href = 'https://www.empoliga.games'
                   })
                   .catch((error) => {
+                    button.classList.remove('is-loading')
                     console.error('Error:', error)
                   })
               }}
@@ -245,7 +256,7 @@ function SecondStep(user, setUser) {
               type='radio'
               name='gender'
               className='mr-1'
-              onClick={() => setUser({ ...user, genre: 'M' })}
+              onClick={() => setUser({ ...user, gender: 'M' })}
               defaultChecked
             />
             Masculino
@@ -257,7 +268,7 @@ function SecondStep(user, setUser) {
               type='radio'
               name='gender'
               className='mr-1'
-              onClick={() => setUser({ ...user, genre: 'F' })}
+              onClick={() => setUser({ ...user, gender: 'F' })}
             />
             Feminino
           </label>
@@ -268,7 +279,7 @@ function SecondStep(user, setUser) {
               type='radio'
               name='gender'
               className='mr-1'
-              onClick={() => setUser({ ...user, genre: 'O' })}
+              onClick={() => setUser({ ...user, gender: 'O' })}
             />
             Outro
           </label>
@@ -378,4 +389,69 @@ function FifthStep(user, setUser) {
       </div>
     </>
   )
+}
+
+function SixthStep(user, setUser) {
+  return (
+    <>
+      <h1
+        className='is-size-1 is-align-self-center title has-text-white is-size-2-mobile ml-4 mr-4 mb-6'
+        style={{ textAlign: 'center' }}
+      >
+        Qual será sua senha?
+      </h1>
+
+      <div className='has-text-centered'>
+        <input
+          className='input is-large is-primary'
+          type='password'
+          placeholder='Insira a senha'
+          style={{ width: '18rem' }}
+          id='password'
+          onChange={(event) => onPasswordChange(event)}
+        />
+        <input
+          className='input is-large is-primary mt-2'
+          type='password'
+          placeholder='Confirme a senha'
+          style={{ width: '18rem' }}
+          id='password-confirmation'
+          onChange={(event) => onPasswordConfirmationChange(event)}
+        />
+        <p className='mt-1 has-text-danger is-hidden' id='error-message'>
+          As senhas não coincidem
+        </p>
+      </div>
+    </>
+  )
+}
+
+function onPasswordConfirmationChange(event) {
+  const passwordConfirmation = event.target.value
+  const password = (document.querySelector('#password') as HTMLInputElement).value
+
+  if (passwordConfirmation !== password) {
+    document.querySelector('#error-message').classList.remove('is-hidden')
+    document.querySelector('#password-confirmation').classList.remove('is-primary')
+    document.querySelector('#password-confirmation').classList.add('is-danger')
+  } else {
+    document.querySelector('#error-message').classList.add('is-hidden')
+    document.querySelector('#password-confirmation').classList.remove('is-danger')
+    document.querySelector('#password-confirmation').classList.add('is-primary')
+  }
+}
+
+function onPasswordChange(event) {
+  const password = event.target.value
+  const passwordConfirmation = (document.querySelector('#password-confirmation') as HTMLInputElement).value
+
+  if (passwordConfirmation !== password) {
+    document.querySelector('#error-message').classList.remove('is-hidden')
+    document.querySelector('#password-confirmation').classList.remove('is-primary')
+    document.querySelector('#password-confirmation').classList.add('is-danger')
+  } else {
+    document.querySelector('#error-message').classList.add('is-hidden')
+    document.querySelector('#password-confirmation').classList.remove('is-danger')
+    document.querySelector('#password-confirmation').classList.add('is-primary')
+  }
 }
