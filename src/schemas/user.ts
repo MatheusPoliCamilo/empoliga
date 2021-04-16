@@ -27,24 +27,19 @@ const userSchema = new mongoose.Schema({
   },
   twitter: {
     type: String,
-    unique: true,
   },
   twitch: {
     type: String,
-    unique: true,
   },
   instagram: {
     type: String,
-    unique: true,
   },
   facebook: {
     type: String,
-    unique: true,
   },
   nickname: [
     {
       type: String,
-      unique: true,
       index: true,
     },
   ],
