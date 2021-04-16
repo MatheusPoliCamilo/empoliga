@@ -1,7 +1,17 @@
-.grow-on-hover{
+.grow-on-hover {
   transition: all .2s ease-in-out;
   
   :hover {
     transform: scale(1.06);
   }
+}
+
+.white-hover {
+  :hover {
+    color: white;
+  }
+}
+
+.fix-scale {
+  transform: scale(1.22);
 }
