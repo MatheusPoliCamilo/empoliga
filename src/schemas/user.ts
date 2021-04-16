@@ -59,11 +59,17 @@ const userSchema = new mongoose.Schema({
   },
 })
 
-userSchema.pre('save', async function () {
+interface UserInterface extends mongoose.Document {
+  password: {
+    type: String
+  }
+}
+
+userSchema.pre<UserInterface>('save', async function () {
   const user = this
 
   if (user.isModified('password')) {
-    user.password = await bcryptjs.hash(user.password, 8)
+    this.password = await bcryptjs.hash(user.password, 8)
   }
 })
 
