@@ -72,8 +72,8 @@ export default function Index() {
           background: 'repeating-linear-gradient(45deg, transparent 0px 21px, #e8d7be 0px 23px)',
         }}
       >
-        <div className='is-flex is-justify-content-center' style={{ paddingTop: '7rem', cursor: 'pointer' }}>
-          <div className='grow-on-hover'>
+        <div className='is-flex is-justify-content-center' style={{ paddingTop: '7rem' }}>
+          <div className='grow-on-hover' style={{ cursor: 'pointer' }}>
             <Image
               src='/tradicional.svg'
               width={200}

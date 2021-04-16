@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import bcryptjs from 'bcryptjs'
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -52,6 +53,18 @@ const userSchema = new mongoose.Schema({
     index: true,
     enum: ['Top', 'Jungle', 'Mid', 'Adc', 'Support'],
   },
+  password: {
+    type: String,
+    required: [true, 'Informe uma senha'],
+  },
+})
+
+userSchema.pre('save', async function () {
+  const user = this
+
+  if (user.isModified('password')) {
+    user.password = await bcryptjs.hash(user.password, 8)
+  }
 })
 
 const User = mongoose.models.User || mongoose.model('User', userSchema)
