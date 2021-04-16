@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Informe o nome'],
   },
-  genre: {
+  gender: {
     type: String,
     enum: ['M', 'F', 'O'],
     required: [true, 'Informe o gênero'],

@@ -1,9 +1,11 @@
 import Image from 'next/image'
 import { useState } from 'react'
+import MaskedInput from 'react-text-mask'
 
 export default function MyApp({ Component, pageProps }) {
-  const [user, setUser] = useState({ genre: 'M' })
+  const [user, setUser] = useState({ genre: 'M', birthDate: '' })
   const [step, setStep] = useState('firstStep')
+  const [phone, setPhone] = useState('')
 
   return (
     <div className='has-background-dark has-text-weight-bold' style={{ height: '100vh' }}>
@@ -22,6 +24,8 @@ export default function MyApp({ Component, pageProps }) {
       {step === 'firstStep' && FirstStep(user, setUser)}
       {step === 'secondStep' && SecondStep(user, setUser)}
       {step === 'thirdStep' && ThirdStep(user, setUser)}
+      {step === 'fourthStep' && FourthStep(user, setUser)}
+      {step === 'fifthStep' && FifthStep(user, setUser, phone, setPhone)}
 
       <div className='mt-6 mb-6'>
         {step === 'firstStep' && (
@@ -56,6 +60,39 @@ export default function MyApp({ Component, pageProps }) {
             50.1%
           </progress>
         )}
+
+        {step === 'fourthStep' && (
+          <progress
+            className='progress is-primary is-small'
+            value='66.8'
+            max='100'
+            style={{ margin: 'auto', maxWidth: '18rem' }}
+          >
+            66.8%
+          </progress>
+        )}
+
+        {step === 'fifthStep' && (
+          <progress
+            className='progress is-primary is-small'
+            value='83.5'
+            max='100'
+            style={{ margin: 'auto', maxWidth: '18rem' }}
+          >
+            83.5%
+          </progress>
+        )}
+
+        {step === 'sixthStep' && (
+          <progress
+            className='progress is-primary is-small'
+            value='100'
+            max='100'
+            style={{ margin: 'auto', maxWidth: '18rem' }}
+          >
+            100%
+          </progress>
+        )}
       </div>
 
       <div className='has-text-centered'>
@@ -83,8 +120,76 @@ export default function MyApp({ Component, pageProps }) {
               Voltar
             </button>
 
-            <button className='button is-large is-primary ml-5' onClick={() => console.log(user)}>
+            <button
+              className='button is-large is-primary ml-5'
+              onClick={() => {
+                const daySelect = document.querySelectorAll('select')[0]
+                const monthSelect = document.querySelectorAll('select')[1]
+                const yearSelect = document.querySelectorAll('select')[2]
+
+                const day = daySelect.options[daySelect.selectedIndex].value
+                const month = monthSelect.options[monthSelect.selectedIndex].value
+                const year = yearSelect.options[yearSelect.selectedIndex].value
+
+                setUser({ ...user, birthDate: new Date(`${year}-${month}-${day}`).toISOString() })
+                setStep('fourthStep')
+              }}
+            >
               Continuar
+            </button>
+          </>
+        )}
+
+        {step === 'fourthStep' && (
+          <>
+            <button className='button is-large is-primary is-light' onClick={() => setStep('thirdStep')}>
+              Voltar
+            </button>
+
+            <button className='button is-large is-primary ml-5' onClick={() => setStep('fifthStep')}>
+              Continuar
+            </button>
+          </>
+        )}
+
+        {step === 'fifthStep' && (
+          <>
+            <button className='button is-large is-primary is-light' onClick={() => setStep('fourthStep')}>
+              Voltar
+            </button>
+
+            <button className='button is-large is-primary ml-5' onClick={() => setStep('sixthStep')}>
+              Continuar
+            </button>
+          </>
+        )}
+
+        {step === 'sixthStep' && (
+          <>
+            <button className='button is-large is-primary is-light' onClick={() => setStep('fourthStep')}>
+              Voltar
+            </button>
+
+            <button
+              className='button is-large is-primary ml-5'
+              onClick={() => {
+                fetch('/api/users', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(user),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    console.log('Success:', data)
+                  })
+                  .catch((error) => {
+                    console.error('Error:', error)
+                  })
+              }}
+            >
+              Criar conta
             </button>
           </>
         )}
@@ -189,7 +294,7 @@ function ThirdStep(user, setUser) {
   return (
     <>
       <h1
-        className='is-size-2 is-align-self-center title has-text-white is-size-3-mobile ml-4 mr-4 mb-5'
+        className='is-size-1 is-align-self-center title has-text-white is-size-2-mobile ml-4 mr-4 mb-5'
         style={{ textAlign: 'center' }}
       >
         Quando você nasceu?
@@ -197,24 +302,79 @@ function ThirdStep(user, setUser) {
 
       <div className='has-text-centered mt-6 is-flex is-justify-content-center'>
         <div className='select is-primary mr-3'>
-          <select onChange={() => console.log('Alterou dia')}>
-            {[...Array(31).keys()].map((day) => (
+          <select>
+            {[...Array(31)].map((_, day) => (
               <option key={day}>{day + 1}</option>
             ))}
           </select>
         </div>
 
         <div className='select is-primary mr-3'>
-          <select onChange={() => console.log('Alterou mês')}>
-            {[...Array(12).keys()].map((month) => (
+          <select>
+            {[...Array(12)].map((_, month) => (
               <option key={month}>{month + 1}</option>
             ))}
           </select>
         </div>
 
         <div className='select is-primary'>
-          <select onChange={(e) => console.log(e)}>{yearOptions.map((year) => year)}</select>
+          <select>{yearOptions.map((year) => year)}</select>
         </div>
+      </div>
+    </>
+  )
+}
+
+function FourthStep(user, setUser) {
+  return (
+    <>
+      <h1
+        className='is-size-1 is-align-self-center title has-text-white is-size-2-mobile ml-4 mr-4 mb-6'
+        style={{ textAlign: 'center' }}
+      >
+        Qual é o seu email?
+      </h1>
+
+      <div className='has-text-centered'>
+        <input
+          className='input is-large is-primary'
+          type='email'
+          placeholder='Insira o e-mail'
+          style={{ width: '18rem' }}
+          onChange={(event) => setUser({ ...user, email: event.target.value })}
+        />
+      </div>
+    </>
+  )
+}
+
+function FifthStep(user, setUser) {
+  return (
+    <>
+      <h1
+        className='is-size-1 is-align-self-center title has-text-white is-size-2-mobile ml-4 mr-4 mb-6'
+        style={{ textAlign: 'center' }}
+      >
+        Qual é o seu número?
+      </h1>
+
+      <div style={{ maxWidth: '18rem', margin: 'auto' }}>
+        <MaskedInput
+          mask={(value) => {
+            if (value.replace(/\D/g, '').length > 10) {
+              return ['(', /\d/, /\d/, ')', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]
+            } else {
+              return ['(', /\d/, /\d/, ')', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]
+            }
+          }}
+          className='input is-large is-primary'
+          placeholder='Insira o número'
+          onChange={(event) => {
+            const whatsapp = event.target.value.replace(/\D/g, '')
+
+            setUser({ ...user, whatsapp })
+          }}
+        />
       </div>
     </>
   )

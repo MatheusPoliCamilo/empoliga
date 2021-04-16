@@ -1,7 +1,13 @@
 import Head from 'next/head'
 import '../styles/index.scss'
+import { useEffect } from 'react'
+import { hotjar } from 'react-hotjar'
 
 export default function MyApp({ Component, pageProps }) {
+  useEffect(() => {
+    hotjar.initialize(2338557, 6)
+  })
+
   return (
     <>
       <Head>

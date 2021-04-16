@@ -1,14 +1,7 @@
 import Image from 'next/image'
-import { useEffect } from 'react'
-import { hotjar } from 'react-hotjar'
 import { Navbar } from '../components/navbar'
 
 export default function Index() {
-  useEffect(() => {
-    hotjar.initialize(2333536, 6)
-    hotjar.initialize(2338557, 6)
-  })
-
   return (
     <div className='has-text-weight-bold'>
       <Navbar />
