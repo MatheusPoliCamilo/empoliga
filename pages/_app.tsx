@@ -1,7 +1,8 @@
 import Head from 'next/head'
 import '../styles/index.scss'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { hotjar } from 'react-hotjar'
+import { AppWrapper } from '../context/state'
 
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -50,7 +51,9 @@ export default function MyApp({ Component, pageProps }) {
         />
       </Head>
 
-      <Component {...pageProps} />
+      <AppWrapper>
+        <Component {...pageProps} />
+      </AppWrapper>
     </>
   )
 }

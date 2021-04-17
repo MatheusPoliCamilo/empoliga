@@ -1,8 +1,14 @@
 import Image from 'next/image'
 import { Navbar } from '../components/navbar'
 import { Footer } from '../components/footer'
+import { useContext } from 'react'
+import { CurrentUserContext } from '../context/state'
 
 export default function Index() {
+  const { user } = useContext(CurrentUserContext)
+
+  console.log('user', user)
+
   return (
     <div className='has-text-weight-bold'>
       <Navbar />

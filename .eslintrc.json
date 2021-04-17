@@ -28,7 +28,9 @@
         "no-unused-expressions": "warn",
         "no-unused-vars": "warn",
         "node/no-deprecated-api": "warn",
-        "react/prop-types": "warn"
+        "react/prop-types": "warn",
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": ["error"]
     },
     "settings": {
         "react": {
