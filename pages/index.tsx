@@ -1,14 +1,8 @@
 import Image from 'next/image'
 import { Navbar } from '../components/navbar'
 import { Footer } from '../components/footer'
-import { useContext } from 'react'
-import { CurrentUserContext } from '../context/state'
 
 export default function Index() {
-  const { user } = useContext(CurrentUserContext)
-
-  console.log('user', user)
-
   return (
     <div className='has-text-weight-bold'>
       <Navbar />
@@ -27,6 +21,24 @@ export default function Index() {
             left: '50%',
             transform: 'translate(-50%, -50%)',
           }}
+          className='is-hidden-desktop'
+        >
+          <source src='/abertura_empoliga.mp4' type='video/mp4' />
+        </video>
+
+        <video
+          width={1280}
+          autoPlay
+          loop
+          muted
+          style={{
+            position: 'absolute',
+            top: '63%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            maxWidth: '67vw',
+          }}
+          className='is-hidden-touch'
         >
           <source src='/abertura_empoliga.mp4' type='video/mp4' />
         </video>
@@ -34,7 +46,7 @@ export default function Index() {
         <div
           style={{
             position: 'absolute',
-            top: '38vw',
+            top: '40vw',
             left: '50%',
             transform: 'translate(-50%, -50%)',
             minWidth: '91vw',
@@ -42,7 +54,7 @@ export default function Index() {
           }}
         >
           <h2
-            className='subtitle has-text-white is-size-3-desktop'
+            className='subtitle has-text-white is-size-3-fullhd'
             style={{
               textShadow: '4px 3px 2px #000000',
             }}
@@ -51,7 +63,7 @@ export default function Index() {
           </h2>
 
           <h1
-            className='title has-text-white is-size-1-desktop'
+            className='title has-text-white is-size-1-fullhd'
             style={{
               textShadow: '4px 3px 2px #000000',
             }}
@@ -60,7 +72,7 @@ export default function Index() {
           </h1>
 
           <a
-            className='button is-primary is-medium p-5'
+            className='button is-primary is-large p-5'
             style={{
               borderRadius: 'unset',
             }}

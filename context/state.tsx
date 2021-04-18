@@ -1,10 +1,12 @@
-import { createContext, useState } from 'react'
+import { createContext, useState, useEffect } from 'react'
 export const CurrentUserContext = createContext({})
 
 export function AppWrapper({ children }) {
   const [user, setUser] = useState({})
 
-  console.log('estado', user)
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem('currentUser')))
+  }, [])
 
-  return <CurrentUserContext.Provider value={{ user, setUser }}>{children}</CurrentUserContext.Provider>
+  return <CurrentUserContext.Provider value={{ user }}>{children}</CurrentUserContext.Provider>
 }

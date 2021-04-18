@@ -1,7 +1,7 @@
 import Image from 'next/image'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import MaskedInput from 'react-text-mask'
-import { CurrentUserContext } from '../../context/state'
+import { useRouter } from 'next/router'
 
 function onPasswordConfirmationChange(event, user, setUser) {
   const passwordConfirmation = event.target.value
@@ -37,7 +37,8 @@ function onPasswordChange(event) {
   }
 }
 
-function handleSubmit(event, user, setUser) {
+function handleSubmit(event, user, router) {
+  event.preventDefault()
   const button = document.querySelector('#create-account') as HTMLButtonElement
   const buttonBack = document.querySelector('#backFifthStep') as HTMLButtonElement
 
@@ -61,8 +62,8 @@ function handleSubmit(event, user, setUser) {
       } else if (Object.keys(data).length === 0) {
         console.log('Error:', data.errors)
       } else {
-        setUser(data)
-        window.location.href = '/'
+        localStorage.setItem('currentUser', JSON.stringify(data))
+        router.push('/')
       }
     })
     .catch((error) => {
@@ -71,8 +72,6 @@ function handleSubmit(event, user, setUser) {
 
       console.error('Error:', error)
     })
-
-  event.preventDefault()
 }
 
 function FirstStep(user, setUser) {
@@ -310,7 +309,7 @@ function SixthStep(user, setUser) {
 export default function MyApp({ Component, pageProps }) {
   const [currentUser, setCurrentUser] = useState({ gender: 'M', birthDate: '' })
   const [step, setStep] = useState('firstStep')
-  const { setUser } = useContext(CurrentUserContext)
+  const router = useRouter()
 
   useEffect(() => {
     document.querySelector('html').classList.add('has-background-dark')
@@ -346,7 +345,7 @@ export default function MyApp({ Component, pageProps }) {
       <div className='pb-4 is-hidden-tablet' />
       <div className='pb-6 is-hidden-mobile' />
 
-      <form onSubmit={(event) => handleSubmit(event, currentUser, setUser)}>
+      <form onSubmit={(event) => handleSubmit(event, currentUser, router)}>
         {step === 'firstStep' && FirstStep(currentUser, setCurrentUser)}
         {step === 'secondStep' && SecondStep(currentUser, setCurrentUser)}
         {step === 'thirdStep' && ThirdStep(currentUser, setCurrentUser)}

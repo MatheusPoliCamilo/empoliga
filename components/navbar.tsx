@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import Image from 'next/image'
+import { CurrentUserContext } from '../context/state'
 
 function Navbar() {
   const [active, setActive] = useState(false)
+  const { user } = useContext(CurrentUserContext)
 
   return (
     <nav className='navbar is-fixed-top is-dark' role='navigation' aria-label='main navigation'>
@@ -84,7 +86,12 @@ function Navbar() {
         <div className='navbar-end mr-6'>
           <div className='navbar-item'>
             <div className='buttons'>
-              <a className='button is-dark pl-5 pr-5'>Login</a>
+              {console.log(user)}
+              {user && user._id ? (
+                <a className='button is-dark pl-5 pr-5'>{user.nick ? user.nick : user.name}</a>
+              ) : (
+                <a className='button is-dark pl-5 pr-5'>Login</a>
+              )}
               <a className='button is-primary p-5' style={{ borderRadius: 'unset' }} href='/cadastrar'>
                 <strong>Cadastre-se</strong>
               </a>
