@@ -64,7 +64,7 @@ function handleSubmit(event, user, router) {
       } else {
         Cookie.set('token', data.token, { expires: addDays(new Date(), 1) })
         Cookie.set('currentUser', data.user, { expires: addDays(new Date(), 1) })
-        router.push('/')
+        window.location.href = '/'
       }
     })
     .catch((error) => {
@@ -103,6 +103,7 @@ function FirstStep(user, setUser) {
           style={{ width: '21rem' }}
           onChange={(event) => setUser({ ...user, name: event.target.value })}
           autoFocus
+          value={user.name}
         />
       </div>
     </>
@@ -125,12 +126,12 @@ function SecondStep(user, setUser) {
         <div className='control'>
           <label htmlFor='male' className='radio'>
             <input
-              id='m'
+              id='male'
               type='radio'
               name='gender'
               className='mr-1'
               onClick={() => setUser({ ...user, gender: 'M' })}
-              defaultChecked
+              defaultChecked={user.gender === 'M'}
             />
             Masculino
           </label>
@@ -142,6 +143,7 @@ function SecondStep(user, setUser) {
               name='gender'
               className='mr-1'
               onClick={() => setUser({ ...user, gender: 'F' })}
+              defaultChecked={user.gender === 'F'}
             />
             Feminino
           </label>
@@ -153,6 +155,7 @@ function SecondStep(user, setUser) {
               name='gender'
               className='mr-1'
               onClick={() => setUser({ ...user, gender: 'O' })}
+              defaultChecked={user.gender === 'O'}
             />
             Outro
           </label>
@@ -162,7 +165,7 @@ function SecondStep(user, setUser) {
   )
 }
 
-function ThirdStep(user, setUser) {
+function ThirdStep(date, setDate) {
   const minYear = new Date().getFullYear() - 12
   const maxYear = new Date().getFullYear() - 100
   const yearOptions = []
@@ -186,7 +189,12 @@ function ThirdStep(user, setUser) {
 
       <div className='has-text-centered mt-6 is-flex is-justify-content-center'>
         <div className='select is-primary mr-3'>
-          <select>
+          <select
+            onClick={(event) => {
+              setDate({ ...date, day: (event.target as HTMLOptionElement).value })
+            }}
+            defaultValue={date.day}
+          >
             {[...Array(31)].map((_, day) => (
               <option key={day}>{day + 1}</option>
             ))}
@@ -194,7 +202,12 @@ function ThirdStep(user, setUser) {
         </div>
 
         <div className='select is-primary mr-3'>
-          <select>
+          <select
+            onClick={(event) => {
+              setDate({ ...date, month: (event.target as HTMLOptionElement).value })
+            }}
+            defaultValue={date.month}
+          >
             {[...Array(12)].map((_, month) => (
               <option key={month}>{month + 1}</option>
             ))}
@@ -202,7 +215,14 @@ function ThirdStep(user, setUser) {
         </div>
 
         <div className='select is-primary'>
-          <select>{yearOptions.map((year) => year)}</select>
+          <select
+            onClick={(event) => {
+              setDate({ ...date, year: (event.target as HTMLOptionElement).value })
+            }}
+            defaultValue={date.year}
+          >
+            {yearOptions.map((year) => year)}
+          </select>
         </div>
       </div>
     </>
@@ -237,6 +257,7 @@ function FourthStep(user, setUser) {
           }}
           autoFocus
           type='tel'
+          value={user.whatsapp}
         />
       </div>
     </>
@@ -261,6 +282,7 @@ function FifthStep(user, setUser) {
           style={{ width: '18rem' }}
           onChange={(event) => setUser({ ...user, email: event.target.value })}
           autoFocus
+          value={user.email}
         />
       </div>
     </>
@@ -282,11 +304,12 @@ function SixthStep(user, setUser) {
           <input
             className='input is-large is-primary'
             type='password'
-            placeholder='Insira a senha'
+            placeholder='Insira sua senha'
             style={{ width: '18rem' }}
             id='password'
             onChange={(event) => onPasswordChange(event)}
             autoFocus
+            autoComplete='new-password'
           />
         </div>
 
@@ -298,6 +321,7 @@ function SixthStep(user, setUser) {
             style={{ width: '18rem' }}
             id='password-confirmation'
             onChange={(event) => onPasswordConfirmationChange(event, user, setUser)}
+            autoComplete='new-password'
           />
         </div>
         <p className='mt-1 has-text-danger is-hidden' id='error-message'>
@@ -309,8 +333,9 @@ function SixthStep(user, setUser) {
 }
 
 export default function MyApp({ Component, pageProps }) {
-  const [currentUser, setCurrentUser] = useState({ gender: 'M', birthDate: '' })
+  const [currentUser, setCurrentUser] = useState({ gender: 'M', birthDate: '', name: '', email: '' })
   const [step, setStep] = useState('firstStep')
+  const [date, setDate] = useState({})
   const router = useRouter()
 
   useEffect(() => {
@@ -350,7 +375,7 @@ export default function MyApp({ Component, pageProps }) {
       <form onSubmit={(event) => handleSubmit(event, currentUser, router)}>
         {step === 'firstStep' && FirstStep(currentUser, setCurrentUser)}
         {step === 'secondStep' && SecondStep(currentUser, setCurrentUser)}
-        {step === 'thirdStep' && ThirdStep(currentUser, setCurrentUser)}
+        {step === 'thirdStep' && ThirdStep(date, setDate)}
         {step === 'fourthStep' && FourthStep(currentUser, setCurrentUser)}
         {step === 'fifthStep' && FifthStep(currentUser, setCurrentUser)}
         {step === 'sixthStep' && SixthStep(currentUser, setCurrentUser)}
@@ -513,7 +538,7 @@ export default function MyApp({ Component, pageProps }) {
               <button
                 className='button is-large is-primary is-light'
                 id='backFifthStep'
-                onClick={() => setStep('fourthStep')}
+                onClick={() => setStep('fifthStep')}
                 type='button'
               >
                 Voltar
