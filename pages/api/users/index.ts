@@ -1,5 +1,6 @@
 import { connectToDatabase } from '../../../src/database'
 import { User } from '../../../src/schemas/user'
+import jwt from 'jsonwebtoken'
 
 export default async (request, response) => {
   const database = await connectToDatabase(process.env.MONGODB_URI)
@@ -10,6 +11,7 @@ export default async (request, response) => {
 
   switch (request.method) {
     case 'GET': {
+      // TODO: Remover informações sensíveis do index de usuários
       const getCollection = await database.collection('users')
       const users = await getCollection.find({}).toArray()
 
@@ -21,11 +23,15 @@ export default async (request, response) => {
     case 'POST': {
       return await User.create(request.body, (errors, user) => {
         database.close()
+        user.password = undefined
 
         if (errors) {
           return response.status(422).json(errors)
         } else {
-          return response.status(201).json(user)
+          const oneDay = 86400
+          const token = jwt.sign({ id: user._id }, process.env.AUTH_SECRET, { expiresIn: oneDay })
+
+          return response.status(201).json({ user, token })
         }
       })
     }

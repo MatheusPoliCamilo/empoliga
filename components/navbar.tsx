@@ -86,15 +86,19 @@ function Navbar() {
         <div className='navbar-end mr-6'>
           <div className='navbar-item'>
             <div className='buttons'>
-              {console.log(user)}
               {user && user._id ? (
-                <a className='button is-dark pl-5 pr-5'>{user.nick ? user.nick : user.name}</a>
+                <>
+                  <a className='button is-dark p-5'>Sair</a>
+                  <a className='button p-5 ml-1'>{user.nick ? user.nick : user.name}</a>
+                </>
               ) : (
-                <a className='button is-dark pl-5 pr-5'>Login</a>
+                <>
+                  <a className='button is-dark p-5'>Login</a>
+                  <a className='button is-primary p-5' href='/cadastrar'>
+                    <strong>Cadastre-se</strong>
+                  </a>
+                </>
               )}
-              <a className='button is-primary p-5' style={{ borderRadius: 'unset' }} href='/cadastrar'>
-                <strong>Cadastre-se</strong>
-              </a>
             </div>
           </div>
         </div>

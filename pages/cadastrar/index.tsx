@@ -2,6 +2,8 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import MaskedInput from 'react-text-mask'
 import { useRouter } from 'next/router'
+import Cookie from 'js-cookie'
+import { addDays } from 'date-fns'
 
 function onPasswordConfirmationChange(event, user, setUser) {
   const passwordConfirmation = event.target.value
@@ -60,7 +62,8 @@ function handleSubmit(event, user, router) {
       if (data.errors || Object.keys(data).length === 0) {
         console.log('Errors:', data.errors)
       } else {
-        localStorage.setItem('currentUser', JSON.stringify(data))
+        Cookie.set('token', data.token, { expires: addDays(new Date(), 1) })
+        Cookie.set('currentUser', data.user, { expires: addDays(new Date(), 1) })
         router.push('/')
       }
     })

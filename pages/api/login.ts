@@ -2,7 +2,6 @@ import bcryptjs from 'bcryptjs'
 import { connectToDatabase } from '../../src/database'
 import { User } from '../../src/schemas/user'
 import jwt from 'jsonwebtoken'
-import authConfig from '../../src/config/auth'
 
 export default async (request, response) => {
   const database = await connectToDatabase(process.env.MONGODB_URI)
@@ -11,9 +10,11 @@ export default async (request, response) => {
     return response.status(500).json(error)
   })
 
-  return await User.findOne({ email: request?.body?.email })
+  return await User.findOne({ email: request.body.email })
     .select('+password')
     .exec((error, user) => {
+      database.close()
+
       if (error) {
         return response.status(400).json(error)
       }
