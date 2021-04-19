@@ -93,7 +93,9 @@ function Navbar() {
                 </>
               ) : (
                 <>
-                  <a className='button is-dark p-5'>Login</a>
+                  <a className='button is-dark p-5' href='/login'>
+                    Login
+                  </a>
                   <a className='button is-primary p-5' href='/cadastrar'>
                     <strong>Cadastre-se</strong>
                   </a>
