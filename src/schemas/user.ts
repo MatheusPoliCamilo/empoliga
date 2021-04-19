@@ -51,6 +51,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Informe uma senha'],
+    select: false,
   },
 })
 

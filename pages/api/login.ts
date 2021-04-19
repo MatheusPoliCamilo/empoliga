@@ -1,5 +1,8 @@
 import bcryptjs from 'bcryptjs'
 import { connectToDatabase } from '../../src/database'
+import { User } from '../../src/schemas/user'
+import jwt from 'jsonwebtoken'
+import authConfig from '../../src/config/auth'
 
 export default async (request, response) => {
   const database = await connectToDatabase(process.env.MONGODB_URI)
@@ -8,22 +11,31 @@ export default async (request, response) => {
     return response.status(500).json(error)
   })
 
-  const userCollection = await database.collection('users')
-
-  return await userCollection.findOne({ email: request.body.email }, (error, user) => {
-    if (error) {
-      return response.status(500).json(error)
-    }
-
-    bcryptjs.compare(request.body.password, user.password, function (error, response) {
+  return await User.findOne({ email: request?.body?.email })
+    .select('+password')
+    .exec((error, user) => {
       if (error) {
-        console.log('handle error', error)
+        return response.status(400).json(error)
       }
-      if (response) {
-        console.log('Send JWT', response)
-      } else {
-        return response.json({ error: { message: 'Senha inválida' } })
+
+      if (!user) {
+        return response.status(400).json({ error: { message: 'Usuário não encontrado' } })
       }
+
+      bcryptjs.compare(request.body.password, user.password, function (error, bcryptjsResponse) {
+        if (error) {
+          return response.status(400).json(error)
+        }
+        if (bcryptjsResponse) {
+          user.password = undefined
+
+          const oneDay = 86400
+          const token = jwt.sign({ id: user._id }, process.env.AUTH_SECRET, { expiresIn: oneDay })
+
+          response.status(200).json({ user, token })
+        } else {
+          return response.status(400).json({ error: { message: 'Senha inválida' } })
+        }
+      })
     })
-  })
 }

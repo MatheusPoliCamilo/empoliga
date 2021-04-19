@@ -57,10 +57,8 @@ function handleSubmit(event, user, router) {
       button.classList.remove('is-loading')
       buttonBack.disabled = false
 
-      if (data.errors) {
+      if (data.errors || Object.keys(data).length === 0) {
         console.log('Errors:', data.errors)
-      } else if (Object.keys(data).length === 0) {
-        console.log('Error:', data.errors)
       } else {
         localStorage.setItem('currentUser', JSON.stringify(data))
         router.push('/')
@@ -98,7 +96,7 @@ function FirstStep(user, setUser) {
         <input
           className='input is-large is-primary'
           type='text'
-          placeholder='Insira o nome completo'
+          placeholder='Insira seu nome completo'
           style={{ width: '21rem' }}
           onChange={(event) => setUser({ ...user, name: event.target.value })}
           autoFocus
@@ -215,30 +213,6 @@ function FourthStep(user, setUser) {
         className='is-size-1 is-align-self-center title has-text-white is-size-2-mobile ml-4 mr-4 mb-6'
         style={{ textAlign: 'center' }}
       >
-        Qual é o seu email?
-      </h1>
-
-      <div className='has-text-centered'>
-        <input
-          className='input is-large is-primary'
-          type='email'
-          placeholder='Insira o e-mail'
-          style={{ width: '18rem' }}
-          onChange={(event) => setUser({ ...user, email: event.target.value })}
-          autoFocus
-        />
-      </div>
-    </>
-  )
-}
-
-function FifthStep(user, setUser) {
-  return (
-    <>
-      <h1
-        className='is-size-1 is-align-self-center title has-text-white is-size-2-mobile ml-4 mr-4 mb-6'
-        style={{ textAlign: 'center' }}
-      >
         Qual é o seu número?
       </h1>
 
@@ -252,12 +226,37 @@ function FifthStep(user, setUser) {
             }
           }}
           className='input is-large is-primary'
-          placeholder='Insira o número'
+          placeholder='Insira seu número'
           onChange={(event) => {
             const whatsapp = event.target.value.replace(/\D/g, '')
 
             setUser({ ...user, whatsapp })
           }}
+          autoFocus
+          type='tel'
+        />
+      </div>
+    </>
+  )
+}
+
+function FifthStep(user, setUser) {
+  return (
+    <>
+      <h1
+        className='is-size-1 is-align-self-center title has-text-white is-size-2-mobile ml-4 mr-4 mb-6'
+        style={{ textAlign: 'center' }}
+      >
+        Qual é o seu email?
+      </h1>
+
+      <div className='has-text-centered'>
+        <input
+          className='input is-large is-primary'
+          type='email'
+          placeholder='Insira seu e-mail'
+          style={{ width: '18rem' }}
+          onChange={(event) => setUser({ ...user, email: event.target.value })}
           autoFocus
         />
       </div>
