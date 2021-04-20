@@ -15,3 +15,9 @@
 .fix-scale {
   transform: scale(1.22);
 }
+
+.black-hover {
+  :hover {
+    color: black !important;
+  }
+}

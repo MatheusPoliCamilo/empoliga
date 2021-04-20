@@ -8,8 +8,10 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <div style={{ height: '20rem' }}>
-      <div className='ml-5 mt-5 is-hidden-touch'>
-        <Image src='/tradicional.svg' width={80} height={80} alt='Logo da Empoliga' />
+      <div className='ml-5 mt-5 is-hidden-touch grow-on-hover'>
+        <a href='/'>
+          <Image src='/tradicional.svg' width={80} height={80} alt='Logo da Empoliga' />
+        </a>
       </div>
 
       <div className='is-hidden-touch is-flex is-justify-content-center'>
@@ -18,16 +20,18 @@ export default function MyApp({ Component, pageProps }) {
           style={{ height: '37vw', width: '30vw', minWidth: '28rem', minHeight: '35rem' }}
         >
           <div className='is-flex is-justify-content-center'>
-            <h1 className='is-size-2 has-text-black has-text-weight-bold mt-6'>Iniciar sessão</h1>
+            <h1 className='is-size-2 has-text-black has-text-weight-bold mt-6' style={{ textTransform: 'none' }}>
+              Iniciar sessão
+            </h1>
           </div>
 
           <form action=''>
-            <div className='mb-6 mt-6 p-6'>
+            <div className='mb-6 p-6'>
               <input className='input is-large' type='email' placeholder='Digite o e-mail' />
-              <input className='input is-large mt-5' type='password' placeholder='Digite a senha' />
+              <input className='input is-large mt-4' type='password' placeholder='Digite a senha' />
             </div>
 
-            <div className='is-flex is-justify-content-center mt-6'>
+            <div className='is-flex is-justify-content-center'>
               <button
                 className='button is-large is-primary p-6'
                 style={{
@@ -35,13 +39,16 @@ export default function MyApp({ Component, pageProps }) {
                     'url(data:image/svg+xml;charset=utf8;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNC4yNzI3IDEwTDAuNSAxMFY4TDE0LjI3MjUgOEw4LjUxMzQ1IDEuNzI0OTZMOS44NjU3OSAwLjI1MTQ2NUwxNy4yMTg5IDguMjYzMzNDMTcuNTkyMyA4LjY3MDIyIDE3LjU5MjMgOS4zMjk5MyAxNy4yMTg5IDkuNzM2ODJMOS44NjU3OSAxNy43NDg3TDguNTEzNDUgMTYuMjc1MkwxNC4yNzI3IDEwWiIgZmlsbD0iI0Y5RjlGOSIvPgo8L3N2Zz4K)',
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'center center',
-                  backgroundSize: '1.5rem',
+                  backgroundSize: '2.5rem',
+                  borderRadius: '1.7rem',
                 }}
               />
             </div>
 
-            <div className='is-flex is-justify-content-center has-text-weight-bold' style={{ marginTop: '7rem' }}>
-              <p>CRIAR CONTA</p>
+            <div className='is-flex is-justify-content-center has-text-weight-bold black-hover'>
+              <a className='has-text-grey' style={{ marginTop: '2vw', letterSpacing: '0.05rem' }} href='/cadastrar'>
+                CRIAR CONTA
+              </a>
             </div>
           </form>
         </div>
