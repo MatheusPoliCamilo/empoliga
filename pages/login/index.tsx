@@ -7,8 +7,10 @@ import { addDays } from 'date-fns'
 function handleSubmit(event, userData) {
   event.preventDefault()
 
-  const buttonSubmit = document.querySelector('#submit')
-  const buttonSubmitMobile = document.querySelector('#submit-mobile')
+  const buttonSubmit = document.querySelector('#submit') as HTMLButtonElement
+  const buttonSubmitMobile = document.querySelector('#submit-mobile') as HTMLButtonElement
+  const errorMessage = document.querySelector('#error-message') as HTMLDivElement
+  const mobileErrorMessage = document.querySelector('#mobile-error-message') as HTMLDivElement
 
   buttonSubmit.classList.remove(styles.btnArrow)
   buttonSubmitMobile.classList.remove(styles.btnArrow)
@@ -32,15 +34,23 @@ function handleSubmit(event, userData) {
     })
     .then((data) => {
       if (data.errors || Object.keys(data).length === 0) {
-        console.log('Errors:', data.errors)
+        errorMessage.classList.remove('is-hidden')
+        mobileErrorMessage.classList.remove('is-hidden')
+        errorMessage.textContent = data.errors.message
+        mobileErrorMessage.textContent = data.errors.message
       } else {
+        errorMessage.classList.add('is-hidden')
+        mobileErrorMessage.classList.add('is-hidden')
         Cookie.set('token', data.token, { expires: addDays(new Date(), 1) })
         Cookie.set('currentUser', data.user, { expires: addDays(new Date(), 1) })
         window.location.href = '/'
       }
     })
-    .catch((error) => {
-      console.error('Error:', error)
+    .catch(() => {
+      errorMessage.classList.remove('is-hidden')
+      mobileErrorMessage.classList.remove('is-hidden')
+      errorMessage.textContent = 'Erro ao efetuar login'
+      mobileErrorMessage.textContent = 'Erro ao efetuar login'
     })
 }
 
@@ -66,10 +76,7 @@ export default function MyApp({ Component, pageProps }) {
       </div>
 
       <div className='is-hidden-touch is-flex is-justify-content-center'>
-        <div
-          className='has-background-white'
-          style={{ height: '37vw', width: '30vw', minWidth: '28rem', minHeight: '35rem' }}
-        >
+        <div className='has-background-white' style={{ width: '30vw', minWidth: '28rem', minHeight: '39vw' }}>
           <div className='is-flex is-justify-content-center'>
             <h1 className='is-size-2 has-text-black has-text-weight-bold mt-6' style={{ textTransform: 'none' }}>
               Iniciar sessão
@@ -77,7 +84,7 @@ export default function MyApp({ Component, pageProps }) {
           </div>
 
           <form onSubmit={(event) => handleSubmit(event, userData)}>
-            <div className='p-6' style={{ marginBottom: '2rem' }}>
+            <div className='p-6'>
               <input
                 className='input is-large'
                 type='email'
@@ -93,6 +100,10 @@ export default function MyApp({ Component, pageProps }) {
                 onChange={(event) => setUserData({ ...userData, password: event.target.value })}
               />
             </div>
+
+            <article className='message is-danger mr-4 ml-4'>
+              <div className='message-body is-hidden' id='error-message' style={{ textTransform: 'none' }} />
+            </article>
 
             <div className='is-flex is-justify-content-center'>
               <button id='submit' className={`button is-large is-primary p-6 ${styles.btn} ${styles.btnArrow}`} />
@@ -112,7 +123,7 @@ export default function MyApp({ Component, pageProps }) {
       </div>
 
       <div className='is-hidden-desktop is-flex is-justify-content-center'>
-        <div className='has-background-white' style={{ height: '83vh', width: '94vw' }}>
+        <div className='has-background-white' style={{ minHeight: '83vh', width: '94vw' }}>
           <div style={{ marginTop: '2vh' }} />
           <div className='is-flex is-justify-content-center'>
             <h1 className='is-size-2 has-text-black has-text-weight-bold' style={{ textTransform: 'none' }}>
@@ -137,6 +148,10 @@ export default function MyApp({ Component, pageProps }) {
                 onChange={(event) => setUserData({ ...userData, password: event.target.value })}
               />
             </div>
+
+            <article className='message is-danger mr-4 ml-4'>
+              <div className='message-body is-hidden' id='mobile-error-message' />
+            </article>
 
             <div className='is-flex is-justify-content-center'>
               <button
