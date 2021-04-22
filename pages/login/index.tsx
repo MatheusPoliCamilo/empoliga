@@ -150,7 +150,7 @@ export default function MyApp({ Component, pageProps }) {
             </div>
 
             <article className='message is-danger mr-4 ml-4'>
-              <div className='message-body is-hidden' id='mobile-error-message' />
+              <div className='message-body is-hidden' id='mobile-error-message' style={{ textTransform: 'none' }} />
             </article>
 
             <div className='is-flex is-justify-content-center'>
