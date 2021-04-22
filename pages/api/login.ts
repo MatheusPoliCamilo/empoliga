@@ -20,7 +20,7 @@ export default async (request, response) => {
       }
 
       if (!user) {
-        return response.status(400).json({ error: { message: 'Usuário não encontrado' } })
+        return response.status(400).json({ errors: { message: 'E-mail não cadastrado' } })
       }
 
       bcryptjs.compare(request.body.password, user.password, function (error, bcryptjsResponse) {
@@ -35,7 +35,7 @@ export default async (request, response) => {
 
           response.status(200).json({ user, token })
         } else {
-          return response.status(400).json({ error: { message: 'Senha inválida' } })
+          return response.status(400).json({ errors: { message: 'Senha inválida' } })
         }
       })
     })

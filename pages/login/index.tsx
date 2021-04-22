@@ -120,7 +120,7 @@ export default function MyApp({ Component, pageProps }) {
             </h1>
           </div>
 
-          <form onSubmit={(event) => handleSubmit(event)}>
+          <form onSubmit={(event) => handleSubmit(event, userData)}>
             <div className='p-6'>
               <input
                 className='input is-large'

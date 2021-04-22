@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react'
 import Image from 'next/image'
 import { CurrentUserContext } from '../context/state'
+import Cookie from 'js-cookie'
 
 function Navbar() {
   const [active, setActive] = useState(false)
@@ -88,7 +89,18 @@ function Navbar() {
             <div className='buttons'>
               {user && user._id ? (
                 <>
-                  <a className='button is-dark p-5'>Sair</a>
+                  <button
+                    className='button is-dark p-5 has-text-weight-bold'
+                    type='button'
+                    onClick={() => {
+                      Cookie.remove('token')
+                      Cookie.remove('currentUser')
+                      window.location.reload()
+                    }}
+                    style={{ textTransform: 'uppercase' }}
+                  >
+                    Sair
+                  </button>
                   <a className='button p-5 ml-1'>{user.nick ? user.nick : user.name}</a>
                 </>
               ) : (
