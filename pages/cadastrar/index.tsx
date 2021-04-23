@@ -254,7 +254,7 @@ function FourthStep(user, setUser) {
         className='is-size-1 is-align-self-center title has-text-white is-size-2-mobile ml-4 mr-4 mb-6'
         style={{ textAlign: 'center' }}
       >
-        Qual é o seu número?
+        Qual é o seu telefone?
       </h1>
 
       <div style={{ maxWidth: '18rem', margin: 'auto' }}>
@@ -267,7 +267,7 @@ function FourthStep(user, setUser) {
             }
           }}
           className='input is-large is-primary'
-          placeholder='Insira seu número'
+          placeholder='Insira seu telefone'
           onChange={(event) => {
             const whatsapp = event.target.value.replace(/\D/g, '')
 
