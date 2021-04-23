@@ -1,9 +1,9 @@
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import MaskedInput from 'react-text-mask'
-import { useRouter } from 'next/router'
 import Cookie from 'js-cookie'
 import { addDays } from 'date-fns'
+import * as yup from 'yup'
 
 function onPasswordConfirmationChange(event, user, setUser) {
   const passwordConfirmation = event.target.value
@@ -39,7 +39,7 @@ function onPasswordChange(event) {
   }
 }
 
-function handleSubmit(event, user, router) {
+function handleSubmit(event, user) {
   event.preventDefault()
   const button = document.querySelector('#create-account') as HTMLButtonElement
   const buttonBack = document.querySelector('#backFifthStep') as HTMLButtonElement
@@ -106,6 +106,12 @@ function FirstStep(user, setUser) {
           value={user.name}
         />
       </div>
+
+      <div className='is-flex is-justify-content-center mt-5 is-hidden' id='name-error'>
+        <article className='message is-danger is-flex' style={{ width: '21rem' }}>
+          <div className='message-body' style={{ textTransform: 'none', fontWeight: 400 }} />
+        </article>
+      </div>
     </>
   )
 }
@@ -160,6 +166,12 @@ function SecondStep(user, setUser) {
             Outro
           </label>
         </div>
+      </div>
+
+      <div className='is-flex is-justify-content-center mt-5 is-hidden' id='gender-error'>
+        <article className='message is-danger is-flex' style={{ width: '21rem' }}>
+          <div className='message-body' style={{ textTransform: 'none', fontWeight: 400 }} />
+        </article>
       </div>
     </>
   )
@@ -224,6 +236,12 @@ function ThirdStep(date, setDate) {
             {yearOptions.map((year) => year)}
           </select>
         </div>
+      </div>
+
+      <div className='is-flex is-justify-content-center mt-5 is-hidden' id='date-error'>
+        <article className='message is-danger is-flex' style={{ width: '21rem' }}>
+          <div className='message-body' style={{ textTransform: 'none', fontWeight: 400 }} />
+        </article>
       </div>
     </>
   )
@@ -336,7 +354,6 @@ export default function MyApp({ Component, pageProps }) {
   const [currentUser, setCurrentUser] = useState({ gender: 'M', birthDate: '', name: '', email: '' })
   const [step, setStep] = useState('firstStep')
   const [date, setDate] = useState({})
-  const router = useRouter()
 
   useEffect(() => {
     document.querySelector('html').classList.add('has-background-dark')
@@ -344,7 +361,7 @@ export default function MyApp({ Component, pageProps }) {
   })
 
   return (
-    <div className='has-text-weight-bold' style={{ height: '100vh' }}>
+    <div className='has-text-weight-bold' style={{ minHeight: '100vh' }}>
       {/* <div
         style={{
           backgroundImage: 'url("/map.png")',
@@ -372,7 +389,7 @@ export default function MyApp({ Component, pageProps }) {
       <div className='pb-4 is-hidden-tablet' />
       <div className='pb-6 is-hidden-mobile' />
 
-      <form onSubmit={(event) => handleSubmit(event, currentUser, router)}>
+      <form onSubmit={(event) => handleSubmit(event, currentUser)}>
         {step === 'firstStep' && FirstStep(currentUser, setCurrentUser)}
         {step === 'secondStep' && SecondStep(currentUser, setCurrentUser)}
         {step === 'thirdStep' && ThirdStep(date, setDate)}
@@ -450,7 +467,32 @@ export default function MyApp({ Component, pageProps }) {
 
         <div className='has-text-centered'>
           {step === 'firstStep' && (
-            <button className='button is-large is-primary' type='submit' onClick={() => setStep('secondStep')}>
+            <button
+              className='button is-large is-primary mb-5'
+              type='submit'
+              onClick={(event) => {
+                event.preventDefault()
+                const nameError: HTMLDivElement = document.querySelector('#name-error')
+                const schema = yup.object().shape({
+                  name: yup
+                    .string()
+                    .required('É necessário informar o nome completo')
+                    .min(3, 'Informe seu nome completo'),
+                })
+
+                schema
+                  .validate({ name: currentUser.name })
+                  .then(() => {
+                    nameError.classList.add('is-hidden')
+                    nameError.querySelector('div').textContent = ''
+                    setStep('secondStep')
+                  })
+                  .catch((error) => {
+                    nameError.querySelector('div').textContent = (error.errors && error.errors[0]) || error
+                    nameError.classList.remove('is-hidden')
+                  })
+              }}
+            >
               Continuar
             </button>
           )}
@@ -460,12 +502,33 @@ export default function MyApp({ Component, pageProps }) {
               <button
                 className='button is-large is-primary is-light'
                 type='button'
-                onClick={() => setStep('firstStep')}
+                onClick={(event) => setStep('firstStep')}
               >
                 Voltar
               </button>
 
-              <button className='button is-large is-primary ml-5' onClick={() => setStep('thirdStep')}>
+              <button
+                className='button is-large is-primary ml-5'
+                onClick={(event) => {
+                  event.preventDefault()
+                  const genderError: HTMLDivElement = document.querySelector('#gender-error')
+                  const schema = yup.object().shape({
+                    gender: yup.string().length(1, 'Gênero inválido').required('Informe seu gênero'),
+                  })
+
+                  schema
+                    .validate({ gender: currentUser.gender })
+                    .then(() => {
+                      genderError.classList.add('is-hidden')
+                      genderError.querySelector('div').textContent = ''
+                      setStep('thirdStep')
+                    })
+                    .catch((error) => {
+                      genderError.querySelector('div').textContent = (error.errors && error.errors[0]) || error
+                      genderError.classList.remove('is-hidden')
+                    })
+                }}
+              >
                 Continuar
               </button>
             </>
@@ -483,17 +546,41 @@ export default function MyApp({ Component, pageProps }) {
 
               <button
                 className='button is-large is-primary ml-5'
-                onClick={() => {
+                onClick={(event) => {
+                  event.preventDefault()
+
+                  const dateError: HTMLDivElement = document.querySelector('#date-error')
                   const daySelect = document.querySelectorAll('select')[0]
                   const monthSelect = document.querySelectorAll('select')[1]
                   const yearSelect = document.querySelectorAll('select')[2]
-
                   const day = daySelect.options[daySelect.selectedIndex].value
                   const month = monthSelect.options[monthSelect.selectedIndex].value
                   const year = yearSelect.options[yearSelect.selectedIndex].value
 
-                  setCurrentUser({ ...currentUser, birthDate: new Date(`${year}-${month}-${day}`).toISOString() })
-                  setStep('fourthStep')
+                  if (!day || !month || !year) {
+                    dateError.querySelector('div').textContent = 'Informe sua data de nascimento'
+                    dateError.classList.remove('is-hidden')
+                    return
+                  }
+
+                  const date = new Date(`${year}-${month}-${day}`)
+
+                  const schema = yup.object().shape({
+                    date: yup.date().required(),
+                  })
+
+                  schema
+                    .validate({ date })
+                    .then((date) => {
+                      dateError.classList.add('is-hidden')
+                      dateError.querySelector('div').textContent = ''
+                      setCurrentUser({ ...currentUser, birthDate: date.date.toISOString() })
+                      setStep('fourthStep')
+                    })
+                    .catch((error) => {
+                      dateError.querySelector('div').textContent = (error.errors && error.errors[0]) || error
+                      dateError.classList.remove('is-hidden')
+                    })
                 }}
               >
                 Continuar
