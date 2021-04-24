@@ -75,7 +75,7 @@ function Navbar() {
 
             <div className='navbar-dropdown'>
               <a className='navbar-item' href='https://empoliga.com/'>
-                Noticias
+                Notícias
               </a>
               <a className='navbar-item' href='https://empoliga.com/category/empoliga/comunicados-de-penalidade/'>
                 Penalidades

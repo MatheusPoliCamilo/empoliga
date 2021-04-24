@@ -129,7 +129,7 @@ function SecondStep(user, setUser) {
       <div className='mt-6' />
 
       <div className='has-text-centered is-flex is-justify-content-center'>
-        <div className='control'>
+        <div className='control' style={{ color: '#bf9d6b' }}>
           <label htmlFor='male' className='radio'>
             <input
               id='male'
