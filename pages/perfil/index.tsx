@@ -28,7 +28,27 @@ export default function Index() {
       <Navbar />
 
       <div className='is-flex is-justify-content-center mt-6'>
-        <div className='card' style={{ backgroundColor: 'white', height: '48rem', width: '60rem' }}>
+        <div className='is-flex is-flex-direction-column is-justify-content-center'>
+          <button
+            className='button is-large is-focused'
+            style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+          >
+            Perfil
+          </button>
+          <button
+            className='button is-large mt-5'
+            style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+          >
+            Histórico
+          </button>
+          <button
+            className='button is-large mt-5'
+            style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+          >
+            Conquistas
+          </button>
+        </div>
+        <div className='card' style={{ backgroundColor: 'white', height: '38vw', width: '60rem' }}>
           <div className='card-content'>
             <div className='content'>
               <div className='is-flex'>
@@ -47,11 +67,41 @@ export default function Index() {
                 </figure>
 
                 <div>
-                  <h1 className='title m-0 mt-1' style={{ fontSize: '4rem' }}>
+                  <h1 className='title m-0 mt-1 is-1' style={{ fontSize: '4rem' }}>
                     MMMMMMMMMMMMMMMM
                   </h1>
 
                   <h1 className='title'>Yanca Silva Elizandro</h1>
+
+                  <h1 className='title'>ADC</h1>
+                </div>
+              </div>
+
+              <div className='columns'>
+                <div className='column'>
+                  <h1 className='title is-4'>yancaselizandro@gmail.com</h1>
+                  <h1 className='title is-4'>24 anos</h1>
+                  <h1 className='title is-4'>Santa Catarina</h1>
+                  <h1 className='title is-4'>Tijucas</h1>
+                </div>
+                <div className='column has-text-centered'>
+                  <h1>PAIN GAMING</h1>
+
+                  <div className='is-flex is-justify-content-center'>
+                    <figure
+                      className='image ml-0 mt-0'
+                      style={{
+                        cursor: 'pointer',
+                        width: '20rem',
+                        minWidth: '20rem',
+                        height: '20rem',
+                        backgroundColor: 'gray',
+                      }}
+                      onClick={() => openProfilePictureModal()}
+                    >
+                      {/* <img src='https://bulma.io/images/placeholders/128x128.png' /> */}
+                    </figure>
+                  </div>
                 </div>
               </div>
             </div>
