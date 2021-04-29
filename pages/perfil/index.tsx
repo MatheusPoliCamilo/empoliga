@@ -67,13 +67,17 @@ export default function Index() {
                 </figure>
 
                 <div>
-                  <h1 className='title m-0 mt-1 is-1' style={{ fontSize: '4rem' }}>
+                  <h1 className='title ml-0 mr-0 mb-0 is-1' style={{ fontSize: '4rem', marginTop: '-1rem' }}>
                     MMMMMMMMMMMMMMMM
                   </h1>
 
                   <h1 className='title'>Yanca Silva Elizandro</h1>
 
-                  <h1 className='title'>ADC</h1>
+                  <h1 className='title mt-1'>ADC</h1>
+
+                  <h1 className='title mt-1'>
+                    <a href=''>paiN Gaming</a>
+                  </h1>
                 </div>
               </div>
 
@@ -85,16 +89,17 @@ export default function Index() {
                   <h1 className='title is-4'>Tijucas</h1>
                 </div>
                 <div className='column has-text-centered'>
-                  <h1>PAIN GAMING</h1>
+                  <h1>Diamante 1</h1>
 
                   <div className='is-flex is-justify-content-center'>
                     <figure
-                      className='image ml-0 mt-0'
+                      className='image ml-0 mt-0 mr-0'
                       style={{
                         cursor: 'pointer',
-                        width: '20rem',
+                        // width: '20rem',
                         minWidth: '20rem',
-                        height: '20rem',
+                        minHeight: '15rem',
+                        // height: '20rem',
                         backgroundColor: 'gray',
                       }}
                       onClick={() => openProfilePictureModal()}
