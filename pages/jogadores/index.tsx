@@ -4,14 +4,21 @@ import { Navbar } from '../../components/navbar'
 function Card() {
   return (
     <div className='card'>
+      <header className='card-header'>
+        <p className='card-header-title' style={{ justifyContent: 'center' }}>
+          TOP
+        </p>
+      </header>
+
       <div className='card-image'>
         <figure className='image is-4by3'>
           <img src='https://bulma.io/images/placeholders/1280x960.png' alt='Placeholder image' />
         </figure>
       </div>
+
       <div className='card-content'>
         <div className='media'>
-          <div className='media-left' title='Diamante 1'>
+          <div className='media-left' title='Mestre'>
             <figure className='image is-48x48'>
               <img src='https://bulma.io/images/placeholders/96x96.png' alt='Elo' />
             </figure>
@@ -30,6 +37,12 @@ function Card() {
           <a href='#'>Furnace e-Sports - Major A</a>
         </div>
       </div>
+
+      <footer className='card-footer'>
+        <p className='card-header-title' style={{ justifyContent: 'center' }}>
+          Mestre - 8 pontos
+        </p>
+      </footer>
     </div>
   )
 }
