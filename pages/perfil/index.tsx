@@ -1,6 +1,8 @@
 import { useContext, useEffect } from 'react'
 import { Navbar } from '../../components/navbar'
 import { CurrentUserContext } from '../../context/state'
+import jwt from 'jsonwebtoken'
+import Cookie from 'js-cookie'
 
 function openProfilePictureModal() {
   document.querySelector('html').classList.add('is-clipped')
@@ -13,15 +15,16 @@ function closeProfilePictureModal() {
 }
 
 export default function Index() {
-  const { user, token } = useContext(CurrentUserContext)
-
   useEffect(() => {
+    const cookie = Cookie.get('token')
+
+    if (!cookie) {
+      window.location.href = '/'
+    }
+
     document.querySelector('body').classList.add('has-navbar-fixed-top')
     document.querySelector('html').style.backgroundColor = 'black'
   })
-
-  console.log(user)
-  console.log(token)
 
   return (
     <div className='has-text-weight-bold'>

@@ -37,17 +37,6 @@ const userSchema = new mongoose.Schema({
   facebook: {
     type: String,
   },
-  nickname: [
-    {
-      type: String,
-      index: true,
-    },
-  ],
-  role: {
-    type: String,
-    index: true,
-    enum: ['Top', 'Jungle', 'Mid', 'Adc', 'Support'],
-  },
   password: {
     type: String,
     required: [true, 'Informe uma senha'],
