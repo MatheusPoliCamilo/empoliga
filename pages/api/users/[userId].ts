@@ -11,7 +11,7 @@ export default async (request, response) => {
 
   switch (request.method) {
     case 'GET': {
-      // TODO: Retornar informações sensíveis somente se estiver autenticado ou se for um juíz
+      // TODO: Retornar informações sensíveis somente se for um juíz
       const { userId } = request.query
 
       return User.findById(userId, (error, user) => {
@@ -57,6 +57,7 @@ export default async (request, response) => {
       })
     }
 
+    // USER DELETE
     // case 'DELETE': {
     //   const { userId } = request.query
     //   const condition = { _id: userId }

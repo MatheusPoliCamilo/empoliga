@@ -21,12 +21,19 @@ export default async (request, response) => {
         return decoded.id
       })
 
-      const getCollection = await database.collection('users')
-      const user = await getCollection.find({}).toArray()
+      return User.findById(id, (error, user) => {
+        database.close()
 
-      database.close()
+        if (error) {
+          return response.status(500).json(error)
+        }
 
-      return response.status(200).json({})
+        if (!user) {
+          return response.status(422).json({ erros: { message: 'Usuário não encontrado' } })
+        }
+
+        return response.status(200).json(user)
+      })
     }
 
     default: {
