@@ -42,6 +42,10 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Informe uma senha'],
     select: false,
   },
+  player: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Player',
+  },
 })
 
 interface UserInterface extends mongoose.Document {

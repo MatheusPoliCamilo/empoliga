@@ -28,6 +28,10 @@ const leagueAccountSchema = new mongoose.Schema({
   leaguePoints: {
     type: Number,
   },
+  player: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Player',
+  },
 })
 
 const LeagueAccount = mongoose.models.LeagueAccount || mongoose.model('LeagueAccount', leagueAccountSchema)

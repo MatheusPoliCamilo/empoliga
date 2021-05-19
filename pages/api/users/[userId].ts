@@ -57,25 +57,24 @@ export default async (request, response) => {
       })
     }
 
-    // USER DELETE
-    // case 'DELETE': {
-    //   const { userId } = request.query
-    //   const condition = { _id: userId }
+    case 'DELETE': {
+      const { userId } = request.query
+      const condition = { _id: userId }
 
-    //   return User.findOneAndDelete(condition, {}, (error, user) => {
-    //     database.close()
+      return User.findOneAndDelete(condition, {}, (error, user) => {
+        database.close()
 
-    //     if (error) {
-    //       return response.status(500).json(error)
-    //     }
+        if (error) {
+          return response.status(500).json(error)
+        }
 
-    //     if (!user) {
-    //       return response.status(422).json({ erros: { message: 'Usuário não encontrado' } })
-    //     }
+        if (!user) {
+          return response.status(422).json({ erros: { message: 'Usuário não encontrado' } })
+        }
 
-    //     return response.status(200).json(user)
-    //   })
-    // }
+        return response.status(200).json(user)
+      })
+    }
 
     default: {
       database.close()
