@@ -1,5 +1,6 @@
 import { connectToDatabase } from '../../../src/database'
 import { User } from '../../../src/schemas/user'
+import { Player } from '../../../src/schemas/player'
 import jwt from 'jsonwebtoken'
 
 export default async (request, response) => {
@@ -21,15 +22,25 @@ export default async (request, response) => {
         return decoded.id
       })
 
-      return User.findById(id, (error, user) => {
-        database.close()
-
+      return User.findById(id, async (error, user) => {
         if (error) {
+          database.close()
           return response.status(500).json(error)
         }
 
         if (!user) {
+          database.close()
           return response.status(422).json({ erros: { message: 'Usuário não encontrado' } })
+        }
+
+        if (!user.player) {
+          const player = await Player.create({ valid: false })
+          user.player = player.id
+          player.user = user.id
+          await player.save()
+          await user.save()
+
+          database.close()
         }
 
         return response.status(200).json(user)
