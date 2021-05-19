@@ -39,11 +39,13 @@ export default async (request, response) => {
           player.user = user.id
           await player.save()
           await user.save()
-
-          database.close()
         }
 
-        return response.status(200).json(user)
+        const res = response.status(200).json({ ...user._doc, player: await Player.findById(user.player) })
+
+        database.close()
+
+        return res
       })
     }
 
