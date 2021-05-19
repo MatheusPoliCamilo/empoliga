@@ -1,8 +1,5 @@
-import { useContext, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/navbar'
-import { CurrentUserContext } from '../../context/state'
-import jwt from 'jsonwebtoken'
-import Cookie from 'js-cookie'
 
 function openProfilePictureModal() {
   document.querySelector('html').classList.add('is-clipped')
@@ -14,23 +11,35 @@ function closeProfilePictureModal() {
   document.querySelector('.modal').classList.remove('is-active')
 }
 
+async function fetchProfile() {
+  const response = await fetch('/api/profile')
+  return await response.json()
+}
+
 export default function Index() {
+  const [profile, setProfile] = useState(null)
+
   useEffect(() => {
-    const cookie = Cookie.get('token')
-
-    if (!cookie) {
-      window.location.href = '/'
-    }
-
     document.querySelector('body').classList.add('has-navbar-fixed-top')
     document.querySelector('html').style.backgroundColor = 'black'
-  })
+
+    fetchProfile().then((profile) => {
+      if (profile.errors) {
+        window.location.href = '/'
+      } else {
+        setProfile(profile)
+
+        document.querySelector('#loading').classList.add('is-hidden')
+        document.querySelector('#page').classList.remove('is-hidden')
+      }
+    })
+  }, [])
 
   return (
     <div className='has-text-weight-bold'>
       <Navbar />
 
-      <div className='is-flex is-justify-content-center mt-6'>
+      <div className='is-flex is-justify-content-center mt-6 is-hidden' id='page'>
         <div className='is-flex is-flex-direction-column is-justify-content-center'>
           <button
             className='button is-large is-focused'
@@ -51,6 +60,7 @@ export default function Index() {
             Conquistas
           </button>
         </div>
+
         <div className='card' style={{ backgroundColor: 'white', height: '38vw', width: '60rem' }}>
           <div className='card-content'>
             <div className='content'>
@@ -119,12 +129,20 @@ export default function Index() {
 
       <div className='modal'>
         <div className='modal-background' onClick={() => closeProfilePictureModal()} style={{ cursor: 'pointer' }} />
+
         <div className='modal-content'>
           <p className='image is-4by3'>
             <img src='https://bulma.io/images/placeholders/1280x960.png' />
           </p>
         </div>
+
         <button className='modal-close is-large' aria-label='close' onClick={() => closeProfilePictureModal()} />
+      </div>
+
+      <div className='is-flex is-justify-content-center'>
+        <div style={{ margin: '0', position: 'absolute', top: '50%', transform: 'translateY(-50%)' }}>
+          <button className='button is-loading is-large' id='loading' />
+        </div>
       </div>
     </div>
   )

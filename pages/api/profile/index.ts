@@ -15,13 +15,15 @@ export default async (request, response) => {
     case 'GET': {
       const token = request.cookies.token
 
-      const id = jwt.verify(token, process.env.AUTH_SECRET, (error, decoded) => {
-        if (error) {
-          return response.status(401).json({ errors: { message: 'Token incorreto' } })
-        }
-
-        return decoded.id
+      const { error, decoded } = jwt.verify(token, process.env.AUTH_SECRET, (error, decoded) => {
+        return { error, decoded }
       })
+
+      if (error) {
+        return response.status(401).json({ errors: { message: 'Token incorreto' } })
+      }
+
+      const id = decoded.id
 
       return User.findById(id, async (error, user) => {
         if (error) {
@@ -59,11 +61,9 @@ export default async (request, response) => {
           })
         )
 
-        const res = response.status(200).json({ ...user._doc, player: { ...player._doc, leagueAccounts } })
-
         database.close()
 
-        return res
+        return response.status(200).json({ ...user._doc, player: { ...player._doc, leagueAccounts } })
       })
     }
 

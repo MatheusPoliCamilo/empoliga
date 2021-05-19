@@ -8,6 +8,7 @@ const playerSchema = new mongoose.Schema({
     type: String,
   },
   role: {
+    type: String,
     enum: ['Top', 'Jungle', 'Mid', 'Adc', 'Support'],
   },
   availability: {
