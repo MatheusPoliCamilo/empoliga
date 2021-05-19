@@ -44,16 +44,13 @@ export default async (request, response) => {
 
         let player = await Player.findById(user.player)
 
-        if (!player.leagueAccounts || player.leagueAccounts.length === 0) {
-          console.log(1, !player.leagueAccounts)
-          console.log(2, player.leagueAccounts.length === 0)
+        if (player.leagueAccounts.length === 0) {
           const leagueAccount = await LeagueAccount.create({})
           leagueAccount.player = player.id
           await leagueAccount.save()
 
           player.leagueAccounts.push(leagueAccount.id)
           player = await player.save()
-          console.log('player no if', player)
         }
 
         const leagueAccounts = await Promise.all(
