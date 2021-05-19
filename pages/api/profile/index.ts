@@ -1,6 +1,7 @@
 import { connectToDatabase } from '../../../src/database'
 import { User } from '../../../src/schemas/user'
 import { Player } from '../../../src/schemas/player'
+import { LeagueAccount } from '../../../src/schemas/leagueAccount'
 import jwt from 'jsonwebtoken'
 
 export default async (request, response) => {
@@ -41,7 +42,18 @@ export default async (request, response) => {
           await user.save()
         }
 
-        const res = response.status(200).json({ ...user._doc, player: await Player.findById(user.player) })
+        const player = await Player.findById(user.player)
+
+        if (player.leagueAccounts.length === 0) {
+          const leagueAccount = await LeagueAccount.create({})
+          leagueAccount.player = player.id
+          await leagueAccount.save()
+
+          player.leagueAccounts.push(leagueAccount)
+          await player.save()
+        }
+
+        const res = response.status(200).json({ ...user._doc, player })
 
         database.close()
 
