@@ -1,5 +1,6 @@
 import { connectToDatabase } from '../../../src/database'
 import { User } from '../../../src/schemas/user'
+import { Player } from '../../../src/schemas/player'
 import jwt from 'jsonwebtoken'
 
 export default async (request, response) => {
@@ -21,15 +22,21 @@ export default async (request, response) => {
     }
 
     case 'POST': {
-      return await User.create(request.body, (errors, user) => {
-        database.close()
-        user.password = undefined
+      const player = await Player.create({ valid: false })
 
+      return await User.create({ ...request.body, player: player.id }, async (errors, user) => {
         if (errors) {
+          database.close()
           return response.status(422).json(errors)
         } else {
+          user.password = undefined
+
           const oneDay = 86400
           const token = jwt.sign({ id: user._id }, process.env.AUTH_SECRET, { expiresIn: oneDay })
+
+          player.user = user
+          await player.save()
+          database.close()
 
           return response.status(201).json({ user, token })
         }
