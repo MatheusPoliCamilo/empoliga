@@ -39,21 +39,30 @@ export default async (request, response) => {
           user.player = player.id
           player.user = user.id
           await player.save()
-          await user.save()
+          user = await user.save()
         }
 
-        const player = await Player.findById(user.player)
+        let player = await Player.findById(user.player)
 
-        if (player.leagueAccounts.length === 0) {
+        if (!player.leagueAccounts || player.leagueAccounts.length === 0) {
+          console.log(1, !player.leagueAccounts)
+          console.log(2, player.leagueAccounts.length === 0)
           const leagueAccount = await LeagueAccount.create({})
           leagueAccount.player = player.id
           await leagueAccount.save()
 
-          player.leagueAccounts.push(leagueAccount)
-          await player.save()
+          player.leagueAccounts.push(leagueAccount.id)
+          player = await player.save()
+          console.log('player no if', player)
         }
 
-        const res = response.status(200).json({ ...user._doc, player })
+        const leagueAccounts = await Promise.all(
+          player.leagueAccounts.map(async (id) => {
+            return await LeagueAccount.findById(id)
+          })
+        )
+
+        const res = response.status(200).json({ ...user._doc, player: { ...player._doc, leagueAccounts } })
 
         database.close()
 
