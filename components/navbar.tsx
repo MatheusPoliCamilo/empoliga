@@ -101,7 +101,9 @@ function Navbar() {
                   >
                     Sair
                   </button>
-                  <a className='button p-5 ml-1'>{user.nick ? user.nick : user.name}</a>
+                  <a href='/perfil' className='button p-5 ml-1'>
+                    {user.nick ? user.nick : user.name}
+                  </a>
                 </>
               ) : (
                 <>

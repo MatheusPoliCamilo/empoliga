@@ -35,6 +35,8 @@ export default function Index() {
     })
   }, [])
 
+  console.log(profile)
+
   return (
     <div className='has-text-weight-bold'>
       <Navbar />
@@ -84,19 +86,55 @@ export default function Index() {
                     MMMMMMMMMMMMMMMM
                   </h1>
 
-                  <h1 className='title'>Yanca Silva Elizandro</h1>
+                  <h1
+                    className='title'
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      document.querySelector('#name').classList.add('is-hidden')
+                      document.querySelector('#name-form').classList.remove('is-hidden')
+                    }}
+                    id='name'
+                  >
+                    {profile && profile.name}
+                  </h1>
+
+                  <form
+                    id='name-form'
+                    className='is-hidden is-flex mt-5 mb-4'
+                    onSubmit={(event) => {
+                      event.preventDefault()
+                    }}
+                  >
+                    <input
+                      type='text'
+                      name=''
+                      className='input is-medium'
+                      placeholder='Digite seu nome completo'
+                      value={profile && profile.name}
+                    />
+                    <button
+                      className='button is-primary is-medium ml-2'
+                      onClick={() => {
+                        document.querySelector('#name-form').classList.add('is-hidden')
+                        document.querySelector('#name').classList.remove('is-hidden')
+                      }}
+                    >
+                      Salvar
+                    </button>
+                  </form>
 
                   <h1 className='title mt-1'>ADC</h1>
 
-                  <h1 className='title mt-1'>
+                  {/* TODO: Time/Free agent */}
+                  {/* <h1 className='title mt-1'>
                     <a href=''>paiN Gaming</a>
-                  </h1>
+                  </h1> */}
                 </div>
               </div>
 
               <div className='columns'>
                 <div className='column'>
-                  <h1 className='title is-4'>yancaselizandro@gmail.com</h1>
+                  <h1 className='title is-4'>{profile && profile.email}</h1>
                   <h1 className='title is-4'>24 anos</h1>
                   <h1 className='title is-4'>Santa Catarina</h1>
                   <h1 className='title is-4'>Tijucas</h1>
