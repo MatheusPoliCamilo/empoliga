@@ -22,6 +22,7 @@ export default function Index() {
   const [profile, setProfile] = useState(null)
   const [name, setName] = useState('')
   const [role, setRole] = useState('Top')
+  const [email, setEmail] = useState('')
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
@@ -34,6 +35,7 @@ export default function Index() {
         setProfile(profile)
         setName(profile.name)
         setRole(profile.player.role)
+        setEmail(profile.email)
 
         document.querySelector('#loading').classList.add('is-hidden')
         document.querySelector('#page').classList.remove('is-hidden')
@@ -60,6 +62,13 @@ export default function Index() {
             style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
             disabled
           >
+            Dados pessoais
+          </button>
+          <button
+            className='button is-large mt-5 is-primary'
+            style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+            disabled
+          >
             Histórico
           </button>
           <button
@@ -71,7 +80,10 @@ export default function Index() {
           </button>
         </div>
 
-        <div className='card' style={{ backgroundColor: 'white', height: '38vw', width: '60rem' }}>
+        <div
+          className='card'
+          style={{ backgroundColor: 'white', height: '38vw', width: '60rem', marginRight: '12rem' }}
+        >
           <div className='card-content'>
             <div className='content'>
               <div className='is-flex'>
@@ -126,7 +138,6 @@ export default function Index() {
                   >
                     <input
                       type='text'
-                      id='name-input'
                       className='input is-medium'
                       placeholder='Digite seu nome completo'
                       value={name}
@@ -227,7 +238,62 @@ export default function Index() {
 
               <div className='columns'>
                 <div className='column'>
-                  <h1 className='title is-4'>{profile && profile.email}</h1>
+                  <h1
+                    className='title is-4'
+                    style={{ cursor: 'pointer' }}
+                    id='email'
+                    onClick={() => {
+                      document.querySelector('#email').classList.add('is-hidden')
+                      document.querySelector('#email-form').classList.remove('is-hidden')
+                    }}
+                  >
+                    {email}
+                  </h1>
+
+                  <form
+                    id='email-form'
+                    className='is-hidden is-flex'
+                    onSubmit={async (event) => {
+                      event.preventDefault()
+
+                      await fetch(`/api/users/${profile._id}`, {
+                        method: 'PATCH',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email }),
+                      })
+                    }}
+                  >
+                    <input
+                      type='text'
+                      className='input'
+                      placeholder='Digite seu e-mail'
+                      value={email}
+                      autoFocus
+                      onChange={(event) => setEmail(event.target.value)}
+                    />
+                    <button
+                      className='button is-primary ml-2'
+                      onClick={() => {
+                        document.querySelector('#email-form').classList.add('is-hidden')
+                        document.querySelector('#email').classList.remove('is-hidden')
+                      }}
+                    >
+                      Salvar
+                    </button>
+                    <button
+                      className='button ml-2'
+                      type='button'
+                      onClick={() => {
+                        document.querySelector('#email-form').classList.add('is-hidden')
+                        document.querySelector('#email').classList.remove('is-hidden')
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                  </form>
+
                   <h1 className='title is-4'>24 anos</h1>
                   <h1 className='title is-4'>Santa Catarina</h1>
                   <h1 className='title is-4'>Tijucas</h1>
