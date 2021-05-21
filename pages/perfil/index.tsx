@@ -180,6 +180,10 @@ export default function Index() {
                     onSubmit={async (event) => {
                       event.preventDefault()
 
+                      const button = document.querySelector('#name-save') as HTMLButtonElement
+                      button.disabled = true
+                      button.classList.add('is-loading')
+
                       await fetch(`/api/users/${profile._id}`, {
                         method: 'PATCH',
                         headers: {
@@ -190,6 +194,12 @@ export default function Index() {
 
                       const user = JSON.parse(Cookie.get('currentUser'))
                       Cookie.set('currentUser', { ...user, name }, { expires: addDays(new Date(), 1) })
+
+                      document.querySelector('#name-form').classList.add('is-hidden')
+                      document.querySelector('#name').classList.remove('is-hidden')
+
+                      button.disabled = false
+                      button.classList.remove('is-loading')
                     }}
                   >
                     <input
@@ -200,13 +210,7 @@ export default function Index() {
                       autoFocus
                       onChange={(event) => setName(event.target.value)}
                     />
-                    <button
-                      className='button is-primary is-medium ml-2'
-                      onClick={() => {
-                        document.querySelector('#name-form').classList.add('is-hidden')
-                        document.querySelector('#name').classList.remove('is-hidden')
-                      }}
-                    >
+                    <button className='button is-primary is-medium ml-2' id='name-save'>
                       Salvar
                     </button>
                     <button
@@ -239,6 +243,10 @@ export default function Index() {
                     onSubmit={async (event) => {
                       event.preventDefault()
 
+                      const button = document.querySelector('#role-save') as HTMLButtonElement
+                      button.disabled = true
+                      button.classList.add('is-loading')
+
                       await fetch(`/api/players/${profile.player._id}`, {
                         method: 'PATCH',
                         headers: {
@@ -246,6 +254,12 @@ export default function Index() {
                         },
                         body: JSON.stringify({ role }),
                       })
+
+                      document.querySelector('#role-form').classList.add('is-hidden')
+                      document.querySelector('#role').classList.remove('is-hidden')
+
+                      button.disabled = false
+                      button.classList.remove('is-loading')
                     }}
                   >
                     <div className='select is-medium'>
@@ -263,13 +277,7 @@ export default function Index() {
                       </select>
                     </div>
 
-                    <button
-                      className='button is-primary is-medium ml-2'
-                      onClick={() => {
-                        document.querySelector('#role-form').classList.add('is-hidden')
-                        document.querySelector('#role').classList.remove('is-hidden')
-                      }}
-                    >
+                    <button className='button is-primary is-medium ml-2' id='role-save'>
                       Salvar
                     </button>
 
@@ -308,9 +316,13 @@ export default function Index() {
 
                   <form
                     id='email-form'
-                    className='is-hidden is-flex'
+                    className='is-hidden is-flex mb-3'
                     onSubmit={async (event) => {
                       event.preventDefault()
+
+                      const button = document.querySelector('#email-save') as HTMLButtonElement
+                      button.disabled = true
+                      button.classList.add('is-loading')
 
                       await fetch(`/api/users/${profile._id}`, {
                         method: 'PATCH',
@@ -319,6 +331,12 @@ export default function Index() {
                         },
                         body: JSON.stringify({ email }),
                       })
+
+                      document.querySelector('#email-form').classList.add('is-hidden')
+                      document.querySelector('#email').classList.remove('is-hidden')
+
+                      button.disabled = false
+                      button.classList.remove('is-loading')
                     }}
                   >
                     <input
@@ -329,13 +347,7 @@ export default function Index() {
                       autoFocus
                       onChange={(event) => setEmail(event.target.value)}
                     />
-                    <button
-                      className='button is-primary ml-2'
-                      onClick={() => {
-                        document.querySelector('#email-form').classList.add('is-hidden')
-                        document.querySelector('#email').classList.remove('is-hidden')
-                      }}
-                    >
+                    <button className='button is-primary ml-2' id='email-save'>
                       Salvar
                     </button>
                     <button
@@ -364,9 +376,13 @@ export default function Index() {
 
                   <form
                     id='age-form'
-                    className='is-hidden is-flex'
+                    className='is-hidden is-flex mb-3'
                     onSubmit={async (event) => {
                       event.preventDefault()
+
+                      const button = document.querySelector('#age-save') as HTMLButtonElement
+                      button.disabled = true
+                      button.classList.add('is-loading')
 
                       const birthDate = new Date(`${date.year}-${date.month}-${date.day}`).toISOString()
 
@@ -382,6 +398,9 @@ export default function Index() {
 
                       document.querySelector('#age-form').classList.add('is-hidden')
                       document.querySelector('#age').classList.remove('is-hidden')
+
+                      button.disabled = false
+                      button.classList.remove('is-loading')
                     }}
                   >
                     <div className='select'>
@@ -424,7 +443,9 @@ export default function Index() {
                       </select>
                     </div>
 
-                    <button className='button is-primary ml-2'>Salvar</button>
+                    <button className='button is-primary ml-2' id='age-save'>
+                      Salvar
+                    </button>
                     <button
                       className='button ml-2'
                       type='button'
@@ -451,9 +472,12 @@ export default function Index() {
 
                   <form
                     id='state-form'
-                    className='is-hidden is-flex'
+                    className='is-hidden is-flex mb-3'
                     onSubmit={async (event) => {
                       event.preventDefault()
+                      const button = document.querySelector('#state-save') as HTMLButtonElement
+                      button.disabled = true
+                      button.classList.add('is-loading')
 
                       await fetch(`/api/players/${profile.player._id}`, {
                         method: 'PATCH',
@@ -465,6 +489,9 @@ export default function Index() {
 
                       document.querySelector('#state-form').classList.add('is-hidden')
                       document.querySelector('#state').classList.remove('is-hidden')
+
+                      button.disabled = false
+                      button.classList.remove('is-loading')
                     }}
                   >
                     <div className='select'>
@@ -477,7 +504,9 @@ export default function Index() {
                       </select>
                     </div>
 
-                    <button className='button is-primary ml-2'>Salvar</button>
+                    <button className='button is-primary ml-2' id='state-save'>
+                      Salvar
+                    </button>
                     <button
                       className='button ml-2'
                       type='button'
@@ -504,9 +533,13 @@ export default function Index() {
 
                   <form
                     id='city-form'
-                    className='is-hidden is-flex'
+                    className='is-hidden is-flex mb-3'
                     onSubmit={async (event) => {
                       event.preventDefault()
+
+                      const button = document.querySelector('#city-save') as HTMLButtonElement
+                      button.disabled = true
+                      button.classList.add('is-loading')
 
                       await fetch(`/api/players/${profile.player._id}`, {
                         method: 'PATCH',
@@ -518,6 +551,9 @@ export default function Index() {
 
                       document.querySelector('#city-form').classList.add('is-hidden')
                       document.querySelector('#city').classList.remove('is-hidden')
+
+                      button.disabled = false
+                      button.classList.remove('is-loading')
                     }}
                   >
                     <div className='select'>
@@ -530,7 +566,9 @@ export default function Index() {
                       </select>
                     </div>
 
-                    <button className='button is-primary ml-2'>Salvar</button>
+                    <button className='button is-primary ml-2' id='city-save'>
+                      Salvar
+                    </button>
                     <button
                       className='button ml-2'
                       type='button'
