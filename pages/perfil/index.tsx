@@ -21,6 +21,7 @@ async function fetchProfile() {
 export default function Index() {
   const [profile, setProfile] = useState(null)
   const [name, setName] = useState('')
+  const [role, setRole] = useState('Top')
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
@@ -32,6 +33,7 @@ export default function Index() {
       } else {
         setProfile(profile)
         setName(profile.name)
+        setRole(profile.player.role)
 
         document.querySelector('#loading').classList.add('is-hidden')
         document.querySelector('#page').classList.remove('is-hidden')
@@ -107,8 +109,19 @@ export default function Index() {
                   <form
                     id='name-form'
                     className='is-hidden is-flex mt-5 mb-4'
-                    onSubmit={(event) => {
+                    onSubmit={async (event) => {
                       event.preventDefault()
+
+                      await fetch(`/api/users/${profile._id}`, {
+                        method: 'PATCH',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name }),
+                      })
+
+                      const user = JSON.parse(Cookie.get('currentUser'))
+                      Cookie.set('currentUser', { ...user, name }, { expires: addDays(new Date(), 1) })
                     }}
                   >
                     <input
@@ -122,20 +135,9 @@ export default function Index() {
                     />
                     <button
                       className='button is-primary is-medium ml-2'
-                      onClick={async () => {
+                      onClick={() => {
                         document.querySelector('#name-form').classList.add('is-hidden')
                         document.querySelector('#name').classList.remove('is-hidden')
-
-                        await fetch(`/api/users/${profile._id}`, {
-                          method: 'PATCH',
-                          headers: {
-                            'Content-Type': 'application/json',
-                          },
-                          body: JSON.stringify({ name }),
-                        })
-
-                        const user = JSON.parse(Cookie.get('currentUser'))
-                        Cookie.set('currentUser', { ...user, name }, { expires: addDays(new Date(), 1) })
                       }}
                     >
                       Salvar
@@ -151,33 +153,36 @@ export default function Index() {
                     }}
                     style={{ cursor: 'pointer' }}
                   >
-                    ADC
+                    {role}
                   </h1>
 
                   <form
                     id='role-form'
                     className='is-hidden is-flex mt-5 mb-4'
-                    onSubmit={(event) => {
+                    onSubmit={async (event) => {
                       event.preventDefault()
+
+                      await fetch(`/api/players/${profile.player._id}`, {
+                        method: 'PATCH',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ role }),
+                      })
                     }}
                   >
                     <div className='select is-medium'>
-                      <select>
-                        <option value='Top' selected={profile && profile.player.role === 'Top'}>
-                          Top
-                        </option>
-                        <option value='Jungle' selected={profile && profile.player.role === 'Jungle'}>
-                          Jungle
-                        </option>
-                        <option value='Mid' selected={profile && profile.player.role === 'Mid'}>
-                          Mid
-                        </option>
-                        <option value='Adc' selected={profile && profile.player.role === 'Adc'}>
-                          Adc
-                        </option>
-                        <option value='Support' selected={profile && profile.player.role === 'Support'}>
-                          Support
-                        </option>
+                      <select
+                        onChange={(event) => {
+                          setRole(event.target.value)
+                        }}
+                        value={role}
+                      >
+                        <option value='Top'>Top</option>
+                        <option value='Jungle'>Jungle</option>
+                        <option value='Mid'>Mid</option>
+                        <option value='Adc'>Adc</option>
+                        <option value='Support'>Support</option>
                       </select>
                     </div>
 
