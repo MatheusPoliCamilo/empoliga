@@ -142,6 +142,16 @@ export default function Index() {
                     >
                       Salvar
                     </button>
+                    <button
+                      className='button is-medium ml-2'
+                      type='button'
+                      onClick={() => {
+                        document.querySelector('#name-form').classList.add('is-hidden')
+                        document.querySelector('#name').classList.remove('is-hidden')
+                      }}
+                    >
+                      Cancelar
+                    </button>
                   </form>
 
                   <h1
@@ -194,6 +204,17 @@ export default function Index() {
                       }}
                     >
                       Salvar
+                    </button>
+
+                    <button
+                      type='button'
+                      className='button is-medium ml-2'
+                      onClick={() => {
+                        document.querySelector('#role-form').classList.add('is-hidden')
+                        document.querySelector('#role').classList.remove('is-hidden')
+                      }}
+                    >
+                      Cancelar
                     </button>
                   </form>
 
