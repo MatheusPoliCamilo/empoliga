@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/navbar'
 import Cookie from 'js-cookie'
+import { addDays } from 'date-fns'
 
 function openProfilePictureModal() {
   document.querySelector('html').classList.add('is-clipped')
@@ -47,20 +48,22 @@ export default function Index() {
       <div className='is-flex is-justify-content-center mt-6 is-hidden' id='page'>
         <div className='is-flex is-flex-direction-column is-justify-content-center'>
           <button
-            className='button is-large is-focused'
+            className='button is-large is-focused is-primary'
             style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
           >
             Perfil
           </button>
           <button
-            className='button is-large mt-5'
+            className='button is-large mt-5 is-primary'
             style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+            disabled
           >
             Histórico
           </button>
           <button
-            className='button is-large mt-5'
+            className='button is-large mt-5 is-primary'
             style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+            disabled
           >
             Conquistas
           </button>
@@ -130,6 +133,9 @@ export default function Index() {
                           },
                           body: JSON.stringify({ name }),
                         })
+
+                        const user = JSON.parse(Cookie.get('currentUser'))
+                        Cookie.set('currentUser', { ...user, name }, { expires: addDays(new Date(), 1) })
                       }}
                     >
                       Salvar
