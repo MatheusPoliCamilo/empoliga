@@ -1,6 +1,7 @@
 import { connectToDatabase } from '../../../src/database'
 import { User } from '../../../src/schemas/user'
 import { verifyAuthentication } from '../../../src/verifyAuthentication'
+import jwt from 'jsonwebtoken'
 
 export default async (request, response) => {
   const database = await connectToDatabase(process.env.MONGODB_URI)
@@ -30,12 +31,19 @@ export default async (request, response) => {
     }
 
     case 'PATCH': {
-      const id = verifyAuthentication(request, response)
+      // const id = verifyAuthentication(request, response)
+      const token = request.cookies.token
+      const { error, decoded } = jwt.verify(token, process.env.AUTH_SECRET, (error, decoded) => {
+        return { error, decoded }
+      })
+
+      if (error) return response.status(401).json({ errors: { message: 'Usuário não autenticado' } })
+
       const { userId } = request.query
 
-      if (!id) return
+      if (!decoded.id) return response.status(401).json({ errors: { message: 'Usuário não autenticado' } })
 
-      if (id !== userId) {
+      if (decoded.id !== userId) {
         return response.status(200).json({ errors: { message: 'Tentativa de alteração de usuário não autenticado' } })
       }
 

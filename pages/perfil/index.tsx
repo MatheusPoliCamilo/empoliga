@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/navbar'
+import Cookie from 'js-cookie'
 
 function openProfilePictureModal() {
   document.querySelector('html').classList.add('is-clipped')
@@ -18,6 +19,7 @@ async function fetchProfile() {
 
 export default function Index() {
   const [profile, setProfile] = useState(null)
+  const [name, setName] = useState('')
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
@@ -28,6 +30,7 @@ export default function Index() {
         window.location.href = '/'
       } else {
         setProfile(profile)
+        setName(profile.name)
 
         document.querySelector('#loading').classList.add('is-hidden')
         document.querySelector('#page').classList.remove('is-hidden')
@@ -95,7 +98,7 @@ export default function Index() {
                     }}
                     id='name'
                   >
-                    {profile && profile.name}
+                    {name}
                   </h1>
 
                   <form
@@ -107,23 +110,81 @@ export default function Index() {
                   >
                     <input
                       type='text'
-                      name=''
+                      id='name-input'
                       className='input is-medium'
                       placeholder='Digite seu nome completo'
-                      value={profile && profile.name}
+                      value={name}
+                      autoFocus
+                      onChange={(event) => setName(event.target.value)}
                     />
                     <button
                       className='button is-primary is-medium ml-2'
-                      onClick={() => {
+                      onClick={async () => {
                         document.querySelector('#name-form').classList.add('is-hidden')
                         document.querySelector('#name').classList.remove('is-hidden')
+
+                        await fetch(`/api/users/${profile._id}`, {
+                          method: 'PATCH',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({ name }),
+                        })
                       }}
                     >
                       Salvar
                     </button>
                   </form>
 
-                  <h1 className='title mt-1'>ADC</h1>
+                  <h1
+                    className='title mt-1'
+                    id='role'
+                    onClick={() => {
+                      document.querySelector('#role').classList.add('is-hidden')
+                      document.querySelector('#role-form').classList.remove('is-hidden')
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    ADC
+                  </h1>
+
+                  <form
+                    id='role-form'
+                    className='is-hidden is-flex mt-5 mb-4'
+                    onSubmit={(event) => {
+                      event.preventDefault()
+                    }}
+                  >
+                    <div className='select is-medium'>
+                      <select>
+                        <option value='Top' selected={profile && profile.player.role === 'Top'}>
+                          Top
+                        </option>
+                        <option value='Jungle' selected={profile && profile.player.role === 'Jungle'}>
+                          Jungle
+                        </option>
+                        <option value='Mid' selected={profile && profile.player.role === 'Mid'}>
+                          Mid
+                        </option>
+                        <option value='Adc' selected={profile && profile.player.role === 'Adc'}>
+                          Adc
+                        </option>
+                        <option value='Support' selected={profile && profile.player.role === 'Support'}>
+                          Support
+                        </option>
+                      </select>
+                    </div>
+
+                    <button
+                      className='button is-primary is-medium ml-2'
+                      onClick={() => {
+                        document.querySelector('#role-form').classList.add('is-hidden')
+                        document.querySelector('#role').classList.remove('is-hidden')
+                      }}
+                    >
+                      Salvar
+                    </button>
+                  </form>
 
                   {/* TODO: Time/Free agent */}
                   {/* <h1 className='title mt-1'>
