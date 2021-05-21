@@ -29,6 +29,12 @@ async function fetchCities(state) {
   return await response.json()
 }
 
+function showOnlyInput(attributeName) {
+  document.querySelector(`#${attributeName}`).classList.add('is-hidden')
+  document.querySelector(`#${attributeName}-cancel`).classList.add('is-hidden')
+  document.querySelector(`#${attributeName}-form`).classList.remove('is-hidden')
+}
+
 export default function Index() {
   const [profile, setProfile] = useState(null)
   const [name, setName] = useState('')
@@ -55,7 +61,7 @@ export default function Index() {
         setRole(profile.player.role)
         setEmail(profile.email)
         setBirthDate(profile.birthDate.toString())
-        setState(profile.player.state)
+        if (profile.player.state) setState(profile.player.state)
         setCity(profile.player.city)
 
         fetchStates().then((states) => {
@@ -68,6 +74,10 @@ export default function Index() {
           document.querySelector('#loading').classList.add('is-hidden')
           document.querySelector('#page').classList.remove('is-hidden')
         })
+
+        if (!profile.player.role) showOnlyInput('role')
+        if (!profile.player.state) showOnlyInput('state')
+        if (!profile.player.city) showOnlyInput('city')
       }
     })
   }, [])
@@ -234,6 +244,7 @@ export default function Index() {
                     onClick={() => {
                       document.querySelector('#role').classList.add('is-hidden')
                       document.querySelector('#role-form').classList.remove('is-hidden')
+                      document.querySelector('#role-cancel').classList.remove('is-hidden')
                     }}
                     style={{ cursor: 'pointer' }}
                   >
@@ -289,6 +300,7 @@ export default function Index() {
                     <button
                       type='button'
                       className='button is-medium ml-2'
+                      id='role-cancel'
                       onClick={() => {
                         document.querySelector('#role-form').classList.add('is-hidden')
                         document.querySelector('#role').classList.remove('is-hidden')
@@ -519,6 +531,7 @@ export default function Index() {
                     <button
                       className='button ml-2'
                       type='button'
+                      id='state-cancel'
                       onClick={() => {
                         document.querySelector('#state-form').classList.add('is-hidden')
                         document.querySelector('#state').classList.remove('is-hidden')
@@ -583,6 +596,7 @@ export default function Index() {
                     <button
                       className='button ml-2'
                       type='button'
+                      id='city-cancel'
                       onClick={() => {
                         document.querySelector('#city-form').classList.add('is-hidden')
                         document.querySelector('#city').classList.remove('is-hidden')
