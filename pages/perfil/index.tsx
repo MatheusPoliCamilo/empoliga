@@ -18,6 +18,16 @@ async function fetchProfile() {
   return await response.json()
 }
 
+async function fetchStates() {
+  const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
+  return await response.json()
+}
+
+async function fetchCities(state) {
+  const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios`)
+  return await response.json()
+}
+
 export default function Index() {
   const [profile, setProfile] = useState(null)
   const [name, setName] = useState('')
@@ -26,6 +36,10 @@ export default function Index() {
   const [birthDate, setBirthDate] = useState('')
   const [age, setAge] = useState('')
   const [date, setDate] = useState({ day: '1', month: '1', year: '2009' })
+  const [states, setStates] = useState([])
+  const [state, setState] = useState('RO')
+  const [cities, setCities] = useState('')
+  const [city, setCity] = useState('')
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
@@ -40,9 +54,18 @@ export default function Index() {
         setRole(profile.player.role)
         setEmail(profile.email)
         setBirthDate(profile.birthDate.toString())
+        setState(profile.player.state)
 
-        document.querySelector('#loading').classList.add('is-hidden')
-        document.querySelector('#page').classList.remove('is-hidden')
+        fetchStates().then((states) => {
+          setStates(
+            states.map((state) => {
+              return { uf: state.sigla, name: state.nome }
+            })
+          )
+
+          document.querySelector('#loading').classList.add('is-hidden')
+          document.querySelector('#page').classList.remove('is-hidden')
+        })
       }
     })
   }, [])
@@ -54,6 +77,16 @@ export default function Index() {
     setDate({ day: date.getDate().toString(), month: (date.getMonth() + 1).toString(), year: getYear(date).toString() })
     setAge(`${numberAge} anos`)
   }, [birthDate])
+
+  useEffect(() => {
+    fetchCities(state).then((cities) => {
+      setCities(
+        cities.map((city) => {
+          return { name: city.nome }
+        })
+      )
+    })
+  }, [state])
 
   const minYear = new Date().getFullYear() - 12
   const maxYear = new Date().getFullYear() - 100
@@ -125,7 +158,7 @@ export default function Index() {
 
                 <div>
                   <h1 className='title ml-0 mr-0 mb-0 is-1' style={{ fontSize: '4rem', marginTop: '-1rem' }}>
-                    MMMMMMMMMMMMMMMM
+                    This is my nickname
                   </h1>
 
                   <h1
@@ -403,7 +436,59 @@ export default function Index() {
                     </button>
                   </form>
 
-                  <h1 className='title is-4'>Santa Catarina</h1>
+                  <h1
+                    className='title is-4'
+                    id='state'
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      document.querySelector('#state').classList.add('is-hidden')
+                      document.querySelector('#state-form').classList.remove('is-hidden')
+                    }}
+                  >
+                    Santa Catarina
+                  </h1>
+
+                  <form
+                    id='state-form'
+                    className='is-hidden is-flex'
+                    onSubmit={async (event) => {
+                      event.preventDefault()
+
+                      await fetch(`/api/players/${profile.player._id}`, {
+                        method: 'PATCH',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ state }),
+                      })
+
+                      document.querySelector('#state-form').classList.add('is-hidden')
+                      document.querySelector('#state').classList.remove('is-hidden')
+                    }}
+                  >
+                    <div className='select'>
+                      <select value={state} onChange={(event) => setState(event.target.value)}>
+                        {states.map(({ uf, name }) => (
+                          <option value={uf} key={uf}>
+                            {name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <button className='button is-primary ml-2'>Salvar</button>
+                    <button
+                      className='button ml-2'
+                      type='button'
+                      onClick={() => {
+                        document.querySelector('#state-form').classList.add('is-hidden')
+                        document.querySelector('#state').classList.remove('is-hidden')
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                  </form>
+
                   <h1 className='title is-4'>Tijucas</h1>
                 </div>
                 <div className='column has-text-centered'>
