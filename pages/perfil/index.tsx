@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/navbar'
 import Cookie from 'js-cookie'
 import { addDays, parseISO, getYear, differenceInYears } from 'date-fns'
+import { Player } from '../../src/schemas/player'
 
 function openProfilePictureModal() {
   document.querySelector('html').classList.add('is-clipped')
@@ -171,7 +172,7 @@ export default function Index() {
                     }}
                     id='name'
                   >
-                    {name}
+                    {profile && profile.name}
                   </h1>
 
                   <form
@@ -191,6 +192,8 @@ export default function Index() {
                         },
                         body: JSON.stringify({ name }),
                       })
+
+                      setProfile({ ...profile, name })
 
                       const user = JSON.parse(Cookie.get('currentUser'))
                       Cookie.set('currentUser', { ...user, name }, { expires: addDays(new Date(), 1) })
@@ -234,7 +237,7 @@ export default function Index() {
                     }}
                     style={{ cursor: 'pointer' }}
                   >
-                    {role}
+                    {profile && profile.player.role}
                   </h1>
 
                   <form
@@ -254,6 +257,8 @@ export default function Index() {
                         },
                         body: JSON.stringify({ role }),
                       })
+
+                      setProfile({ ...profile, player: { ...profile.player, role } })
 
                       document.querySelector('#role-form').classList.add('is-hidden')
                       document.querySelector('#role').classList.remove('is-hidden')
@@ -311,7 +316,7 @@ export default function Index() {
                       document.querySelector('#email-form').classList.remove('is-hidden')
                     }}
                   >
-                    {email}
+                    {profile && profile.email}
                   </h1>
 
                   <form
@@ -331,6 +336,8 @@ export default function Index() {
                         },
                         body: JSON.stringify({ email }),
                       })
+
+                      setProfile({ ...profile, email })
 
                       document.querySelector('#email-form').classList.add('is-hidden')
                       document.querySelector('#email').classList.remove('is-hidden')
@@ -467,7 +474,7 @@ export default function Index() {
                       document.querySelector('#state-form').classList.remove('is-hidden')
                     }}
                   >
-                    {state}
+                    {profile && profile.player.state}
                   </h1>
 
                   <form
@@ -486,6 +493,8 @@ export default function Index() {
                         },
                         body: JSON.stringify({ state }),
                       })
+
+                      setProfile({ ...profile, player: { ...profile.player, state } })
 
                       document.querySelector('#state-form').classList.add('is-hidden')
                       document.querySelector('#state').classList.remove('is-hidden')
@@ -528,7 +537,7 @@ export default function Index() {
                       document.querySelector('#city-form').classList.remove('is-hidden')
                     }}
                   >
-                    {city}
+                    {profile && profile.player.city}
                   </h1>
 
                   <form
@@ -548,6 +557,8 @@ export default function Index() {
                         },
                         body: JSON.stringify({ city }),
                       })
+
+                      setProfile({ ...profile, player: { ...profile.player, city } })
 
                       document.querySelector('#city-form').classList.add('is-hidden')
                       document.querySelector('#city').classList.remove('is-hidden')
