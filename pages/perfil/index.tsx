@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/navbar'
 import Cookie from 'js-cookie'
-import { addDays } from 'date-fns'
+import { addDays, parseISO, getYear, differenceInYears } from 'date-fns'
 
 function openProfilePictureModal() {
   document.querySelector('html').classList.add('is-clipped')
@@ -23,12 +23,15 @@ export default function Index() {
   const [name, setName] = useState('')
   const [role, setRole] = useState('Top')
   const [email, setEmail] = useState('')
+  const [birthDate, setBirthDate] = useState('')
+  const [age, setAge] = useState('')
+  const [date, setDate] = useState({ day: '1', month: '1', year: '2009' })
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
     document.querySelector('html').style.backgroundColor = 'black'
 
-    fetchProfile().then((profile) => {
+    fetchProfile().then(async (profile) => {
       if (profile.errors) {
         window.location.href = '/'
       } else {
@@ -36,6 +39,7 @@ export default function Index() {
         setName(profile.name)
         setRole(profile.player.role)
         setEmail(profile.email)
+        setBirthDate(profile.birthDate.toString())
 
         document.querySelector('#loading').classList.add('is-hidden')
         document.querySelector('#page').classList.remove('is-hidden')
@@ -43,7 +47,25 @@ export default function Index() {
     })
   }, [])
 
-  console.log(profile)
+  useEffect(() => {
+    const date = parseISO(birthDate)
+    const numberAge = differenceInYears(new Date(), date)
+
+    setDate({ day: date.getDate().toString(), month: (date.getMonth() + 1).toString(), year: getYear(date).toString() })
+    setAge(`${numberAge} anos`)
+  }, [birthDate])
+
+  const minYear = new Date().getFullYear() - 12
+  const maxYear = new Date().getFullYear() - 100
+  const yearOptions = []
+
+  for (let year = minYear; year > maxYear; year--) {
+    yearOptions.push(
+      <option value={year} key={year}>
+        {year}
+      </option>
+    )
+  }
 
   return (
     <div className='has-text-weight-bold'>
@@ -64,7 +86,7 @@ export default function Index() {
           >
             Dados pessoais
           </button>
-          <button
+          {/* <button
             className='button is-large mt-5 is-primary'
             style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
             disabled
@@ -77,7 +99,7 @@ export default function Index() {
             disabled
           >
             Conquistas
-          </button>
+          </button> */}
         </div>
 
         <div
@@ -294,7 +316,93 @@ export default function Index() {
                     </button>
                   </form>
 
-                  <h1 className='title is-4'>24 anos</h1>
+                  <h1
+                    className='title is-4'
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      document.querySelector('#age').classList.add('is-hidden')
+                      document.querySelector('#age-form').classList.remove('is-hidden')
+                    }}
+                    id='age'
+                  >
+                    {age}
+                  </h1>
+
+                  <form
+                    id='age-form'
+                    className='is-hidden is-flex'
+                    onSubmit={async (event) => {
+                      event.preventDefault()
+
+                      const birthDate = new Date(`${date.year}-${date.month}-${date.day}`).toISOString()
+
+                      await fetch(`/api/users/${profile._id}`, {
+                        method: 'PATCH',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ birthDate }),
+                      })
+
+                      setBirthDate(birthDate)
+
+                      document.querySelector('#age-form').classList.add('is-hidden')
+                      document.querySelector('#age').classList.remove('is-hidden')
+                    }}
+                  >
+                    <div className='select'>
+                      <select
+                        onClick={(event) => {
+                          setDate({ ...date, day: (event.target as HTMLOptionElement).value })
+                        }}
+                        value={date.day}
+                        onChange={(event) => setDate({ ...date, day: event.target.value })}
+                      >
+                        {[...Array(31)].map((_, day) => (
+                          <option key={day}>{day + 1}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className='select ml-2'>
+                      <select
+                        onClick={(event) => {
+                          setDate({ ...date, month: (event.target as HTMLOptionElement).value })
+                        }}
+                        value={date.month}
+                        onChange={(event) => setDate({ ...date, month: event.target.value })}
+                      >
+                        {[...Array(12)].map((_, month) => (
+                          <option key={month}>{month + 1}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className='select ml-2'>
+                      <select
+                        onClick={(event) => {
+                          setDate({ ...date, year: (event.target as HTMLOptionElement).value })
+                        }}
+                        value={date.year}
+                        onChange={(event) => setDate({ ...date, year: event.target.value })}
+                      >
+                        {yearOptions.map((year) => year)}
+                      </select>
+                    </div>
+
+                    <button className='button is-primary ml-2'>Salvar</button>
+                    <button
+                      className='button ml-2'
+                      type='button'
+                      onClick={() => {
+                        document.querySelector('#age-form').classList.add('is-hidden')
+                        document.querySelector('#age').classList.remove('is-hidden')
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                  </form>
+
                   <h1 className='title is-4'>Santa Catarina</h1>
                   <h1 className='title is-4'>Tijucas</h1>
                 </div>
