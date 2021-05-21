@@ -38,7 +38,7 @@ export default function Index() {
   const [date, setDate] = useState({ day: '1', month: '1', year: '2009' })
   const [states, setStates] = useState([])
   const [state, setState] = useState('RO')
-  const [cities, setCities] = useState('')
+  const [cities, setCities] = useState([])
   const [city, setCity] = useState('')
 
   useEffect(() => {
@@ -55,6 +55,7 @@ export default function Index() {
         setEmail(profile.email)
         setBirthDate(profile.birthDate.toString())
         setState(profile.player.state)
+        setCity(profile.player.city)
 
         fetchStates().then((states) => {
           setStates(
@@ -445,7 +446,7 @@ export default function Index() {
                       document.querySelector('#state-form').classList.remove('is-hidden')
                     }}
                   >
-                    Santa Catarina
+                    {state}
                   </h1>
 
                   <form
@@ -489,7 +490,58 @@ export default function Index() {
                     </button>
                   </form>
 
-                  <h1 className='title is-4'>Tijucas</h1>
+                  <h1
+                    className='title is-4'
+                    style={{ cursor: 'pointer' }}
+                    id='city'
+                    onClick={() => {
+                      document.querySelector('#city').classList.add('is-hidden')
+                      document.querySelector('#city-form').classList.remove('is-hidden')
+                    }}
+                  >
+                    {city}
+                  </h1>
+
+                  <form
+                    id='city-form'
+                    className='is-hidden is-flex'
+                    onSubmit={async (event) => {
+                      event.preventDefault()
+
+                      await fetch(`/api/players/${profile.player._id}`, {
+                        method: 'PATCH',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ city }),
+                      })
+
+                      document.querySelector('#city-form').classList.add('is-hidden')
+                      document.querySelector('#city').classList.remove('is-hidden')
+                    }}
+                  >
+                    <div className='select'>
+                      <select value={city} onChange={(event) => setCity(event.target.value)}>
+                        {cities.map(({ name }) => (
+                          <option value={name} key={name}>
+                            {name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <button className='button is-primary ml-2'>Salvar</button>
+                    <button
+                      className='button ml-2'
+                      type='button'
+                      onClick={() => {
+                        document.querySelector('#city-form').classList.add('is-hidden')
+                        document.querySelector('#city').classList.remove('is-hidden')
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                  </form>
                 </div>
                 <div className='column has-text-centered'>
                   <h1>Diamante 1</h1>
