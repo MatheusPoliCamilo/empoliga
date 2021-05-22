@@ -121,13 +121,22 @@ export default function Index() {
           <button
             className='button is-large is-focused is-primary'
             style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+            id='player-card-button'
+            onClick={() => {
+              document.querySelector('#information-card').classList.add('is-hidden')
+              document.querySelector('#player-card').classList.remove('is-hidden')
+            }}
           >
             Perfil
           </button>
           <button
             className='button is-large mt-5 is-primary'
             style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
-            disabled
+            onClick={() => {
+              document.querySelector('#player-card-button').classList.remove('is-focused')
+              document.querySelector('#player-card').classList.add('is-hidden')
+              document.querySelector('#information-card').classList.remove('is-hidden')
+            }}
           >
             Dados pessoais
           </button>
@@ -149,26 +158,74 @@ export default function Index() {
 
         <div
           className='card'
-          style={{ backgroundColor: 'white', height: '38vw', width: '60rem', marginRight: '12rem' }}
+          style={{ backgroundColor: 'white', height: '45rem', width: '60rem', marginRight: '12rem' }}
         >
-          <div className='card-content'>
+          <div className='card-content' id='player-card'>
             <div className='content'>
               <div className='is-flex'>
-                <figure
-                  className='image ml-0 mt-0'
-                  style={{
-                    cursor: 'pointer',
-                    width: '20rem',
-                    minWidth: '20rem',
-                    height: '20rem',
-                    backgroundColor: 'gray',
-                  }}
-                  onClick={() => openProfilePictureModal()}
-                >
-                  {/* <img src='https://bulma.io/images/placeholders/128x128.png' /> */}
-                </figure>
+                {profile && profile.player.profilePicture ? (
+                  <figure
+                    className='image ml-0 mt-0'
+                    style={{
+                      cursor: 'pointer',
+                      width: '20rem',
+                      minWidth: '20rem',
+                      height: '20rem',
+                      backgroundColor: 'gray',
+                    }}
+                    onClick={() => openProfilePictureModal()}
+                  >
+                    <img src={`${profile.player.profilePicture}`} />
+                  </figure>
+                ) : (
+                  <form
+                    style={{
+                      width: '20rem',
+                      minWidth: '20rem',
+                      height: '20rem',
+                    }}
+                    className='is-flex is-flex-direction-column is-justify-content-center'
+                  >
+                    <div className='file is-centered is-boxed is-primary has-name'>
+                      <label className='file-label'>
+                        <input className='file-input' type='file' name='resume' />
+                        <span className='file-cta'>
+                          <span className='file-icon'>
+                            <svg
+                              aria-hidden='true'
+                              focusable='false'
+                              data-prefix='fas'
+                              data-icon='upload'
+                              role='img'
+                              xmlns='http://www.w3.org/2000/svg'
+                              viewBox='0 0 512 512'
+                              className='svg-inline--fa fa-upload fa-w-16 fa-3x'
+                            >
+                              <path
+                                fill='currentColor'
+                                d='M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z'
+                                className=''
+                              />
+                            </svg>
+                          </span>
+                          <span className='file-label'>Foto de perfil</span>
+                        </span>
+                        <span className='file-name'>Escolha a foto de perfil</span>
+                      </label>
+                    </div>
 
-                <div>
+                    <div className='field is-grouped is-grouped-centered mt-2'>
+                      <div className='control'>
+                        <button className='button is-primary'>Salvar</button>
+                      </div>
+                      <div className='control'>
+                        <button className='button'>Cancelar</button>
+                      </div>
+                    </div>
+                  </form>
+                )}
+
+                <div className='ml-4'>
                   <h1 className='title ml-0 mr-0 mb-0 is-1' style={{ fontSize: '4rem', marginTop: '-1rem' }}>
                     This is my nickname
                   </h1>
@@ -318,7 +375,7 @@ export default function Index() {
               </div>
 
               <div className='columns'>
-                <div className='column'>
+                <div className='column mt-6'>
                   <h1
                     className='title is-4'
                     style={{ cursor: 'pointer' }}
@@ -606,6 +663,7 @@ export default function Index() {
                     </button>
                   </form>
                 </div>
+
                 <div className='column has-text-centered'>
                   <h1>Diamante 1</h1>
 
@@ -620,7 +678,6 @@ export default function Index() {
                         // height: '20rem',
                         backgroundColor: 'gray',
                       }}
-                      onClick={() => openProfilePictureModal()}
                     >
                       {/* <img src='https://bulma.io/images/placeholders/128x128.png' /> */}
                     </figure>
@@ -629,6 +686,8 @@ export default function Index() {
               </div>
             </div>
           </div>
+
+          <div className='card-content is-hidden' id='information-card' />
         </div>
       </div>
 
