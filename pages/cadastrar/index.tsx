@@ -59,7 +59,8 @@ function handleSubmit(event, user) {
       button.classList.remove('is-loading')
       buttonBack.disabled = false
 
-      if (data.errors || Object.keys(data).length === 0) {
+      console.log('Data:', data)
+      if (data.name === 'MongoError' || data.errors || Object.keys(data).length === 0) {
         console.log('Errors:', data.errors)
       } else {
         Cookie.set('token', data.token, { expires: addDays(new Date(), 1) })
