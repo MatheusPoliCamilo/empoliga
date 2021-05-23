@@ -127,21 +127,61 @@ export default function Index() {
             id='player-card-button'
             onClick={() => {
               document.querySelector('#information-card').classList.add('is-hidden')
+              document.querySelector('#social-media-card').classList.add('is-hidden')
+              document.querySelector('#smurfs-card').classList.add('is-hidden')
+
               document.querySelector('#player-card').classList.remove('is-hidden')
             }}
           >
             Perfil
           </button>
+
           <button
             className='button is-large mt-5 is-primary'
             style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
             onClick={() => {
               document.querySelector('#player-card-button').classList.remove('is-focused')
+
               document.querySelector('#player-card').classList.add('is-hidden')
+              document.querySelector('#social-media-card').classList.add('is-hidden')
+              document.querySelector('#information-card').classList.add('is-hidden')
+
               document.querySelector('#information-card').classList.remove('is-hidden')
             }}
           >
             Dados pessoais
+          </button>
+
+          <button
+            className='button is-large mt-5 is-primary'
+            style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+            onClick={() => {
+              document.querySelector('#player-card-button').classList.remove('is-focused')
+
+              document.querySelector('#player-card').classList.add('is-hidden')
+              document.querySelector('#information-card').classList.add('is-hidden')
+              document.querySelector('#smurfs-card').classList.add('is-hidden')
+
+              document.querySelector('#social-media-card').classList.remove('is-hidden')
+            }}
+          >
+            Redes sociais
+          </button>
+
+          <button
+            className='button is-large mt-5 is-primary'
+            style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+            onClick={() => {
+              document.querySelector('#player-card-button').classList.remove('is-focused')
+
+              document.querySelector('#player-card').classList.add('is-hidden')
+              document.querySelector('#information-card').classList.add('is-hidden')
+              document.querySelector('#social-media-card').classList.add('is-hidden')
+
+              document.querySelector('#smurfs-card').classList.remove('is-hidden')
+            }}
+          >
+            Smurfs
           </button>
           {/* <button
             className='button is-large mt-5 is-primary'
@@ -161,7 +201,7 @@ export default function Index() {
 
         <div
           className='card'
-          style={{ backgroundColor: 'white', height: '45rem', width: '60rem', marginRight: '12rem' }}
+          style={{ backgroundColor: 'white', height: '47rem', width: '60rem', marginRight: '12rem' }}
         >
           <div className='card-content' id='player-card'>
             <div className='content'>
@@ -456,9 +496,13 @@ export default function Index() {
               </div>
 
               <div className='columns'>
-                <div className='column mt-6'>
+                <div className='column'>
+                  <label className='label' style={{ fontWeight: 'bolder' }}>
+                    E-mail
+                  </label>
+
                   <h1
-                    className='title is-4'
+                    className='title is-4 mt-0'
                     style={{ cursor: 'pointer' }}
                     id='email'
                     onClick={() => {
@@ -519,8 +563,20 @@ export default function Index() {
                     </button>
                   </form>
 
+                  <label className='label' style={{ fontWeight: 'bolder' }}>
+                    Gênero
+                  </label>
+
+                  <h1 className='title is-4 mt-0' style={{ cursor: 'pointer' }} id='gender'>
+                    {profile && profile.gender}
+                  </h1>
+
+                  <label className='label' style={{ fontWeight: 'bolder' }}>
+                    Idade
+                  </label>
+
                   <h1
-                    className='title is-4'
+                    className='title is-4 mt-0'
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
                       document.querySelector('#age').classList.add('is-hidden')
@@ -615,8 +671,12 @@ export default function Index() {
                     </button>
                   </form>
 
+                  <label className='label' style={{ fontWeight: 'bolder' }}>
+                    Estado
+                  </label>
+
                   <h1
-                    className='title is-4'
+                    className='title is-4 mt-0'
                     id='state'
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
@@ -679,8 +739,12 @@ export default function Index() {
                     </button>
                   </form>
 
+                  <label className='label' style={{ fontWeight: 'bolder' }}>
+                    Cidade
+                  </label>
+
                   <h1
-                    className='title is-4'
+                    className='title is-4 mt-0'
                     style={{ cursor: 'pointer' }}
                     id='city'
                     onClick={() => {
@@ -768,7 +832,15 @@ export default function Index() {
             </div>
           </div>
 
-          <div className='card-content is-hidden' id='information-card' />
+          <div className='card-content is-hidden' id='information-card'>
+            Dados pessoais
+          </div>
+          <div className='card-content is-hidden' id='social-media-card'>
+            Redes sociais
+          </div>
+          <div className='card-content is-hidden' id='smurfs-card'>
+            Smurfs
+          </div>
         </div>
       </div>
 
