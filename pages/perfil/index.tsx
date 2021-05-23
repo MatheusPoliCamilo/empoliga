@@ -3,6 +3,7 @@ import { Navbar } from '../../components/navbar'
 import Cookie from 'js-cookie'
 import { addDays, parseISO, getYear, differenceInYears } from 'date-fns'
 import { Player } from '../../src/schemas/player'
+import getConfig from 'next/config'
 
 function openProfilePictureModal() {
   document.querySelector('html').classList.add('is-clipped')
@@ -185,10 +186,59 @@ export default function Index() {
                       height: '20rem',
                     }}
                     className='is-flex is-flex-direction-column is-justify-content-center'
+                    onSubmit={(event) => {
+                      event.preventDefault()
+                      const button = document.querySelector('#profile-picture-save') as HTMLButtonElement
+                      button.disabled = true
+                      button.classList.add('is-loading')
+
+                      const fileInput = document.querySelector('#profile') as HTMLInputElement
+                      if (fileInput.files.length > 0) {
+                        const file = (document.querySelector('#profile') as HTMLInputElement).files[0]
+
+                        const { publicRuntimeConfig } = getConfig()
+                        const formData = new FormData()
+                        formData.append('file', file)
+                        formData.append('upload_preset', publicRuntimeConfig.CLOUDINARY_UPLOAD_PRESET)
+
+                        fetch(publicRuntimeConfig.CLOUDINARY_URL, {
+                          method: 'POST',
+                          body: formData,
+                        })
+                          .then((response) => response.json())
+                          .then(async (data) => {
+                            if (data.secure_url !== '') {
+                              await fetch(`/api/players/${profile.player._id}`, {
+                                method: 'PATCH',
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ profilePicture: data.secure_url }),
+                              })
+                            }
+                          })
+                          .catch((err) => console.error(err))
+
+                        button.disabled = false
+                        button.classList.remove('is-loading')
+                      }
+                    }}
                   >
                     <div className='file is-centered is-boxed is-primary has-name'>
                       <label className='file-label'>
-                        <input className='file-input' type='file' name='resume' />
+                        <input
+                          className='file-input'
+                          type='file'
+                          name='resume'
+                          id='profile'
+                          onChange={() => {
+                            const fileInput = document.querySelector('#profile') as HTMLInputElement
+                            if (fileInput.files.length > 0) {
+                              const fileName = document.querySelector('.file-name')
+                              fileName.textContent = fileInput.files[0].name
+                            }
+                          }}
+                        />
                         <span className='file-cta'>
                           <span className='file-icon'>
                             <svg
@@ -216,11 +266,21 @@ export default function Index() {
 
                     <div className='field is-grouped is-grouped-centered mt-2'>
                       <div className='control'>
-                        <button className='button is-primary'>Salvar</button>
+                        <button className='button is-primary' id='profile-picture-save'>
+                          Salvar
+                        </button>
                       </div>
-                      <div className='control'>
-                        <button className='button'>Cancelar</button>
-                      </div>
+                      {/* <div className='control'>
+                        <button
+                          type='button'
+                          className='button'
+                          onClick={() => {
+                            document.querySelector('.file-name').textContent = 'Escolha a foto de perfil'
+                          }}
+                        >
+                          Cancelar
+                        </button>
+                      </div> */}
                     </div>
                   </form>
                 )}
