@@ -48,6 +48,7 @@ export default function Index() {
   const [state, setState] = useState('RO')
   const [cities, setCities] = useState([])
   const [city, setCity] = useState('')
+  const [profilePicture, setProfilePicture] = useState('')
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
@@ -64,6 +65,7 @@ export default function Index() {
         setBirthDate(profile.birthDate.toString())
         if (profile.player.state) setState(profile.player.state)
         setCity(profile.player.city)
+        setProfilePicture(profile.player.profilePicture)
 
         fetchStates().then((states) => {
           setStates(
@@ -164,126 +166,145 @@ export default function Index() {
           <div className='card-content' id='player-card'>
             <div className='content'>
               <div className='is-flex'>
-                {profile && profile.player.profilePicture ? (
-                  <figure
-                    className='image ml-0 mt-0'
-                    style={{
-                      cursor: 'pointer',
-                      width: '20rem',
-                      minWidth: '20rem',
-                      height: '20rem',
-                      backgroundColor: 'gray',
-                    }}
-                    onClick={() => openProfilePictureModal()}
-                  >
-                    <img src={`${profile.player.profilePicture}`} />
-                  </figure>
-                ) : (
-                  <form
-                    style={{
-                      width: '20rem',
-                      minWidth: '20rem',
-                      height: '20rem',
-                    }}
-                    className='is-flex is-flex-direction-column is-justify-content-center'
-                    onSubmit={(event) => {
-                      event.preventDefault()
-                      const button = document.querySelector('#profile-picture-save') as HTMLButtonElement
-                      button.disabled = true
-                      button.classList.add('is-loading')
+                <figure
+                  className={`image ml-0 mt-0 ${profile && profile.player.profilePicture ? '' : 'is-hidden'}`}
+                  style={{
+                    cursor: 'pointer',
+                    width: '20rem',
+                    minWidth: '20rem',
+                    height: '20rem',
+                  }}
+                  onClick={() => {
+                    document.querySelector('#profile-picture').classList.add('is-hidden')
+                    document.querySelector('#profile-picture-form').classList.remove('is-hidden')
+                    document.querySelector('#profile-picture-cancel').classList.remove('is-hidden')
+                  }}
+                  id='profile-picture'
+                >
+                  <img src={`${profilePicture}`} />
+                </figure>
 
-                      const fileInput = document.querySelector('#profile') as HTMLInputElement
-                      if (fileInput.files.length > 0) {
-                        const file = (document.querySelector('#profile') as HTMLInputElement).files[0]
+                <form
+                  style={{
+                    width: '20rem',
+                    minWidth: '20rem',
+                    height: '20rem',
+                  }}
+                  className={`is-flex is-flex-direction-column is-justify-content-center ${
+                    profile && profile.player.profilePicture ? 'is-hidden' : ''
+                  }`}
+                  id='profile-picture-form'
+                  onSubmit={(event) => {
+                    event.preventDefault()
+                    const button = document.querySelector('#profile-picture-save') as HTMLButtonElement
+                    button.disabled = true
+                    button.classList.add('is-loading')
 
-                        const { publicRuntimeConfig } = getConfig()
-                        const formData = new FormData()
-                        formData.append('file', file)
-                        formData.append('upload_preset', publicRuntimeConfig.CLOUDINARY_UPLOAD_PRESET)
+                    const form = document.querySelector('#profile-picture-form') as HTMLFormElement
+                    const profilePicture = document.querySelector('#profile-picture')
 
-                        fetch(publicRuntimeConfig.CLOUDINARY_URL, {
-                          method: 'POST',
-                          body: formData,
+                    const fileInput = document.querySelector('#profile') as HTMLInputElement
+                    if (fileInput.files.length > 0) {
+                      const file = (document.querySelector('#profile') as HTMLInputElement).files[0]
+
+                      const { publicRuntimeConfig } = getConfig()
+                      const formData = new FormData()
+                      formData.append('file', file)
+                      formData.append('upload_preset', publicRuntimeConfig.CLOUDINARY_UPLOAD_PRESET)
+
+                      fetch(publicRuntimeConfig.CLOUDINARY_URL, {
+                        method: 'POST',
+                        body: formData,
+                      })
+                        .then((response) => response.json())
+                        .then(async (data) => {
+                          if (data.secure_url !== '') {
+                            await fetch(`/api/players/${profile.player._id}`, {
+                              method: 'PATCH',
+                              headers: {
+                                'Content-Type': 'application/json',
+                              },
+                              body: JSON.stringify({ profilePicture: data.secure_url }),
+                            })
+
+                            form.classList.add('is-hidden')
+                            profilePicture.classList.remove('is-hidden')
+                          }
+
+                          setProfilePicture(data.secure_url)
+
+                          button.disabled = false
+                          button.classList.remove('is-loading')
                         })
-                          .then((response) => response.json())
-                          .then(async (data) => {
-                            if (data.secure_url !== '') {
-                              await fetch(`/api/players/${profile.player._id}`, {
-                                method: 'PATCH',
-                                headers: {
-                                  'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ profilePicture: data.secure_url }),
-                              })
-                            }
-                          })
-                          .catch((err) => console.error(err))
-
-                        button.disabled = false
-                        button.classList.remove('is-loading')
-                      }
-                    }}
-                  >
-                    <div className='file is-centered is-boxed is-primary has-name'>
-                      <label className='file-label'>
-                        <input
-                          className='file-input'
-                          type='file'
-                          name='resume'
-                          id='profile'
-                          onChange={() => {
-                            const fileInput = document.querySelector('#profile') as HTMLInputElement
-                            if (fileInput.files.length > 0) {
-                              const fileName = document.querySelector('.file-name')
-                              fileName.textContent = fileInput.files[0].name
-                            }
-                          }}
-                        />
-                        <span className='file-cta'>
-                          <span className='file-icon'>
-                            <svg
-                              aria-hidden='true'
-                              focusable='false'
-                              data-prefix='fas'
-                              data-icon='upload'
-                              role='img'
-                              xmlns='http://www.w3.org/2000/svg'
-                              viewBox='0 0 512 512'
-                              className='svg-inline--fa fa-upload fa-w-16 fa-3x'
-                            >
-                              <path
-                                fill='currentColor'
-                                d='M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z'
-                                className=''
-                              />
-                            </svg>
-                          </span>
-                          <span className='file-label'>Foto de perfil</span>
+                        .catch((err) => {
+                          console.error(err)
+                          button.disabled = false
+                          button.classList.remove('is-loading')
+                        })
+                    }
+                  }}
+                >
+                  <div className='file is-centered is-boxed is-primary has-name'>
+                    <label className='file-label'>
+                      <input
+                        className='file-input'
+                        type='file'
+                        name='resume'
+                        id='profile'
+                        onChange={() => {
+                          const fileInput = document.querySelector('#profile') as HTMLInputElement
+                          if (fileInput.files.length > 0) {
+                            const fileName = document.querySelector('.file-name')
+                            fileName.textContent = fileInput.files[0].name
+                          }
+                        }}
+                      />
+                      <span className='file-cta'>
+                        <span className='file-icon'>
+                          <svg
+                            aria-hidden='true'
+                            focusable='false'
+                            data-prefix='fas'
+                            data-icon='upload'
+                            role='img'
+                            xmlns='http://www.w3.org/2000/svg'
+                            viewBox='0 0 512 512'
+                            className='svg-inline--fa fa-upload fa-w-16 fa-3x'
+                          >
+                            <path
+                              fill='currentColor'
+                              d='M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z'
+                              className=''
+                            />
+                          </svg>
                         </span>
-                        <span className='file-name'>Escolha a foto de perfil</span>
-                      </label>
-                    </div>
+                        <span className='file-label'>Foto de perfil</span>
+                      </span>
+                      <span className='file-name'>Escolha a foto de perfil</span>
+                    </label>
+                  </div>
 
-                    <div className='field is-grouped is-grouped-centered mt-2'>
-                      <div className='control'>
-                        <button className='button is-primary' id='profile-picture-save'>
-                          Salvar
-                        </button>
-                      </div>
-                      {/* <div className='control'>
-                        <button
-                          type='button'
-                          className='button'
-                          onClick={() => {
-                            document.querySelector('.file-name').textContent = 'Escolha a foto de perfil'
-                          }}
-                        >
-                          Cancelar
-                        </button>
-                      </div> */}
+                  <div className='field is-grouped is-grouped-centered mt-2'>
+                    <div className='control'>
+                      <button className='button is-primary' id='profile-picture-save'>
+                        Salvar
+                      </button>
                     </div>
-                  </form>
-                )}
+                    <div className='control'>
+                      <button
+                        type='button'
+                        className='button is-hidden'
+                        id='profile-picture-cancel'
+                        onClick={() => {
+                          document.querySelector('#profile-picture-form').classList.add('is-hidden')
+                          document.querySelector('#profile-picture').classList.remove('is-hidden')
+                        }}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                </form>
 
                 <div className='ml-4'>
                   <h1 className='title ml-0 mr-0 mb-0 is-1' style={{ fontSize: '4rem', marginTop: '-1rem' }}>
