@@ -36,6 +36,19 @@ function showOnlyInput(attributeName) {
   document.querySelector(`#${attributeName}-form`).classList.remove('is-hidden')
 }
 
+function gender(genderChar) {
+  switch (genderChar) {
+    case 'M':
+      return 'Masculino'
+    case 'F':
+      return 'Feminino'
+    case 'O':
+      return 'Outro'
+    default:
+      break
+  }
+}
+
 export default function Index() {
   const [profile, setProfile] = useState(null)
   const [name, setName] = useState('')
@@ -144,7 +157,7 @@ export default function Index() {
 
               document.querySelector('#player-card').classList.add('is-hidden')
               document.querySelector('#social-media-card').classList.add('is-hidden')
-              document.querySelector('#information-card').classList.add('is-hidden')
+              document.querySelector('#smurfs-card').classList.add('is-hidden')
 
               document.querySelector('#information-card').classList.remove('is-hidden')
             }}
@@ -201,13 +214,13 @@ export default function Index() {
 
         <div
           className='card'
-          style={{ backgroundColor: 'white', height: '47rem', width: '60rem', marginRight: '12rem' }}
+          style={{ backgroundColor: 'white', height: '49rem', width: '61rem', marginRight: '12rem' }}
         >
           <div className='card-content' id='player-card'>
             <div className='content'>
               <div className='is-flex'>
                 <figure
-                  className={`image ml-0 mt-0 ${profile && profile.player.profilePicture ? '' : 'is-hidden'}`}
+                  className={`image ml-0 mt-0 mb-5 ${profile && profile.player.profilePicture ? '' : 'is-hidden'}`}
                   style={{
                     cursor: 'pointer',
                     width: '20rem',
@@ -230,7 +243,7 @@ export default function Index() {
                     minWidth: '20rem',
                     height: '20rem',
                   }}
-                  className={`is-flex is-flex-direction-column is-justify-content-center ${
+                  className={`is-flex is-flex-direction-column is-justify-content-center pl-6 pr-6 pb-6 mb-5 ml-4 mr-4 ${
                     profile && profile.player.profilePicture ? 'is-hidden' : ''
                   }`}
                   id='profile-picture-form'
@@ -496,7 +509,7 @@ export default function Index() {
               </div>
 
               <div className='columns'>
-                <div className='column'>
+                <div className='column pt-0'>
                   <label className='label' style={{ fontWeight: 'bolder' }}>
                     E-mail
                   </label>
@@ -568,7 +581,7 @@ export default function Index() {
                   </label>
 
                   <h1 className='title is-4 mt-0' style={{ cursor: 'pointer' }} id='gender'>
-                    {profile && profile.gender}
+                    {profile && gender(profile.gender)}
                   </h1>
 
                   <label className='label' style={{ fontWeight: 'bolder' }}>
@@ -833,7 +846,7 @@ export default function Index() {
           </div>
 
           <div className='card-content is-hidden' id='information-card'>
-            Dados pessoais
+            <div className='content'>Dados pessoais - content</div>
           </div>
           <div className='card-content is-hidden' id='social-media-card'>
             Redes sociais
