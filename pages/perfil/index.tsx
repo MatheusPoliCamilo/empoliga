@@ -65,6 +65,7 @@ export default function Index() {
   const [setupPhoto, setSetupPhoto] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
   const [rg, setRg] = useState('')
+  const [cpf, setCpf] = useState('')
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
@@ -1128,6 +1129,74 @@ export default function Index() {
                       onClick={() => {
                         document.querySelector('#rg-form').classList.add('is-hidden')
                         document.querySelector('#rg').classList.remove('is-hidden')
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                  </form>
+
+                  <label className='label'>CPF</label>
+
+                  <h1
+                    className={`title is-4 mt-0 ${profile && profile.player.cpf ? '' : 'is-hidden'}`}
+                    style={{ cursor: 'pointer' }}
+                    id='cpf'
+                    onClick={() => {
+                      document.querySelector('#cpf').classList.add('is-hidden')
+                      document.querySelector('#cpf-form').classList.remove('is-hidden')
+                      document.querySelector('#cpf-cancel').classList.remove('is-hidden')
+                    }}
+                  >
+                    {profile && profile.player.cpf}
+                  </h1>
+
+                  <form
+                    id='cpf-form'
+                    className={`is-flex mb-3 ${profile && profile.player.cpf ? 'is-hidden' : ''}`}
+                    onSubmit={async (event) => {
+                      event.preventDefault()
+
+                      const button = document.querySelector('#cpf-save') as HTMLButtonElement
+                      button.disabled = true
+                      button.classList.add('is-loading')
+
+                      await fetch(`/api/players/${profile.player._id}`, {
+                        method: 'PATCH',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ cpf }),
+                      })
+
+                      setProfile({ ...profile, player: { ...profile.player, cpf } })
+
+                      document.querySelector('#cpf-form').classList.add('is-hidden')
+                      document.querySelector('#cpf').classList.remove('is-hidden')
+
+                      button.disabled = false
+                      button.classList.remove('is-loading')
+                    }}
+                  >
+                    <input
+                      type='text'
+                      className='input'
+                      placeholder='Digite seu CPF'
+                      value={cpf}
+                      autoFocus
+                      onChange={(event) => setCpf(event.target.value)}
+                    />
+
+                    <button className='button is-primary ml-2' id='cpf-save'>
+                      Salvar
+                    </button>
+
+                    <button
+                      className='button ml-2 is-hidden'
+                      type='button'
+                      id='cpf-cancel'
+                      onClick={() => {
+                        document.querySelector('#cpf-form').classList.add('is-hidden')
+                        document.querySelector('#cpf').classList.remove('is-hidden')
                       }}
                     >
                       Cancelar
