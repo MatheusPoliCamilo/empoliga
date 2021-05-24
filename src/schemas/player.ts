@@ -11,9 +11,6 @@ const playerSchema = new mongoose.Schema({
     type: String,
     enum: ['Top', 'Jungle', 'Mid', 'Adc', 'Support'],
   },
-  availability: {
-    type: String,
-  },
   address: {
     type: String,
   },
@@ -48,7 +45,6 @@ interface PlayerInterface extends mongoose.Document {
   city: String
   state: String
   role: String
-  availability: String
   address: String
   profilePicture: String
   setupPhoto: String
@@ -64,7 +60,6 @@ playerSchema.pre<PlayerInterface>('save', async function () {
     player.city &&
     player.state &&
     player.role &&
-    player.availability &&
     player.address &&
     player.profilePicture &&
     player.setupPhoto &&

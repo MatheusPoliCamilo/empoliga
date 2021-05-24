@@ -230,7 +230,9 @@ export default function Index() {
             <div className='content'>
               <div className='is-flex'>
                 <figure
-                  className={`image ml-0 mt-0 mb-5 ${profile && profile.player.profilePicture ? '' : 'is-hidden'}`}
+                  className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center ${
+                    profile && profile.player.profilePicture ? '' : 'is-hidden'
+                  }`}
                   style={{
                     cursor: 'pointer',
                     width: '20rem',
@@ -858,7 +860,7 @@ export default function Index() {
           <div className='card-content is-hidden' id='information-card'>
             <div className='content'>
               <div className='is-flex'>
-                <div>
+                <div className='is-flex is-flex-direction-column is-justify-content-center'>
                   <form
                     style={{
                       width: '20rem',
@@ -985,12 +987,14 @@ export default function Index() {
                   </form>
 
                   <figure
-                    className={`image ml-0 mt-0 mb-5 ${profile && profile.player.setupPhoto ? '' : 'is-hidden'}`}
+                    className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center ${
+                      profile && profile.player.setupPhoto ? '' : 'is-hidden'
+                    }`}
                     style={{
                       cursor: 'pointer',
-                      width: '20rem',
+                      width: '28rem',
                       minWidth: '20rem',
-                      height: '20rem',
+                      height: '28rem',
                     }}
                     onClick={() => {
                       document.querySelector('#setup-photo').classList.add('is-hidden')
