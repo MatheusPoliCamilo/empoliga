@@ -64,6 +64,7 @@ export default function Index() {
   const [profilePicture, setProfilePicture] = useState('')
   const [setupPhoto, setSetupPhoto] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
+  const [rg, setRg] = useState('')
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
@@ -83,6 +84,7 @@ export default function Index() {
         setProfilePicture(profile.player.profilePicture)
         setSetupPhoto(profile.player.setupPhoto)
         setWhatsapp(profile.whatsapp)
+        if (profile.player.rg) setRg(profile.player.rg)
 
         fetchStates().then((states) => {
           setStates(
@@ -1047,15 +1049,85 @@ export default function Index() {
                       autoFocus
                       onChange={(event) => setWhatsapp(event.target.value)}
                     />
+
                     <button className='button is-primary ml-2' id='whatsapp-save'>
                       Salvar
                     </button>
+
                     <button
                       className='button ml-2'
                       type='button'
                       onClick={() => {
                         document.querySelector('#whatsapp-form').classList.add('is-hidden')
                         document.querySelector('#whatsapp').classList.remove('is-hidden')
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                  </form>
+
+                  <label className='label'>RG</label>
+
+                  <h1
+                    className={`title is-4 mt-0 ${profile && profile.player.rg ? '' : 'is-hidden'}`}
+                    style={{ cursor: 'pointer' }}
+                    id='rg'
+                    onClick={() => {
+                      document.querySelector('#rg').classList.add('is-hidden')
+                      document.querySelector('#rg-form').classList.remove('is-hidden')
+                      document.querySelector('#rg-cancel').classList.remove('is-hidden')
+                    }}
+                  >
+                    {profile && profile.player.rg}
+                  </h1>
+
+                  <form
+                    id='rg-form'
+                    className={`is-flex mb-3 ${profile && profile.player.rg ? 'is-hidden' : ''}`}
+                    onSubmit={async (event) => {
+                      event.preventDefault()
+
+                      const button = document.querySelector('#rg-save') as HTMLButtonElement
+                      button.disabled = true
+                      button.classList.add('is-loading')
+
+                      await fetch(`/api/players/${profile.player._id}`, {
+                        method: 'PATCH',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ rg }),
+                      })
+
+                      setProfile({ ...profile, player: { ...profile.player, rg } })
+
+                      document.querySelector('#rg-form').classList.add('is-hidden')
+                      document.querySelector('#rg').classList.remove('is-hidden')
+
+                      button.disabled = false
+                      button.classList.remove('is-loading')
+                    }}
+                  >
+                    <input
+                      type='text'
+                      className='input'
+                      placeholder='Digite seu RG'
+                      value={rg}
+                      autoFocus
+                      onChange={(event) => setRg(event.target.value)}
+                    />
+
+                    <button className='button is-primary ml-2' id='rg-save'>
+                      Salvar
+                    </button>
+
+                    <button
+                      className='button ml-2 is-hidden'
+                      type='button'
+                      id='rg-cancel'
+                      onClick={() => {
+                        document.querySelector('#rg-form').classList.add('is-hidden')
+                        document.querySelector('#rg').classList.remove('is-hidden')
                       }}
                     >
                       Cancelar
