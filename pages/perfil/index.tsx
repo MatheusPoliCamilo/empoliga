@@ -66,6 +66,7 @@ export default function Index() {
   const [whatsapp, setWhatsapp] = useState('')
   const [rg, setRg] = useState('')
   const [cpf, setCpf] = useState('')
+  const [address, setAddress] = useState('')
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
@@ -86,6 +87,8 @@ export default function Index() {
         setSetupPhoto(profile.player.setupPhoto)
         setWhatsapp(profile.whatsapp)
         if (profile.player.rg) setRg(profile.player.rg)
+        if (profile.player.cpf) setRg(profile.player.cpf)
+        if (profile.player.address) setRg(profile.player.address)
 
         fetchStates().then((states) => {
           setStates(
@@ -1197,6 +1200,75 @@ export default function Index() {
                       onClick={() => {
                         document.querySelector('#cpf-form').classList.add('is-hidden')
                         document.querySelector('#cpf').classList.remove('is-hidden')
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                  </form>
+
+                  <label className='label'>Endereço</label>
+
+                  <h1
+                    className={`title is-4 mt-0 ${profile && profile.player.address ? '' : 'is-hidden'}`}
+                    style={{ cursor: 'pointer' }}
+                    id='address'
+                    onClick={() => {
+                      document.querySelector('#address').classList.add('is-hidden')
+                      document.querySelector('#address-form').classList.remove('is-hidden')
+                      document.querySelector('#address-cancel').classList.remove('is-hidden')
+                    }}
+                  >
+                    {profile && profile.player.address}
+                  </h1>
+
+                  <form
+                    id='address-form'
+                    className={`is-flex mb-3 ${profile && profile.player.address ? 'is-hidden' : ''}`}
+                    onSubmit={async (event) => {
+                      event.preventDefault()
+
+                      const button = document.querySelector('#address-save') as HTMLButtonElement
+                      button.disabled = true
+                      button.classList.add('is-loading')
+
+                      await fetch(`/api/players/${profile.player._id}`, {
+                        method: 'PATCH',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ address }),
+                      })
+
+                      setProfile({ ...profile, player: { ...profile.player, address } })
+
+                      document.querySelector('#address-form').classList.add('is-hidden')
+                      document.querySelector('#address').classList.remove('is-hidden')
+
+                      button.disabled = false
+                      button.classList.remove('is-loading')
+                    }}
+                  >
+                    <input
+                      type='text'
+                      className='input'
+                      placeholder='Digite seu endereço'
+                      value={address}
+                      autoFocus
+                      onChange={(event) => setAddress(event.target.value)}
+                      style={{ width: '24rem' }}
+                    />
+
+                    <button className='button is-primary ml-2' id='address-save'>
+                      Salvar
+                    </button>
+
+                    <button
+                      className='button ml-2 is-hidden'
+                      type='button'
+                      id='address-cancel'
+                      onClick={() => {
+                        document.querySelector('#address-form').classList.add('is-hidden')
+                        document.querySelector('#address').classList.remove('is-hidden')
                       }}
                     >
                       Cancelar
