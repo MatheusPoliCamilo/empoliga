@@ -36,7 +36,7 @@ function showOnlyInput(attributeName) {
   document.querySelector(`#${attributeName}-form`).classList.remove('is-hidden')
 }
 
-function gender(genderChar) {
+function genderText(genderChar) {
   switch (genderChar) {
     case 'M':
       return 'Masculino'
@@ -71,6 +71,7 @@ export default function Index() {
   const [twitch, setTwitch] = useState('')
   const [instagram, setInstagram] = useState('')
   const [facebook, setFacebook] = useState('')
+  const [gender, setGender] = useState('M')
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
@@ -84,6 +85,7 @@ export default function Index() {
         setName(profile.name)
         setRole(profile.player.role)
         setEmail(profile.email)
+        setGender(profile.gender)
         setBirthDate(profile.birthDate.toString())
         if (profile.player.state) setState(profile.player.state)
         setCity(profile.player.city)
@@ -238,7 +240,7 @@ export default function Index() {
             <div className='content'>
               <div className='is-flex'>
                 <figure
-                  className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center ${
+                  className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter ${
                     profile && profile.player.profilePicture ? '' : 'is-hidden'
                   }`}
                   style={{
@@ -600,9 +602,67 @@ export default function Index() {
                     Gênero
                   </label>
 
-                  <h1 className='title is-4 mt-0' style={{ cursor: 'pointer' }} id='gender'>
-                    {profile && gender(profile.gender)}
+                  <h1
+                    className='title is-4 mt-0'
+                    style={{ cursor: 'pointer' }}
+                    id='gender'
+                    onClick={() => {
+                      document.querySelector('#gender').classList.add('is-hidden')
+                      document.querySelector('#gender-form').classList.remove('is-hidden')
+                    }}
+                  >
+                    {profile && genderText(profile.gender)}
                   </h1>
+
+                  <form
+                    id='gender-form'
+                    className='is-hidden is-flex mb-3'
+                    onSubmit={async (event) => {
+                      event.preventDefault()
+
+                      const button = document.querySelector('#gender-save') as HTMLButtonElement
+                      button.disabled = true
+                      button.classList.add('is-loading')
+
+                      await fetch(`/api/users/${profile._id}`, {
+                        method: 'PATCH',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ gender }),
+                      })
+
+                      setProfile({ ...profile, gender })
+
+                      document.querySelector('#gender-form').classList.add('is-hidden')
+                      document.querySelector('#gender').classList.remove('is-hidden')
+
+                      button.disabled = false
+                      button.classList.remove('is-loading')
+                    }}
+                  >
+                    <div className='select'>
+                      <select onChange={(event) => setGender(event.target.value)} value={gender}>
+                        <option value='M'>Masculino</option>
+                        <option value='F'>Feminino</option>
+                        <option value='O'>Outro</option>
+                      </select>
+                    </div>
+
+                    <button className='button is-primary ml-2' id='gender-save'>
+                      Salvar
+                    </button>
+                    <button
+                      className='button ml-2'
+                      type='button'
+                      onClick={() => {
+                        document.querySelector('#gender-form').classList.add('is-hidden')
+                        document.querySelector('#gender').classList.remove('is-hidden')
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                  </form>
 
                   <label className='label' style={{ fontWeight: 'bolder' }}>
                     Idade
@@ -999,7 +1059,7 @@ export default function Index() {
                   </form>
 
                   <figure
-                    className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center ${
+                    className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter ${
                       profile && profile.player.setupPhoto ? '' : 'is-hidden'
                     }`}
                     style={{
@@ -1019,7 +1079,7 @@ export default function Index() {
                   </figure>
                 </div>
 
-                <div>
+                <div className='is-flex is-flex-direction-column is-justify-content-center'>
                   <label className='label'>Whatsapp</label>
 
                   <h1
