@@ -1331,7 +1331,7 @@ export default function Index() {
                       value={address}
                       autoFocus
                       onChange={(event) => setAddress(event.target.value)}
-                      style={{ width: '24rem' }}
+                      style={{ width: '17rem' }}
                     />
 
                     <button className='button is-primary ml-2' id='address-save'>
@@ -1360,7 +1360,7 @@ export default function Index() {
             id='social-media-card'
             style={{ height: '49rem' }}
           >
-            <section className='hero'>
+            <section className='hero is-small'>
               <div className='hero-body'>
                 <p
                   className='title'
@@ -1395,7 +1395,7 @@ export default function Index() {
                       body: JSON.stringify({ twitter }),
                     })
 
-                    setTwitter(twitter)
+                    setProfile({ ...profile, twitter })
 
                     document.querySelector('#twitter-form').classList.add('is-hidden')
                     document.querySelector('#twitter').classList.remove('is-hidden')
@@ -1429,7 +1429,8 @@ export default function Index() {
                 </form>
               </div>
             </section>
-            <section className='hero'>
+
+            <section className='hero is-small'>
               <div className='hero-body'>
                 <p
                   className='title'
@@ -1438,15 +1439,68 @@ export default function Index() {
                     document.querySelector('#twitch-cancel').classList.remove('is-hidden')
                     document.querySelector('#twitch-form').classList.remove('is-hidden')
                   }}
+                  style={{ cursor: 'pointer' }}
                 >
                   Twitch
                 </p>
+
                 <p className={`subtitle mt-5 ${profile && profile.twitch ? '' : 'is-hidden'}`} id='twitch'>
                   <a href={`${profile && profile.twitch}`}>{profile && profile.twitch}</a>
                 </p>
+
+                <form
+                  id='twitch-form'
+                  className={`is-flex ${profile && profile.twitch ? 'is-hidden' : ''}`}
+                  onSubmit={async (event) => {
+                    event.preventDefault()
+
+                    const button = document.querySelector('#twitch-save') as HTMLButtonElement
+                    button.disabled = true
+                    button.classList.add('is-loading')
+
+                    await fetch(`/api/users/${profile._id}`, {
+                      method: 'PATCH',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ twitch }),
+                    })
+
+                    setProfile({ ...profile, twitch })
+
+                    document.querySelector('#twitch-form').classList.add('is-hidden')
+                    document.querySelector('#twitch').classList.remove('is-hidden')
+
+                    button.disabled = false
+                    button.classList.remove('is-loading')
+                  }}
+                >
+                  <input
+                    type='text'
+                    className='input is-large'
+                    placeholder='Digite o link do seu canal na Twitch'
+                    value={twitch}
+                    autoFocus
+                    onChange={(event) => setTwitch(event.target.value)}
+                  />
+                  <button className='button is-primary ml-2 is-large' id='twitch-save'>
+                    Salvar
+                  </button>
+                  <button
+                    className='button ml-2 is-large is-hidden'
+                    type='button'
+                    id='twitch-cancel'
+                    onClick={() => {
+                      document.querySelector('#twitch-form').classList.add('is-hidden')
+                      document.querySelector('#twitch').classList.remove('is-hidden')
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                </form>
               </div>
             </section>
-            <section className='hero'>
+            <section className='hero is-small'>
               <div className='hero-body'>
                 <p
                   className='title'
@@ -1455,15 +1509,67 @@ export default function Index() {
                     document.querySelector('#instagram-cancel').classList.remove('is-hidden')
                     document.querySelector('#instagram-form').classList.remove('is-hidden')
                   }}
+                  style={{ cursor: 'pointer' }}
                 >
                   Instagram
                 </p>
                 <p className={`subtitle mt-5 ${profile && profile.instagram ? '' : 'is-hidden'}`} id='instagram'>
                   <a href={`${profile && profile.instagram}`}>{profile && profile.instagram}</a>
                 </p>
+
+                <form
+                  id='instagram-form'
+                  className={`is-flex ${profile && profile.instagram ? 'is-hidden' : ''}`}
+                  onSubmit={async (event) => {
+                    event.preventDefault()
+
+                    const button = document.querySelector('#instagram-save') as HTMLButtonElement
+                    button.disabled = true
+                    button.classList.add('is-loading')
+
+                    await fetch(`/api/users/${profile._id}`, {
+                      method: 'PATCH',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ instagram }),
+                    })
+
+                    setProfile({ ...profile, instagram })
+
+                    document.querySelector('#instagram-form').classList.add('is-hidden')
+                    document.querySelector('#instagram').classList.remove('is-hidden')
+
+                    button.disabled = false
+                    button.classList.remove('is-loading')
+                  }}
+                >
+                  <input
+                    type='text'
+                    className='input is-large'
+                    placeholder='Digite o link do seu Instagram'
+                    value={instagram}
+                    autoFocus
+                    onChange={(event) => setInstagram(event.target.value)}
+                  />
+                  <button className='button is-primary ml-2 is-large' id='instagram-save'>
+                    Salvar
+                  </button>
+                  <button
+                    className='button ml-2 is-large is-hidden'
+                    type='button'
+                    id='instagram-cancel'
+                    onClick={() => {
+                      document.querySelector('#instagram-form').classList.add('is-hidden')
+                      document.querySelector('#instagram').classList.remove('is-hidden')
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                </form>
               </div>
             </section>
-            <section className='hero'>
+            <section className='hero is-small'>
               <div className='hero-body'>
                 <p
                   className='title'
@@ -1472,12 +1578,64 @@ export default function Index() {
                     document.querySelector('#facebook-cancel').classList.remove('is-hidden')
                     document.querySelector('#facebook-form').classList.remove('is-hidden')
                   }}
+                  style={{ cursor: 'pointer' }}
                 >
                   Facebook
                 </p>
                 <p className={`subtitle mt-5 ${profile && profile.facebook ? '' : 'is-hidden'}`} id='facebook'>
                   <a href={`${profile && profile.facebook}`}>{profile && profile.facebook}</a>
                 </p>
+
+                <form
+                  id='facebook-form'
+                  className={`is-flex ${profile && profile.facebook ? 'is-hidden' : ''}`}
+                  onSubmit={async (event) => {
+                    event.preventDefault()
+
+                    const button = document.querySelector('#facebook-save') as HTMLButtonElement
+                    button.disabled = true
+                    button.classList.add('is-loading')
+
+                    await fetch(`/api/users/${profile._id}`, {
+                      method: 'PATCH',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ facebook }),
+                    })
+
+                    setProfile({ ...profile, facebook })
+
+                    document.querySelector('#facebook-form').classList.add('is-hidden')
+                    document.querySelector('#facebook').classList.remove('is-hidden')
+
+                    button.disabled = false
+                    button.classList.remove('is-loading')
+                  }}
+                >
+                  <input
+                    type='text'
+                    className='input is-large'
+                    placeholder='Digite o link do seu facebook'
+                    value={facebook}
+                    autoFocus
+                    onChange={(event) => setFacebook(event.target.value)}
+                  />
+                  <button className='button is-primary ml-2 is-large' id='facebook-save'>
+                    Salvar
+                  </button>
+                  <button
+                    className='button ml-2 is-large is-hidden'
+                    type='button'
+                    id='facebook-cancel'
+                    onClick={() => {
+                      document.querySelector('#facebook-form').classList.add('is-hidden')
+                      document.querySelector('#facebook').classList.remove('is-hidden')
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                </form>
               </div>
             </section>
           </div>
