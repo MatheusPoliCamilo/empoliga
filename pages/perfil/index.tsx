@@ -1371,20 +1371,53 @@ export default function Index() {
             </section>
             <section className='hero'>
               <div className='hero-body'>
-                <p className='title'>Twitch</p>
-                <p className={`subtitle ${profile && profile.twitch ? '' : 'is-hidden'}`}>https://www.google.com/</p>
+                <p
+                  className='title'
+                  onClick={() => {
+                    document.querySelector('#twitch').classList.add('is-hidden')
+                    document.querySelector('#twitch-cancel').classList.remove('is-hidden')
+                    document.querySelector('#twitch-form').classList.remove('is-hidden')
+                  }}
+                >
+                  Twitch
+                </p>
+                <p className={`subtitle mt-5 ${profile && profile.twitch ? '' : 'is-hidden'}`} id='twitch'>
+                  <a href={`${profile && profile.twitch}`}>{profile && profile.twitch}</a>
+                </p>
               </div>
             </section>
             <section className='hero'>
               <div className='hero-body'>
-                <p className='title'>Instagram</p>
-                <p className={`subtitle ${profile && profile.instagram ? '' : 'is-hidden'}`}>https://www.google.com/</p>
+                <p
+                  className='title'
+                  onClick={() => {
+                    document.querySelector('#instagram').classList.add('is-hidden')
+                    document.querySelector('#instagram-cancel').classList.remove('is-hidden')
+                    document.querySelector('#instagram-form').classList.remove('is-hidden')
+                  }}
+                >
+                  Instagram
+                </p>
+                <p className={`subtitle mt-5 ${profile && profile.instagram ? '' : 'is-hidden'}`} id='instagram'>
+                  <a href={`${profile && profile.instagram}`}>{profile && profile.instagram}</a>
+                </p>
               </div>
             </section>
             <section className='hero'>
               <div className='hero-body'>
-                <p className='title'>Facebook</p>
-                <p className={`subtitle ${profile && profile.facebook ? '' : 'is-hidden'}`}>https://www.google.com/</p>
+                <p
+                  className='title'
+                  onClick={() => {
+                    document.querySelector('#facebook').classList.add('is-hidden')
+                    document.querySelector('#facebook-cancel').classList.remove('is-hidden')
+                    document.querySelector('#facebook-form').classList.remove('is-hidden')
+                  }}
+                >
+                  Facebook
+                </p>
+                <p className={`subtitle mt-5 ${profile && profile.facebook ? '' : 'is-hidden'}`} id='facebook'>
+                  <a href={`${profile && profile.facebook}`}>{profile && profile.facebook}</a>
+                </p>
               </div>
             </section>
           </div>
