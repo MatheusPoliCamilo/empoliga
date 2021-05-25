@@ -67,6 +67,10 @@ export default function Index() {
   const [rg, setRg] = useState('')
   const [cpf, setCpf] = useState('')
   const [address, setAddress] = useState('')
+  const [twitter, setTwitter] = useState('')
+  const [twitch, setTwitch] = useState('')
+  const [instagram, setInstagram] = useState('')
+  const [facebook, setFacebook] = useState('')
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
@@ -87,8 +91,12 @@ export default function Index() {
         setSetupPhoto(profile.player.setupPhoto)
         setWhatsapp(profile.whatsapp)
         if (profile.player.rg) setRg(profile.player.rg)
-        if (profile.player.cpf) setRg(profile.player.cpf)
-        if (profile.player.address) setRg(profile.player.address)
+        if (profile.player.cpf) setCpf(profile.player.cpf)
+        if (profile.player.address) setAddress(profile.player.address)
+        setTwitch(profile.twitch)
+        setTwitter(profile.twitter)
+        setInstagram(profile.instagram)
+        setFacebook(profile.facebook)
 
         fetchStates().then((states) => {
           setStates(
@@ -857,7 +865,11 @@ export default function Index() {
             </div>
           </div>
 
-          <div className='card-content is-hidden' id='information-card'>
+          <div
+            className='card-content is-hidden is-flex is-flex-direction-column is-justify-content-center'
+            id='information-card'
+            style={{ height: '49rem' }}
+          >
             <div className='content'>
               <div className='is-flex'>
                 <div className='is-flex is-flex-direction-column is-justify-content-center'>
@@ -1282,9 +1294,101 @@ export default function Index() {
               </div>
             </div>
           </div>
-          <div className='card-content is-hidden' id='social-media-card'>
-            Redes sociais
+
+          <div
+            className='card-content is-hidden is-flex is-flex-direction-column is-justify-content-space-between'
+            id='social-media-card'
+            style={{ height: '49rem' }}
+          >
+            <section className='hero'>
+              <div className='hero-body'>
+                <p
+                  className='title'
+                  onClick={() => {
+                    document.querySelector('#twitter').classList.add('is-hidden')
+                    document.querySelector('#twitter-cancel').classList.remove('is-hidden')
+                    document.querySelector('#twitter-form').classList.remove('is-hidden')
+                  }}
+                  style={{ cursor: 'pointer' }}
+                >
+                  Twitter
+                </p>
+                <p className={`subtitle mt-5 ${profile && profile.twitter ? '' : 'is-hidden'}`} id='twitter'>
+                  <a href={`${profile && profile.twitter}`}>{profile && profile.twitter}</a>
+                </p>
+
+                <form
+                  id='twitter-form'
+                  className={`is-flex ${profile && profile.twitter ? 'is-hidden' : ''}`}
+                  onSubmit={async (event) => {
+                    event.preventDefault()
+
+                    const button = document.querySelector('#twitter-save') as HTMLButtonElement
+                    button.disabled = true
+                    button.classList.add('is-loading')
+
+                    await fetch(`/api/users/${profile._id}`, {
+                      method: 'PATCH',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ twitter }),
+                    })
+
+                    setTwitter(twitter)
+
+                    document.querySelector('#twitter-form').classList.add('is-hidden')
+                    document.querySelector('#twitter').classList.remove('is-hidden')
+
+                    button.disabled = false
+                    button.classList.remove('is-loading')
+                  }}
+                >
+                  <input
+                    type='text'
+                    className='input is-large'
+                    placeholder='Digite o link do seu twitter'
+                    value={twitter}
+                    autoFocus
+                    onChange={(event) => setTwitter(event.target.value)}
+                  />
+                  <button className='button is-primary ml-2 is-large' id='twitter-save'>
+                    Salvar
+                  </button>
+                  <button
+                    className='button ml-2 is-large is-hidden'
+                    type='button'
+                    id='twitter-cancel'
+                    onClick={() => {
+                      document.querySelector('#twitter-form').classList.add('is-hidden')
+                      document.querySelector('#twitter').classList.remove('is-hidden')
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                </form>
+              </div>
+            </section>
+            <section className='hero'>
+              <div className='hero-body'>
+                <p className='title'>Twitch</p>
+                <p className={`subtitle ${profile && profile.twitch ? '' : 'is-hidden'}`}>https://www.google.com/</p>
+              </div>
+            </section>
+            <section className='hero'>
+              <div className='hero-body'>
+                <p className='title'>Instagram</p>
+                <p className={`subtitle ${profile && profile.instagram ? '' : 'is-hidden'}`}>https://www.google.com/</p>
+              </div>
+            </section>
+            <section className='hero'>
+              <div className='hero-body'>
+                <p className='title'>Facebook</p>
+                <p className={`subtitle ${profile && profile.facebook ? '' : 'is-hidden'}`}>https://www.google.com/</p>
+              </div>
+            </section>
           </div>
+
           <div className='card-content is-hidden' id='smurfs-card'>
             Smurfs
           </div>
