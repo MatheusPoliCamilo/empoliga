@@ -1694,7 +1694,14 @@ export default function Index() {
                     const { publicRuntimeConfig } = getConfig()
 
                     const response = await fetch(
-                      `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${nickname}?api_key=${publicRuntimeConfig.RIOT_API_KEY}`
+                      `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${nickname}`,
+                      {
+                        method: 'GET',
+                        headers: {
+                          'Access-Control-Allow-Origin': '*',
+                          'X-Riot-Token': publicRuntimeConfig.RIOT_API_KEY,
+                        },
+                      }
                     )
 
                     const responseJson = await response.json()
