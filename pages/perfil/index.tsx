@@ -4,7 +4,7 @@ import Cookie from 'js-cookie'
 import { addDays, parseISO, getYear, differenceInYears } from 'date-fns'
 import { Player } from '../../src/schemas/player'
 import getConfig from 'next/config'
-import id from 'date-fns/esm/locale/id/index.js'
+import Image from 'next/image'
 
 function openLeagueAccountModal() {
   document.querySelector('html').classList.add('is-clipped')
@@ -48,6 +48,16 @@ function genderText(genderChar) {
     default:
       break
   }
+}
+
+function generateProfileIconId(profileIconId) {
+  let randomId = Math.floor(Math.random() * 29)
+
+  while (randomId === profileIconId) {
+    randomId = Math.floor(Math.random() * 29)
+  }
+
+  return randomId
 }
 
 export default function Index() {
@@ -1717,7 +1727,7 @@ export default function Index() {
                 </form>
 
                 <form
-                  className='is-hidden'
+                  className='is-hidden mt-5'
                   id='nickname-change'
                   onSubmit={async (event) => {
                     event.preventDefault()
@@ -1737,11 +1747,7 @@ export default function Index() {
 
                     const { profileIconId } = await response.json()
 
-                    if (profileIconId !== leagueAccount.profileIconId) {
-                      console.log('Erro')
-                      console.log(profileIconId)
-                      console.log(leagueAccount.profileIconId)
-                    } else {
+                    if (profileIconId === leagueAccount.profileIconId) {
                       await fetch(`/api/leagueAccounts/${profile.user.leagueAccounts[0]._id}`, {
                         method: 'PATCH',
                         headers: {
@@ -1754,17 +1760,23 @@ export default function Index() {
                           nickname: leagueAccount.name,
                         }),
                       })
-                    }
 
-                    button.classList.remove('is-loading')
-                    closeLeagueAccountModal()
+                      button.classList.remove('is-loading')
+                      closeLeagueAccountModal()
+                    } else {
+                      console.log('Erro')
+                      console.log(profileIconId)
+                      console.log(leagueAccount.profileIconId)
+
+                      button.classList.remove('is-loading')
+                    }
                   }}
                 >
                   <div className='field'>
                     <label className='label'>Agora, altere o seu ícone de invocador</label>
                     <div className='control is-flex'>
                       <figure className='image is-128x128 mb-0'>
-                        <img src={`icons/${leagueAccount.profileIconId}`} />
+                        <Image src={`/icons/${generateProfileIconId(leagueAccount.profileIconId)}.png`} layout='fill' />
                       </figure>
 
                       <div className='is-flex is-align-self-flex-end'>
