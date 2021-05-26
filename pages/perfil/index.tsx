@@ -4,13 +4,14 @@ import Cookie from 'js-cookie'
 import { addDays, parseISO, getYear, differenceInYears } from 'date-fns'
 import { Player } from '../../src/schemas/player'
 import getConfig from 'next/config'
+import id from 'date-fns/esm/locale/id/index.js'
 
-function openProfilePictureModal() {
+function openLeagueAccountModal() {
   document.querySelector('html').classList.add('is-clipped')
   document.querySelector('.modal').classList.add('is-active')
 }
 
-function closeProfilePictureModal() {
+function closeLeagueAccountModal() {
   document.querySelector('html').classList.remove('is-clipped')
   document.querySelector('.modal').classList.remove('is-active')
 }
@@ -72,6 +73,7 @@ export default function Index() {
   const [instagram, setInstagram] = useState('')
   const [facebook, setFacebook] = useState('')
   const [gender, setGender] = useState('M')
+  const [leagueAccount, setLeagueAccount] = useState({ id: '', accountId: '', puuid: '', name: '', profileIconId: 1 })
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
@@ -382,9 +384,23 @@ export default function Index() {
                 </form>
 
                 <div className='ml-4'>
-                  <h1 className='title ml-0 mr-0 mb-0 is-1' style={{ fontSize: '4rem', marginTop: '-1rem' }}>
-                    This is my nickname
+                  <h1
+                    className={`title ml-0 mr-0 mb-0 is-1 ${
+                      profile && profile.player.leagueAccounts[0].nickname ? '' : 'is-hidden'
+                    }`}
+                    style={{ fontSize: '4rem', marginTop: '-1rem' }}
+                  >
+                    {profile && profile.player.leagueAccounts[0].nickname}
                   </h1>
+
+                  <button
+                    className={`button is-primary is-large ${
+                      profile && profile.player.leagueAccounts[0].nickname ? 'is-hidden' : ''
+                    }`}
+                    onClick={openLeagueAccountModal}
+                  >
+                    Cadastrar conta
+                  </button>
 
                   <h1
                     className='title'
@@ -902,7 +918,7 @@ export default function Index() {
                   </form>
                 </div>
 
-                <div className='column has-text-centered'>
+                <div className='column has-text-centered is-hidden'>
                   <h1>Diamante 1</h1>
 
                   <div className='is-flex is-justify-content-center'>
@@ -1647,15 +1663,138 @@ export default function Index() {
       </div>
 
       <div className='modal'>
-        <div className='modal-background' onClick={() => closeProfilePictureModal()} style={{ cursor: 'pointer' }} />
+        <div className='modal-background' onClick={() => closeLeagueAccountModal()} style={{ cursor: 'pointer' }} />
 
         <div className='modal-content'>
-          <p className='image is-4by3'>
-            <img src='https://bulma.io/images/placeholders/1280x960.png' />
-          </p>
+          <div className='card'>
+            <header className='card-header'>
+              <p className='card-header-title'>Component</p>
+            </header>
+            <div className='card-content'>
+              <div className='content'>
+                <form
+                  action=''
+                  onSubmit={async (event) => {
+                    event.preventDefault()
+
+                    const button = document.querySelector('#nickname-search')
+                    button.classList.add('is-loading')
+
+                    const nickname = (document.querySelector('#nickname-input') as HTMLInputElement).value
+                    const { publicRuntimeConfig } = getConfig()
+
+                    const response = await fetch(
+                      `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${nickname}`,
+                      {
+                        method: 'GET',
+                        headers: { 'X-Riot-Token': publicRuntimeConfig.RIOT_API_KEY },
+                      }
+                    )
+
+                    const responseJson = await response.json()
+                    setLeagueAccount(responseJson)
+
+                    document.querySelector('#nickname-change').classList.remove('is-hidden')
+
+                    button.classList.remove('is-loading')
+                  }}
+                >
+                  <div className='field'>
+                    <label className='label'>Nickname</label>
+                    <div className='control is-flex'>
+                      <input
+                        className='input is-large'
+                        type='text'
+                        id='nickname-input'
+                        placeholder='Digite o seu nome de invocador'
+                      />
+
+                      <button className='button is-large is-primary ml-2' id='nickname-search'>
+                        Pesquisar
+                      </button>
+                    </div>
+                  </div>
+                </form>
+
+                <form
+                  className='is-hidden'
+                  id='nickname-change'
+                  onSubmit={async (event) => {
+                    event.preventDefault()
+
+                    const button = document.querySelector('#nickname-confirm')
+                    button.classList.add('is-loading')
+
+                    const { publicRuntimeConfig } = getConfig()
+
+                    const response = await fetch(
+                      `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${leagueAccount.name}`,
+                      {
+                        method: 'GET',
+                        headers: { 'X-Riot-Token': publicRuntimeConfig.RIOT_API_KEY },
+                      }
+                    )
+
+                    const { profileIconId } = await response.json()
+
+                    if (profileIconId !== leagueAccount.profileIconId) {
+                      console.log('Erro')
+                      console.log(profileIconId)
+                      console.log(leagueAccount.profileIconId)
+                    } else {
+                      await fetch(`/api/leagueAccounts/${profile.user.leagueAccounts[0]._id}`, {
+                        method: 'PATCH',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                          summonerId: leagueAccount.id,
+                          accountId: leagueAccount.accountId,
+                          puuid: leagueAccount.puuid,
+                          nickname: leagueAccount.name,
+                        }),
+                      })
+                    }
+
+                    button.classList.remove('is-loading')
+                    closeLeagueAccountModal()
+                  }}
+                >
+                  <div className='field'>
+                    <label className='label'>Agora, altere o seu ícone de invocador</label>
+                    <div className='control is-flex'>
+                      <figure className='image is-128x128 mb-0'>
+                        <img src={`icons/${leagueAccount.profileIconId}`} />
+                      </figure>
+
+                      <div className='is-flex is-align-self-flex-end'>
+                        <button className='button is-large is-primary ml-2' id='nickname-confirm'>
+                          Confirmar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <footer className='card-footer'>
+              <a type='button' className='card-footer-item' onClick={() => closeLeagueAccountModal()}>
+                Cancelar
+              </a>
+              <a
+                type='button'
+                className='card-footer-item'
+                onClick={() => {
+                  console.log('Salvar')
+                }}
+              >
+                Salvar
+              </a>
+            </footer>
+          </div>
         </div>
 
-        <button className='modal-close is-large' aria-label='close' onClick={() => closeProfilePictureModal()} />
+        <button className='modal-close is-large' aria-label='close' onClick={() => closeLeagueAccountModal()} />
       </div>
 
       <div className='is-flex is-justify-content-center'>
