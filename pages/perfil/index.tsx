@@ -83,7 +83,14 @@ export default function Index() {
   const [instagram, setInstagram] = useState('')
   const [facebook, setFacebook] = useState('')
   const [gender, setGender] = useState('M')
-  const [leagueAccount, setLeagueAccount] = useState({ id: '', accountId: '', puuid: '', name: '', profileIconId: 1 })
+  const [leagueAccount, setLeagueAccount] = useState({
+    id: '',
+    accountId: '',
+    puuid: '',
+    name: '',
+    profileIconId: 1,
+    confirmationIconId: 1,
+  })
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
@@ -928,7 +935,7 @@ export default function Index() {
                   </form>
                 </div>
 
-                <div className='column has-text-centered is-hidden'>
+                <div className='column has-text-centered is-invisible'>
                   <h1>Diamante 1</h1>
 
                   <div className='is-flex is-justify-content-center'>
@@ -965,7 +972,7 @@ export default function Index() {
                       minWidth: '20rem',
                       height: '20rem',
                     }}
-                    className={`is-flex is-flex-direction-column is-justify-content-center pl-6 pr-6 pb-6 mb-5 ml-4 mr-4 ${
+                    className={`is-flex is-flex-direction-column is-justify-content-center pl-6 pr-6 pb-6 mb-5 ml-6 mr-6 ${
                       profile && profile.player.setupPhoto ? 'is-hidden' : ''
                     }`}
                     id='setup-photo-form'
@@ -1678,7 +1685,7 @@ export default function Index() {
         <div className='modal-content'>
           <div className='card'>
             <header className='card-header'>
-              <p className='card-header-title'>Component</p>
+              <p className='card-header-title'>Adicionar conta</p>
             </header>
             <div className='card-content'>
               <div className='content'>
@@ -1691,21 +1698,13 @@ export default function Index() {
                     button.classList.add('is-loading')
 
                     const nickname = (document.querySelector('#nickname-input') as HTMLInputElement).value
-                    const { publicRuntimeConfig } = getConfig()
-
-                    const response = await fetch(
-                      `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${nickname}`,
-                      {
-                        method: 'GET',
-                        headers: {
-                          'Access-Control-Allow-Origin': '*',
-                          'X-Riot-Token': publicRuntimeConfig.RIOT_API_KEY,
-                        },
-                      }
-                    )
-
+                    const response = await fetch(`api/riot/summoner?nickname=${nickname}`)
                     const responseJson = await response.json()
-                    setLeagueAccount(responseJson)
+
+                    setLeagueAccount({
+                      ...responseJson,
+                      confirmationIconId: generateProfileIconId(leagueAccount.profileIconId),
+                    })
 
                     document.querySelector('#nickname-change').classList.remove('is-hidden')
 
@@ -1729,82 +1728,66 @@ export default function Index() {
                   </div>
                 </form>
 
-                <form
-                  className='is-hidden mt-5'
-                  id='nickname-change'
-                  onSubmit={async (event) => {
-                    event.preventDefault()
-
-                    const button = document.querySelector('#nickname-confirm')
-                    button.classList.add('is-loading')
-
-                    const { publicRuntimeConfig } = getConfig()
-
-                    const response = await fetch(
-                      `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${leagueAccount.name}`,
-                      {
-                        method: 'GET',
-                        headers: { 'X-Riot-Token': publicRuntimeConfig.RIOT_API_KEY },
-                      }
-                    )
-
-                    const { profileIconId } = await response.json()
-
-                    if (profileIconId === leagueAccount.profileIconId) {
-                      await fetch(`/api/leagueAccounts/${profile.user.leagueAccounts[0]._id}`, {
-                        method: 'PATCH',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                          summonerId: leagueAccount.id,
-                          accountId: leagueAccount.accountId,
-                          puuid: leagueAccount.puuid,
-                          nickname: leagueAccount.name,
-                        }),
-                      })
-
-                      button.classList.remove('is-loading')
-                      closeLeagueAccountModal()
-                    } else {
-                      console.log('Erro')
-                      console.log(profileIconId)
-                      console.log(leagueAccount.profileIconId)
-
-                      button.classList.remove('is-loading')
-                    }
-                  }}
-                >
+                <form className='is-hidden mt-5' id='nickname-change'>
                   <div className='field'>
                     <label className='label'>Agora, altere o seu ícone de invocador</label>
                     <div className='control is-flex'>
                       <figure className='image is-128x128 mb-0'>
-                        <Image src={`/icons/${generateProfileIconId(leagueAccount.profileIconId)}.png`} layout='fill' />
+                        <Image src={`/icons/${leagueAccount.confirmationIconId}.png`} layout='fill' />
                       </figure>
-
-                      <div className='is-flex is-align-self-flex-end'>
-                        <button className='button is-large is-primary ml-2' id='nickname-confirm'>
-                          Confirmar
-                        </button>
-                      </div>
                     </div>
                   </div>
                 </form>
               </div>
             </div>
             <footer className='card-footer'>
-              <a type='button' className='card-footer-item' onClick={() => closeLeagueAccountModal()}>
-                Cancelar
-              </a>
               <a
                 type='button'
                 className='card-footer-item'
-                onClick={() => {
-                  console.log('Salvar')
+                id='nickname-confirm'
+                onClick={async () => {
+                  const button = document.querySelector('#nickname-confirm')
+                  const buttonLoading = document.querySelector('#nickname-loading')
+
+                  button.classList.add('is-hidden')
+                  buttonLoading.classList.remove('is-hidden')
+
+                  const response = await fetch(`api/riot/summoner?nickname=${leagueAccount.name}`)
+                  const { profileIconId } = await response.json()
+
+                  if (profileIconId === leagueAccount.confirmationIconId) {
+                    await fetch(`/api/leagueAccounts/${profile.player.leagueAccounts[0]._id}`, {
+                      method: 'PATCH',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        summonerId: leagueAccount.id,
+                        accountId: leagueAccount.accountId,
+                        puuid: leagueAccount.puuid,
+                        nickname: leagueAccount.name,
+                      }),
+                    })
+
+                    setProfile({
+                      ...profile,
+                      player: { ...profile.player, leagueAccounts: [{ nickname: leagueAccount.name }] },
+                    })
+
+                    buttonLoading.classList.add('is-hidden')
+                    button.classList.remove('is-hidden')
+
+                    closeLeagueAccountModal()
+                  } else {
+                    // TODO: Adicionar mensagem de erro
+                    buttonLoading.classList.add('is-hidden')
+                    button.classList.remove('is-hidden')
+                  }
                 }}
               >
                 Salvar
               </a>
+              <button className='button card-footer-item is-loading is-hidden' id='nickname-loading' />
             </footer>
           </div>
         </div>
