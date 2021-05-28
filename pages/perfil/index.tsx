@@ -197,7 +197,7 @@ export default function Index() {
     <div className='has-text-weight-bold'>
       <Navbar />
 
-      <div className='is-flex is-justify-content-center mt-6 is-hidden' id='page'>
+      <div className='is-flex is-justify-content-center mt-5 is-hidden' id='page'>
         <div className='is-flex is-flex-direction-column is-justify-content-center'>
           <button
             className='button is-large is-focused is-primary'
@@ -246,7 +246,7 @@ export default function Index() {
             Redes sociais
           </button>
 
-          <button
+          {/* <button
             className='button is-large mt-5 is-primary'
             style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
             onClick={() => {
@@ -260,7 +260,7 @@ export default function Index() {
             }}
           >
             Smurfs
-          </button>
+          </button> */}
           {/* <button
             className='button is-large mt-5 is-primary'
             style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
@@ -591,7 +591,7 @@ export default function Index() {
 
               <div className='columns'>
                 <div className='column pt-0'>
-                  <label className='label' style={{ fontWeight: 'bolder' }}>
+                  <label className='label mt-3' style={{ fontWeight: 'bolder' }}>
                     E-mail
                   </label>
 
@@ -999,7 +999,7 @@ export default function Index() {
           <div
             className='card-content is-hidden is-flex is-flex-direction-column is-justify-content-center'
             id='information-card'
-            style={{ height: '49rem' }}
+            style={{ height: '50rem' }}
           >
             <div className='content'>
               <div className='is-flex'>
@@ -1711,9 +1711,9 @@ export default function Index() {
             </section>
           </div>
 
-          {/* <div className='card-content is-hidden' id='smurfs-card'>
+          <div className='card-content is-hidden' id='smurfs-card'>
             Smurfs
-          </div> */}
+          </div>
         </div>
       </div>
 

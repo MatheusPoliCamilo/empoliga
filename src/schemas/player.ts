@@ -41,34 +41,34 @@ const playerSchema = new mongoose.Schema({
   ],
 })
 
-interface PlayerInterface extends mongoose.Document {
-  city: String
-  state: String
-  role: String
-  address: String
-  profilePicture: String
-  setupPhoto: String
-  rg: String
-  cpf: String
-  valid: Boolean
-}
+// interface PlayerInterface extends mongoose.Document {
+//   city: String
+//   state: String
+//   role: String
+//   address: String
+//   profilePicture: String
+//   setupPhoto: String
+//   rg: String
+//   cpf: String
+//   valid: Boolean
+// }
 
-playerSchema.pre<PlayerInterface>('save', async function () {
-  const player = this
+// playerSchema.pre<PlayerInterface>('save', async function () {
+//   const player = this
 
-  if (
-    player.city &&
-    player.state &&
-    player.role &&
-    player.address &&
-    player.profilePicture &&
-    player.setupPhoto &&
-    player.rg &&
-    player.cpf
-  ) {
-    this.valid = true
-  }
-})
+//   if (
+//     player.city &&
+//     player.state &&
+//     player.role &&
+//     player.address &&
+//     player.profilePicture &&
+//     player.setupPhoto &&
+//     player.rg &&
+//     player.cpf
+//   ) {
+//     this.valid = true
+//   }
+// })
 
 const Player = mongoose.models.Player || mongoose.model('Player', playerSchema)
 
