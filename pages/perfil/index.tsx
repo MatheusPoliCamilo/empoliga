@@ -431,7 +431,13 @@ export default function Index() {
                     className={`title ml-0 mr-0 mb-0 is-1 is-flex is-align-items-center ${
                       profile && profile.player.leagueAccounts[0].nickname ? '' : 'is-hidden'
                     }`}
-                    style={{ fontSize: '4rem', marginTop: '-1rem', textTransform: 'none' }}
+                    style={{ fontSize: '4rem', marginTop: '-1rem', textTransform: 'none', cursor: 'pointer' }}
+                    id='player-nick'
+                    onClick={() => {
+                      document.querySelector('#player-nick').classList.add('is-hidden')
+                      document.querySelector('#add-account-button').classList.remove('is-hidden')
+                      document.querySelector('#nickname-cancel').classList.remove('is-hidden')
+                    }}
                   >
                     {profile && profile.player.leagueAccounts[0].nickname}
                   </h1>
@@ -441,8 +447,21 @@ export default function Index() {
                       profile && profile.player.leagueAccounts[0].nickname ? 'is-hidden' : ''
                     }`}
                     onClick={openLeagueAccountModal}
+                    id='add-account-button'
                   >
                     Cadastrar conta
+                  </button>
+
+                  <button
+                    className='button is-large ml-2 is-hidden'
+                    id='nickname-cancel'
+                    onClick={() => {
+                      document.querySelector('#add-account-button').classList.add('is-hidden')
+                      document.querySelector('#nickname-cancel').classList.add('is-hidden')
+                      document.querySelector('#player-nick').classList.remove('is-hidden')
+                    }}
+                  >
+                    Cancelar
                   </button>
 
                   <h1
@@ -987,10 +1006,12 @@ export default function Index() {
                     </a>
                   </div>
 
-                  <p className='is-size-5'>
-                    {profile && profile.player.leagueAccounts[0].wins}W/
-                    {profile && profile.player.leagueAccounts[0].losses}L
-                  </p>
+                  {profile && profile.player.leagueAccounts[0].wins && (
+                    <p className='is-size-5'>
+                      {profile.player.leagueAccounts[0].wins}W/
+                      {profile.player.leagueAccounts[0].losses}L
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -1769,11 +1790,16 @@ export default function Index() {
                 <form className='is-hidden mt-5' id='nickname-change'>
                   <div className='field'>
                     <label className='label'>Agora, altere o seu ícone de invocador</label>
+
                     <div className='control is-flex'>
                       <figure className='image is-128x128 mb-0'>
                         <Image src={`/icons/${leagueAccount.confirmationIconId}.png`} layout='fill' />
                       </figure>
                     </div>
+
+                    <p className='has-text-danger-dark pt-3 is-hidden' id='nickname-error'>
+                      Erro: O ícone da conta não está igual ao solicitado
+                    </p>
                   </div>
                 </form>
               </div>
@@ -1816,16 +1842,29 @@ export default function Index() {
                       ...profile,
                       player: {
                         ...profile.player,
-                        leagueAccounts: [{ nickname: leagueAccount.name, tier: leagueAccount.tier }],
+                        leagueAccounts: [
+                          {
+                            nickname: leagueAccount.name,
+                            tier: leagueAccount.tier,
+                            rank: leagueAccount.rank,
+                            wins: leagueAccount.wins,
+                            losses: leagueAccount.losses,
+                          },
+                        ],
                       },
                     })
 
                     buttonLoading.classList.add('is-hidden')
                     button.classList.remove('is-hidden')
 
+                    document.querySelector('#add-account-button').classList.add('is-hidden')
+                    document.querySelector('#nickname-cancel').classList.add('is-hidden')
+                    document.querySelector('#nickname-error').classList.add('is-hidden')
+                    document.querySelector('#player-nick').classList.remove('is-hidden')
+
                     closeLeagueAccountModal()
                   } else {
-                    // TODO: Adicionar mensagem de erro
+                    document.querySelector('#nickname-error').classList.remove('is-hidden')
                     buttonLoading.classList.add('is-hidden')
                     button.classList.remove('is-hidden')
                   }
