@@ -90,6 +90,11 @@ export default function Index() {
     name: '',
     profileIconId: 1,
     confirmationIconId: 1,
+    leaguePoints: 0,
+    wins: 0,
+    losses: 0,
+    tier: '',
+    rank: '',
   })
 
   useEffect(() => {
@@ -402,7 +407,7 @@ export default function Index() {
 
                 <div className='ml-4'>
                   <h1
-                    className={`title ml-0 mr-0 mb-0 is-1 ${
+                    className={`title ml-0 mr-0 mb-0 is-1 is-flex is-align-items-center ${
                       profile && profile.player.leagueAccounts[0].nickname ? '' : 'is-hidden'
                     }`}
                     style={{ fontSize: '4rem', marginTop: '-1rem' }}
@@ -557,9 +562,9 @@ export default function Index() {
                   </form>
 
                   {/* TODO: Time/Free agent */}
-                  {/* <h1 className='title mt-1'>
+                  <h1 className='title mt-1'>
                     <a href=''>paiN Gaming</a>
-                  </h1> */}
+                  </h1>
                 </div>
               </div>
 
@@ -935,7 +940,7 @@ export default function Index() {
                   </form>
                 </div>
 
-                <div className='column has-text-centered is-invisible'>
+                <div className={`column has-text-centered ${profile.player.leagueAccounts[0] ? '' : 'is-invisible'}`}>
                   <h1>Diamante 1</h1>
 
                   <div className='is-flex is-justify-content-center'>
@@ -944,13 +949,12 @@ export default function Index() {
                       style={{
                         cursor: 'pointer',
                         // width: '20rem',
-                        minWidth: '20rem',
-                        minHeight: '15rem',
+                        minWidth: '256px',
+                        minHeight: '292.5px',
                         // height: '20rem',
-                        backgroundColor: 'gray',
                       }}
                     >
-                      {/* <img src='https://bulma.io/images/placeholders/128x128.png' /> */}
+                      <Image src={`/elo/${profile.player.leagueAccounts[0].tier}.png`} layout='fill' />
                     </figure>
                   </div>
                 </div>
@@ -1766,12 +1770,20 @@ export default function Index() {
                         accountId: leagueAccount.accountId,
                         puuid: leagueAccount.puuid,
                         nickname: leagueAccount.name,
+                        leaguePoints: leagueAccount.leaguePoints,
+                        wins: leagueAccount.wins,
+                        losses: leagueAccount.losses,
+                        tier: leagueAccount.tier,
+                        rank: leagueAccount.rank,
                       }),
                     })
 
                     setProfile({
                       ...profile,
-                      player: { ...profile.player, leagueAccounts: [{ nickname: leagueAccount.name }] },
+                      player: {
+                        ...profile.player,
+                        leagueAccounts: [{ nickname: leagueAccount.name, tier: leagueAccount.tier }],
+                      },
                     })
 
                     buttonLoading.classList.add('is-hidden')
