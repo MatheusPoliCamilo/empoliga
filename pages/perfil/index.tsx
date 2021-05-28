@@ -966,20 +966,31 @@ export default function Index() {
                     profile && profile.player.leagueAccounts[0] ? '' : 'is-invisible'
                   }`}
                 >
-                  <h1>{profile && generateRankString(profile.player.leagueAccounts[0])}</h1>
+                  <h1 className='mb-0'>{profile && generateRankString(profile.player.leagueAccounts[0])}</h1>
 
                   <div className='is-flex is-justify-content-center'>
-                    <figure
-                      className='image ml-0 mt-0 mr-0'
-                      style={{
-                        cursor: 'pointer',
-                        minWidth: '288px',
-                        minHeight: '329.0625px',
-                      }}
+                    <a
+                      href={`https://br.op.gg/summoner/userName=${
+                        profile && encodeURIComponent(profile.player.leagueAccounts[0].nickname)
+                      }`}
                     >
-                      <Image src={`/elo/${profile && profile.player.leagueAccounts[0].tier}.png`} layout='fill' />
-                    </figure>
+                      <figure
+                        className='image ml-0 mt-0 mr-0'
+                        style={{
+                          cursor: 'pointer',
+                          minWidth: '288px',
+                          minHeight: '329.0625px',
+                        }}
+                      >
+                        <Image src={`/elo/${profile && profile.player.leagueAccounts[0].tier}.png`} layout='fill' />
+                      </figure>
+                    </a>
                   </div>
+
+                  <p className='is-size-5'>
+                    {profile && profile.player.leagueAccounts[0].wins}W/
+                    {profile && profile.player.leagueAccounts[0].losses}L
+                  </p>
                 </div>
               </div>
             </div>
