@@ -49,10 +49,10 @@ function Navbar() {
               <a className='navbar-item has-text-grey-light'>Minor</a>
               <a className='navbar-item has-text-grey-light'>Tradicional</a>
               <a className='navbar-item has-text-grey-light'>Major</a>
-              <hr className='navbar-divider' />
+              {/* <hr className='navbar-divider' />
               <a className='navbar-item has-text-grey-light' style={{ pointerEvents: 'none' }}>
                 Wild Rift
-              </a>
+              </a> */}
             </div>
           </div>
 

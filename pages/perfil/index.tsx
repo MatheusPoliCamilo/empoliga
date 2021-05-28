@@ -1711,9 +1711,9 @@ export default function Index() {
             </section>
           </div>
 
-          <div className='card-content is-hidden' id='smurfs-card'>
+          {/* <div className='card-content is-hidden' id='smurfs-card'>
             Smurfs
-          </div>
+          </div> */}
         </div>
       </div>
 
