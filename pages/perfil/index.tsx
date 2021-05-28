@@ -940,7 +940,11 @@ export default function Index() {
                   </form>
                 </div>
 
-                <div className={`column has-text-centered ${profile.player.leagueAccounts[0] ? '' : 'is-invisible'}`}>
+                <div
+                  className={`column has-text-centered ${
+                    profile && profile.player.leagueAccounts[0] ? '' : 'is-invisible'
+                  }`}
+                >
                   <h1>Diamante 1</h1>
 
                   <div className='is-flex is-justify-content-center'>
@@ -948,13 +952,11 @@ export default function Index() {
                       className='image ml-0 mt-0 mr-0'
                       style={{
                         cursor: 'pointer',
-                        // width: '20rem',
-                        minWidth: '256px',
-                        minHeight: '292.5px',
-                        // height: '20rem',
+                        minWidth: '288px',
+                        minHeight: '329.0625px',
                       }}
                     >
-                      <Image src={`/elo/${profile.player.leagueAccounts[0].tier}.png`} layout='fill' />
+                      <Image src={`/elo/${profile && profile.player.leagueAccounts[0].tier}.png`} layout='fill' />
                     </figure>
                   </div>
                 </div>
