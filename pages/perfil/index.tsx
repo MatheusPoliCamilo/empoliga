@@ -60,6 +60,27 @@ function generateProfileIconId(profileIconId) {
   return randomId
 }
 
+function generateRankString({ rank, tier, leaguePoints }) {
+  switch (tier) {
+    case 'IRON':
+      return `Ferro ${rank}`
+    case 'BRONZE':
+      return `Bronze ${rank}`
+    case 'SILVER':
+      return `Prata ${rank}`
+    case 'GOLD':
+      return `Ouro ${rank}`
+    case 'PLATINUM':
+      return `Platina ${rank}`
+    case 'DIAMOND':
+      return `Diamante ${rank}`
+    case 'GRANDMASTER':
+      return `Grão Mestre ${leaguePoints} PDL`
+    case 'CHALLENGER':
+      return `Desafiante ${leaguePoints} PDL`
+  }
+}
+
 export default function Index() {
   const [profile, setProfile] = useState(null)
   const [name, setName] = useState('')
@@ -410,7 +431,7 @@ export default function Index() {
                     className={`title ml-0 mr-0 mb-0 is-1 is-flex is-align-items-center ${
                       profile && profile.player.leagueAccounts[0].nickname ? '' : 'is-hidden'
                     }`}
-                    style={{ fontSize: '4rem', marginTop: '-1rem' }}
+                    style={{ fontSize: '4rem', marginTop: '-1rem', textTransform: 'none' }}
                   >
                     {profile && profile.player.leagueAccounts[0].nickname}
                   </h1>
@@ -562,9 +583,9 @@ export default function Index() {
                   </form>
 
                   {/* TODO: Time/Free agent */}
-                  <h1 className='title mt-1'>
+                  {/* <h1 className='title mt-1'>
                     <a href=''>paiN Gaming</a>
-                  </h1>
+                  </h1> */}
                 </div>
               </div>
 
@@ -945,7 +966,7 @@ export default function Index() {
                     profile && profile.player.leagueAccounts[0] ? '' : 'is-invisible'
                   }`}
                 >
-                  <h1>Diamante 1</h1>
+                  <h1>{profile && generateRankString(profile.player.leagueAccounts[0])}</h1>
 
                   <div className='is-flex is-justify-content-center'>
                     <figure
