@@ -1,6 +1,0 @@
-{
-  "env": {
-    "MONGODB_URI": "@my-mongodb-uri",
-    "AUTH_SECRET": "@auth_secret"
-  }
-}
