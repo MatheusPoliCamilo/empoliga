@@ -13,8 +13,8 @@ export default async (request, response) => {
   switch (request.method) {
     case 'GET': {
       // TODO: Remover informações sensíveis do index de usuários
-      const getCollection = await database.collection('users')
-      const users = await getCollection.find({}).toArray()
+      // TODO: Popular league account
+      const users = await User.find({}).populate('player').exec()
 
       database.close()
 

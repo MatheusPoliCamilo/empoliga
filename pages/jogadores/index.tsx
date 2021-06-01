@@ -49,6 +49,16 @@ function Card() {
 
 export default function Index() {
   useEffect(() => {
+    console.log('mount')
+
+    fetch('/api/users').then((response) => {
+      response.json().then((players) => {
+        console.log('players', players)
+      })
+    })
+  }, [])
+
+  useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
   })
 
@@ -67,7 +77,7 @@ export default function Index() {
                 </div>
               </div>
 
-              <div className='field'>
+              {/* <div className='field'>
                 <div className='control'>
                   <label className='checkbox'>
                     <input type='checkbox' className='mr-1' defaultChecked />
@@ -89,11 +99,13 @@ export default function Index() {
                     Free Agent
                   </label>
                 </div>
-              </div>
+              </div> */}
 
               <div className='field is-grouped'>
                 <div className='control'>
-                  <button className='button is-medium is-primary'>Pesquisar</button>
+                  <button className='button is-medium is-primary' id='search-button'>
+                    Pesquisar
+                  </button>
                 </div>
               </div>
             </form>
