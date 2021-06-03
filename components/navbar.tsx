@@ -42,19 +42,19 @@ function Navbar() {
 
       <div id='empoliga-navbar' className={active ? 'navbar-menu is-active' : 'navbar-menu'}>
         <div className='navbar-start'>
-          <div className='navbar-item has-dropdown is-hoverable'>
+          {/* <div className='navbar-item has-dropdown is-hoverable'>
             <a className='navbar-link pl-5'>Ligas</a>
 
             <div className='navbar-dropdown'>
               <a className='navbar-item has-text-grey-light'>Minor</a>
               <a className='navbar-item has-text-grey-light'>Tradicional</a>
               <a className='navbar-item has-text-grey-light'>Major</a>
-              {/* <hr className='navbar-divider' />
+              <hr className='navbar-divider' />
               <a className='navbar-item has-text-grey-light' style={{ pointerEvents: 'none' }}>
                 Wild Rift
-              </a> */}
+              </a>
             </div>
-          </div>
+          </div> */}
 
           <a
             className='navbar-item is-justify-content-center pl-5 pr-5 has-text-grey-light'
@@ -66,6 +66,26 @@ function Navbar() {
           <a className='navbar-item pl-5 pr-5' href='/jogadores'>
             Jogadores
           </a>
+
+          <a className='navbar-item pl-5 pr-5' href='https://www.twitch.tv/team/empoliga'>
+            Streamers
+          </a>
+
+          <div className='navbar-item has-dropdown is-hoverable'>
+            <a className='navbar-link pl-5'>Regulamentos</a>
+
+            <div className='navbar-dropdown'>
+              <a
+                className='navbar-item'
+                href='https://docs.google.com/document/d/1sTtJEy3tyIg96vmY8N4KQlR8PTqNpX71maiARDbhuAg/edit'
+              >
+                Tradicional 2021-1
+              </a>
+              <a className='navbar-item' href='https://drive.google.com/file/d/1ZT6rru4p5nB7trGTHHEAiGcqbVPwezdH/view'>
+                Major 2021-1
+              </a>
+            </div>
+          </div>
 
           <div className='navbar-item has-dropdown is-hoverable'>
             <a className='navbar-link pl-5'>Informações</a>
