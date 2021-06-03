@@ -63,10 +63,7 @@ function Navbar() {
             Equipes
           </a>
 
-          <a
-            className='navbar-item pl-5 pr-5'
-            href='https://docs.google.com/spreadsheets/d/1zHBjBAClwuRTw8rpYaPNwJROTKKPzQjnH29vkAdIuEc/edit?usp=sharing'
-          >
+          <a className='navbar-item pl-5 pr-5' href='/jogadores'>
             Jogadores
           </a>
 

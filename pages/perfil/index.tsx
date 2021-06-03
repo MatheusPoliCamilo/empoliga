@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/navbar'
 import Cookie from 'js-cookie'
 import { addDays, parseISO, getYear, differenceInYears } from 'date-fns'
-import { Player } from '../../src/schemas/player'
 import getConfig from 'next/config'
 import Image from 'next/image'
+import { generateRankString } from '../../services/generateRankString'
 
 function openLeagueAccountModal() {
   document.querySelector('html').classList.add('is-clipped')
@@ -58,27 +58,6 @@ function generateProfileIconId(profileIconId) {
   }
 
   return randomId
-}
-
-function generateRankString({ rank, tier, leaguePoints }) {
-  switch (tier) {
-    case 'IRON':
-      return `Ferro ${rank}`
-    case 'BRONZE':
-      return `Bronze ${rank}`
-    case 'SILVER':
-      return `Prata ${rank}`
-    case 'GOLD':
-      return `Ouro ${rank}`
-    case 'PLATINUM':
-      return `Platina ${rank}`
-    case 'DIAMOND':
-      return `Diamante ${rank}`
-    case 'GRANDMASTER':
-      return `Grão Mestre ${leaguePoints} PDL`
-    case 'CHALLENGER':
-      return `Desafiante ${leaguePoints} PDL`
-  }
 }
 
 export default function Index() {
@@ -373,6 +352,7 @@ export default function Index() {
                         id='profile'
                         onChange={() => {
                           const fileInput = document.querySelector('#profile') as HTMLInputElement
+
                           if (fileInput.files.length > 0) {
                             const fileName = document.querySelector('.file-name')
                             fileName.textContent = fileInput.files[0].name
@@ -1001,7 +981,9 @@ export default function Index() {
                           minHeight: '329.0625px',
                         }}
                       >
-                        <Image src={`/elo/${profile && profile.player.leagueAccounts[0].tier}.png`} layout='fill' />
+                        {profile && profile.player.leagueAccounts[0].tier && (
+                          <Image src={`/elo/${profile && profile.player.leagueAccounts[0].tier}.png`} layout='fill' />
+                        )}
                       </figure>
                     </a>
                   </div>
@@ -1095,6 +1077,7 @@ export default function Index() {
                           id='setup-photo-input'
                           onChange={() => {
                             const fileInput = document.querySelector('#setup-photo-input') as HTMLInputElement
+
                             if (fileInput.files.length > 0) {
                               const fileName = document.querySelector('#setup-photo-name')
                               fileName.textContent = fileInput.files[0].name

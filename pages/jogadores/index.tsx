@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/navbar'
+import { generateRankString } from '../../services/generateRankString'
 
 function chunkArray(array, chunkSize) {
   const chunks = []
@@ -11,7 +12,45 @@ function chunkArray(array, chunkSize) {
   return chunks
 }
 
-function takeCards(users) {}
+function takeCards(users) {
+  return users.filter((user) => {
+    const validUser =
+      user.gender &&
+      user.birthDate &&
+      user.name &&
+      user.email &&
+      user.whatsapp &&
+      user.twitter &&
+      user.twitch &&
+      user.instagram &&
+      user.facebook
+
+    if (validUser) {
+      const player = user.player
+      const validPlayer =
+        player &&
+        player.role &&
+        player.state &&
+        player.city &&
+        player.profilePicture &&
+        player.setupPhoto &&
+        player.rg &&
+        player.cpf &&
+        player.address
+
+      if (validPlayer) {
+        const leagueAccount = player && player.leagueAccounts[0]
+        const validLeagueAccout = leagueAccount && leagueAccount.accountId
+
+        if (validLeagueAccout) {
+          return user
+        }
+      }
+    }
+
+    return false
+  })
+}
 
 function Card({ player }) {
   console.log(player)
@@ -20,41 +59,41 @@ function Card({ player }) {
     <div className='card'>
       <header className='card-header'>
         <p className='card-header-title' style={{ justifyContent: 'center' }}>
-          TOP
+          {player.player.role}
         </p>
       </header>
 
       <div className='card-image'>
-        <figure className='image is-4by3'>
-          <img src='https://bulma.io/images/placeholders/1280x960.png' alt='Placeholder image' />
+        <figure className='image is-1by1'>
+          <img src={player.player.profilePicture} alt='Placeholder image' />
         </figure>
       </div>
 
       <div className='card-content'>
         <div className='media'>
-          <div className='media-left' title='Mestre'>
-            <figure className='image is-48x48'>
-              <img src='https://bulma.io/images/placeholders/96x96.png' alt='Elo' />
+          <div className='media-left'>
+            <figure className='image' style={{ height: '50px', width: '63px' }}>
+              <img src={`/elo/${player.player.leagueAccounts[0].tier}.png`} alt='Elo' />
             </figure>
           </div>
           <div className='media-content'>
             <p className='title is-4' style={{ textTransform: 'none' }}>
-              yBrother
+              {player.player.leagueAccounts[0].nickname}
             </p>
-            <p className='subtitle is-6'>Fernando Henrique de Souza Santos</p>
+            <p className='subtitle is-6'>{player.name}</p>
           </div>
         </div>
 
         <div className='content'>
-          Itajaí - Santa Catarina
+          {player.player.city} - {player.player.state}
           <br />
-          <a href='#'>Furnace e-Sports - Major A</a>
+          {/* <a href='#'>Furnace e-Sports - Major A</a> */}
         </div>
       </div>
 
       <footer className='card-footer'>
         <p className='card-header-title' style={{ justifyContent: 'center' }}>
-          Mestre - 8 pontos
+          {generateRankString(player.player.leagueAccounts[0])}
         </p>
       </footer>
     </div>
@@ -64,7 +103,7 @@ function Card({ player }) {
 function Cards({ cards }) {
   return cards.map((cardChunk, key) => (
     <div className='columns' key={key}>
-      {[cardChunk[0], cardChunk[1], cardChunk[2], cardChunk[3], cardChunk[4], cardChunk[5]].map((card, key) => (
+      {[cardChunk[0], cardChunk[1], cardChunk[2], cardChunk[3], cardChunk[4]].map((card, key) => (
         <div className='column' key={key}>
           {card && <Card player={card} />}
         </div>
@@ -93,6 +132,13 @@ export default function Index() {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
   })
 
+  useEffect(() => {
+    const filteredUsers = takeCards(users)
+    const cardsChunks = chunkArray(filteredUsers, 5)
+
+    setCards(cardsChunks)
+  }, [users])
+
   return (
     <div className='has-text-weight-bold'>
       <Navbar />
@@ -111,8 +157,10 @@ export default function Index() {
 
                 const nickname = (document.querySelector('#nickname') as HTMLInputElement).value
 
-                const cards = chunkArray(users, 5)
-                setCards(cards)
+                const filteredUsers = takeCards(users)
+                const cardsChunks = chunkArray(filteredUsers, 5)
+
+                setCards(cardsChunks)
 
                 button.classList.remove('is-loading')
                 button.disabled = false
