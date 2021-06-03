@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/navbar'
 
 function Card() {
@@ -48,12 +48,17 @@ function Card() {
 }
 
 export default function Index() {
-  useEffect(() => {
-    console.log('mount')
+  const [users, setUsers] = useState([])
+  const [cards, setCards] = useState([])
 
+  useEffect(() => {
     fetch('/api/users').then((response) => {
-      response.json().then((players) => {
-        console.log('players', players)
+      response.json().then((users) => {
+        setUsers(users)
+
+        const searchButton = document.querySelector('#search-button') as HTMLButtonElement
+        searchButton.classList.remove('is-loading')
+        searchButton.disabled = false
       })
     })
   }, [])
@@ -69,11 +74,32 @@ export default function Index() {
       <div className='p-6'>
         <div className='columns'>
           <div className='column'>
-            <form action=''>
+            <form
+              action=''
+              onSubmit={(event) => {
+                event.preventDefault()
+
+                const button = document.querySelector('#search-button') as HTMLButtonElement
+                button.classList.add('is-loading')
+                button.disabled = true
+
+                const nickname = (document.querySelector('#nickname') as HTMLInputElement).value
+                console.log('nickname', nickname)
+                console.log('users', users)
+
+                button.classList.remove('is-loading')
+                button.disabled = false
+              }}
+            >
               <div className='field'>
                 <label className='label'>Jogador</label>
                 <div className='control is-flex'>
-                  <input className='input is-large' type='text' placeholder='Digite o nick ou nome do jogador' />
+                  <input
+                    className='input is-large'
+                    type='text'
+                    id='nickname'
+                    placeholder='Digite o nickname do jogador'
+                  />
                 </div>
               </div>
 
@@ -103,7 +129,7 @@ export default function Index() {
 
               <div className='field is-grouped'>
                 <div className='control'>
-                  <button className='button is-medium is-primary' id='search-button'>
+                  <button className='button is-medium is-primary is-loading' id='search-button' disabled>
                     Pesquisar
                   </button>
                 </div>
@@ -111,42 +137,6 @@ export default function Index() {
             </form>
           </div>
           <div className='column' />
-        </div>
-
-        <div className='columns'>
-          <div className='column'>
-            <Card />
-          </div>
-          <div className='column'>
-            <Card />
-          </div>
-          <div className='column'>
-            <Card />
-          </div>
-          <div className='column'>
-            <Card />
-          </div>
-          <div className='column'>
-            <Card />
-          </div>
-        </div>
-
-        <div className='columns'>
-          <div className='column'>
-            <Card />
-          </div>
-          <div className='column'>
-            <Card />
-          </div>
-          <div className='column'>
-            <Card />
-          </div>
-          <div className='column'>
-            <Card />
-          </div>
-          <div className='column'>
-            <Card />
-          </div>
         </div>
 
         <div className='columns'>

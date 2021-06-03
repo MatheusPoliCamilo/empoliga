@@ -1,6 +1,7 @@
 import { connectToDatabase } from '../../../src/database'
 import { User } from '../../../src/schemas/user'
 import { Player } from '../../../src/schemas/player'
+import { LeagueAccount } from '../../../src/schemas/leagueAccount'
 import jwt from 'jsonwebtoken'
 
 export default async (request, response) => {
@@ -13,8 +14,9 @@ export default async (request, response) => {
   switch (request.method) {
     case 'GET': {
       // TODO: Remover informações sensíveis do index de usuários
-      // TODO: Popular league account
-      const users = await User.find({}).populate('player').exec()
+      const users = await User.find({})
+        .populate({ path: 'player', populate: { path: 'leagueAccounts', model: LeagueAccount } })
+        .exec()
 
       database.close()
 
