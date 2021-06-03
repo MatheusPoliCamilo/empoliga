@@ -1,7 +1,21 @@
 import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/navbar'
 
-function Card() {
+function chunkArray(array, chunkSize) {
+  const chunks = []
+
+  while (array.length) {
+    chunks.push(array.splice(0, chunkSize))
+  }
+
+  return chunks
+}
+
+function takeCards(users) {}
+
+function Card({ player }) {
+  console.log(player)
+
   return (
     <div className='card'>
       <header className='card-header'>
@@ -47,13 +61,25 @@ function Card() {
   )
 }
 
+function Cards({ cards }) {
+  return cards.map((cardChunk, key) => (
+    <div className='columns' key={key}>
+      {[cardChunk[0], cardChunk[1], cardChunk[2], cardChunk[3], cardChunk[4], cardChunk[5]].map((card, key) => (
+        <div className='column' key={key}>
+          {card && <Card player={card} />}
+        </div>
+      ))}
+    </div>
+  ))
+}
+
 export default function Index() {
   const [users, setUsers] = useState([])
   const [cards, setCards] = useState([])
 
   useEffect(() => {
     fetch('/api/users').then((response) => {
-      response.json().then((users) => {
+      response.json().then(({ users }) => {
         setUsers(users)
 
         const searchButton = document.querySelector('#search-button') as HTMLButtonElement
@@ -84,8 +110,9 @@ export default function Index() {
                 button.disabled = true
 
                 const nickname = (document.querySelector('#nickname') as HTMLInputElement).value
-                console.log('nickname', nickname)
-                console.log('users', users)
+
+                const cards = chunkArray(users, 5)
+                setCards(cards)
 
                 button.classList.remove('is-loading')
                 button.disabled = false
@@ -139,23 +166,7 @@ export default function Index() {
           <div className='column' />
         </div>
 
-        <div className='columns'>
-          <div className='column'>
-            <Card />
-          </div>
-          <div className='column'>
-            <Card />
-          </div>
-          <div className='column'>
-            <Card />
-          </div>
-          <div className='column'>
-            <Card />
-          </div>
-          <div className='column'>
-            <Card />
-          </div>
-        </div>
+        {cards.length > 0 && <Cards cards={cards} />}
       </div>
     </div>
   )
