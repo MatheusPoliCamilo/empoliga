@@ -118,7 +118,7 @@ function Navbar() {
                   >
                     Sair
                   </button>
-                  <a href='/perfil' className='button p-5 ml-1'>
+                  <a href='/perfil' className='button is-primary p-5 ml-1'>
                     {user.name}
                   </a>
                 </>

@@ -157,24 +157,27 @@ export default function Index() {
 
                 const nickname = (document.querySelector('#nickname') as HTMLInputElement).value
 
-                const filteredUsers = takeCards(users)
-                const cardsChunks = chunkArray(filteredUsers, 5)
+                fetch(`/api/users?nickname=${nickname}`)
+                  .then((response) => {
+                    response.json().then(({ users }) => {
+                      setUsers(users)
+                    })
+                  })
+                  .then(() => {
+                    const filteredUsers = takeCards(users)
+                    const cardsChunks = chunkArray(filteredUsers, 5)
 
-                setCards(cardsChunks)
+                    setCards(cardsChunks)
 
-                button.classList.remove('is-loading')
-                button.disabled = false
+                    button.classList.remove('is-loading')
+                    button.disabled = false
+                  })
               }}
             >
               <div className='field'>
                 <label className='label'>Jogador</label>
                 <div className='control is-flex'>
-                  <input
-                    className='input is-large'
-                    type='text'
-                    id='nickname'
-                    placeholder='Digite o nickname do jogador'
-                  />
+                  <input className='input is-large' type='text' id='nickname' placeholder='Digite o nickname' />
                 </div>
               </div>
 

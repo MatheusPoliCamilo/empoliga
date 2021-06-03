@@ -14,9 +14,17 @@ export default async (request, response) => {
   switch (request.method) {
     case 'GET': {
       // TODO: Remover informações sensíveis do index de usuários
-      const users = await User.find({})
+      const { nickname } = request.query
+
+      let users = await User.find({})
         .populate({ path: 'player', populate: { path: 'leagueAccounts', model: LeagueAccount } })
         .exec()
+
+      if (nickname) {
+        users = users.filter((user) => {
+          return user.player?.leagueAccounts[0].nickname === nickname
+        })
+      }
 
       database.close()
 

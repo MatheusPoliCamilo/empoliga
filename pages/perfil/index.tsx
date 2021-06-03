@@ -280,7 +280,7 @@ export default function Index() {
                   }}
                   id='profile-picture'
                 >
-                  <img src={`${profilePicture}`} />
+                  <img src={`${profilePicture}`} style={{ maxHeight: '20rem' }} />
                 </figure>
 
                 <form
