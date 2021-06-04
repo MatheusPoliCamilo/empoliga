@@ -58,7 +58,11 @@ function Card({ player }) {
   const [url, setUrl] = useState('#')
 
   useEffect(() => {
-    setCurrentUser(JSON.parse(Cookie.get('currentUser')))
+    const currentUserCookie = Cookie.get('currentUser')
+
+    if (currentUserCookie) {
+      setCurrentUser(JSON.parse(currentUserCookie))
+    }
   }, [])
 
   useEffect(() => {
