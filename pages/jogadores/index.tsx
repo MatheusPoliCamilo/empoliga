@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/navbar'
 import { generateRankString } from '../../services/generateRankString'
+import Cookie from 'js-cookie'
 
 function chunkArray(array, chunkSize) {
   const chunks = []
@@ -53,57 +54,68 @@ function takeCards(users) {
 }
 
 function Card({ player }) {
-  console.log(player)
+  const [currentUser, setCurrentUser] = useState({})
+  const [url, setUrl] = useState('#')
+
+  useEffect(() => {
+    setCurrentUser(JSON.parse(Cookie.get('currentUser')))
+  }, [])
+
+  useEffect(() => {
+    setUrl(currentUser._id === player._id ? '/perfil' : '#')
+  }, [currentUser])
 
   return (
-    <div className='card'>
-      <header className='card-header'>
-        <p className='card-header-title' style={{ justifyContent: 'center' }}>
-          {player.player.role}
-        </p>
-      </header>
+    <a href={url}>
+      <div className='card'>
+        <header className='card-header'>
+          <p className='card-header-title' style={{ justifyContent: 'center' }}>
+            {player.player.role}
+          </p>
+        </header>
 
-      <div className='card-image'>
-        <figure className='image is-1by1'>
-          <img src={player.player.profilePicture} alt='Placeholder image' />
-        </figure>
-      </div>
+        <div className='card-image'>
+          <figure className='image is-1by1'>
+            <img src={player.player.profilePicture} alt='Placeholder image' />
+          </figure>
+        </div>
 
-      <div className='card-content'>
-        <div className='media'>
-          <div className='media-left'>
-            <figure className='image' style={{ height: '50px', width: '63px' }}>
-              <img
-                src={`/elo/${
-                  player.player.leagueAccounts[0].tier ? player.player.leagueAccounts[0].tier : 'UNRANKED'
-                }.png`}
-                alt='Elo'
-              />
-            </figure>
+        <div className='card-content'>
+          <div className='media'>
+            <div className='media-left'>
+              <figure className='image' style={{ height: '50px', width: '63px' }}>
+                <img
+                  src={`/elo/${
+                    player.player.leagueAccounts[0].tier ? player.player.leagueAccounts[0].tier : 'UNRANKED'
+                  }.png`}
+                  alt='Elo'
+                />
+              </figure>
+            </div>
+            <div className='media-content'>
+              <p className='title is-4' style={{ textTransform: 'none' }}>
+                {player.player.leagueAccounts[0].nickname}
+              </p>
+              <p className='subtitle is-6' style={{ minHeight: '2.5rem' }}>
+                {player.name}
+              </p>
+            </div>
           </div>
-          <div className='media-content'>
-            <p className='title is-4' style={{ textTransform: 'none' }}>
-              {player.player.leagueAccounts[0].nickname}
-            </p>
-            <p className='subtitle is-6' style={{ minHeight: '2.5rem' }}>
-              {player.name}
-            </p>
+
+          <div className='content'>
+            {player.player.city} - {player.player.state}
+            <br />
+            {/* <a href='#'>Furnace e-Sports - Major A</a> */}
           </div>
         </div>
 
-        <div className='content'>
-          {player.player.city} - {player.player.state}
-          <br />
-          {/* <a href='#'>Furnace e-Sports - Major A</a> */}
-        </div>
+        <footer className='card-footer'>
+          <p className='card-header-title' style={{ justifyContent: 'center' }}>
+            {generateRankString(player.player.leagueAccounts[0])}
+          </p>
+        </footer>
       </div>
-
-      <footer className='card-footer'>
-        <p className='card-header-title' style={{ justifyContent: 'center' }}>
-          {generateRankString(player.player.leagueAccounts[0])}
-        </p>
-      </footer>
-    </div>
+    </a>
   )
 }
 

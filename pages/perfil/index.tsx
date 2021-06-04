@@ -264,7 +264,7 @@ export default function Index() {
             <div className='content'>
               <div className='is-flex'>
                 <figure
-                  className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter ${
+                  className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter grow-hover ${
                     profile && profile.player.profilePicture ? '' : 'is-hidden'
                   }`}
                   style={{
@@ -408,7 +408,7 @@ export default function Index() {
 
                 <div className='ml-4'>
                   <h1
-                    className={`title ml-0 mr-0 mb-0 is-1 is-flex is-align-items-center ${
+                    className={`title ml-0 mr-0 mb-0 is-1 is-flex is-align-items-center grow-on-hover ${
                       profile && profile.player.leagueAccounts[0].nickname ? '' : 'is-hidden'
                     }`}
                     style={{ fontSize: '4rem', marginTop: '-1rem', textTransform: 'none', cursor: 'pointer' }}
@@ -445,7 +445,7 @@ export default function Index() {
                   </button>
 
                   <h1
-                    className='title'
+                    className='title grow-on-hover'
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
                       document.querySelector('#name').classList.add('is-hidden')
@@ -510,7 +510,7 @@ export default function Index() {
                   </form>
 
                   <h1
-                    className='title mt-1'
+                    className='title mt-1 grow-on-hover'
                     id='role'
                     onClick={() => {
                       document.querySelector('#role').classList.add('is-hidden')
@@ -595,7 +595,7 @@ export default function Index() {
                   </label>
 
                   <h1
-                    className='title is-4 mt-0'
+                    className='title is-4 mt-0 grow-on-hover'
                     style={{ cursor: 'pointer' }}
                     id='email'
                     onClick={() => {
@@ -661,7 +661,7 @@ export default function Index() {
                   </label>
 
                   <h1
-                    className='title is-4 mt-0'
+                    className='title is-4 mt-0 grow-on-hover'
                     style={{ cursor: 'pointer' }}
                     id='gender'
                     onClick={() => {
@@ -727,7 +727,7 @@ export default function Index() {
                   </label>
 
                   <h1
-                    className='title is-4 mt-0'
+                    className='title is-4 mt-0 grow-on-hover'
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
                       document.querySelector('#age').classList.add('is-hidden')
@@ -827,7 +827,7 @@ export default function Index() {
                   </label>
 
                   <h1
-                    className='title is-4 mt-0'
+                    className='title is-4 mt-0 grow-on-hover'
                     id='state'
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
@@ -895,7 +895,7 @@ export default function Index() {
                   </label>
 
                   <h1
-                    className='title is-4 mt-0'
+                    className='title is-4 mt-0 grow-on-hover'
                     style={{ cursor: 'pointer' }}
                     id='city'
                     onClick={() => {
@@ -967,40 +967,35 @@ export default function Index() {
                 >
                   <h1 className='mb-0'>{profile && generateRankString(profile.player.leagueAccounts[0])}</h1>
 
-                  <div className='is-flex is-justify-content-center'>
-                    <a
-                      href={`https://br.op.gg/summoner/userName=${
-                        profile && encodeURIComponent(profile.player.leagueAccounts[0].nickname)
-                      }`}
-                    >
-                      <figure
-                        className='image ml-0 mt-0 mr-0'
-                        style={{
-                          cursor: 'pointer',
-                          minWidth: '288px',
-                          minHeight: '329.0625px',
-                        }}
+                  <div className='is-flex is-justify-content-center grow-hover'>
+                    {profile && profile.player.leagueAccounts[0].tier && (
+                      <a
+                        href={`https://br.op.gg/summoner/userName=${
+                          profile && encodeURIComponent(profile.player.leagueAccounts[0].nickname)
+                        }`}
                       >
-                        {profile && profile.player.leagueAccounts[0].tier && (
-                          <Image
-                            src={`/elo/${
-                              profile && profile.player.leagueAccounts[0].tier
-                                ? profile.player.leagueAccounts[0].tier
-                                : 'UNRANKED'
-                            }.png`}
-                            layout='fill'
-                          />
-                        )}
-                      </figure>
-                    </a>
+                        <figure
+                          className='image ml-0 mt-0 mr-0'
+                          style={{
+                            cursor: 'pointer',
+                            minWidth: '288px',
+                            minHeight: '329.0625px',
+                          }}
+                        >
+                          <Image src={`/elo/${profile && profile.player.leagueAccounts[0].tier}.png`} layout='fill' />
+                        </figure>
+                      </a>
+                    )}
                   </div>
 
-                  {profile && profile.player.leagueAccounts[0].wins && (
-                    <p className='is-size-5'>
-                      {profile.player.leagueAccounts[0].wins}W/
-                      {profile.player.leagueAccounts[0].losses}L
-                    </p>
-                  )}
+                  {profile &&
+                    profile.player.leagueAccounts[0].tier !== 'UNRANKED' &&
+                    (profile.player.leagueAccounts[0].wins || profile.player.leagueAccounts[0].losses) && (
+                      <p className='is-size-5'>
+                        {profile.player.leagueAccounts[0].wins}W/
+                        {profile.player.leagueAccounts[0].losses}L
+                      </p>
+                    )}
                 </div>
               </div>
             </div>
@@ -1141,7 +1136,7 @@ export default function Index() {
                   </form>
 
                   <figure
-                    className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter ${
+                    className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter grow-hover ${
                       profile && profile.player.setupPhoto ? '' : 'is-hidden'
                     }`}
                     style={{
@@ -1165,7 +1160,7 @@ export default function Index() {
                   <label className='label'>Whatsapp</label>
 
                   <h1
-                    className='title is-4 mt-0'
+                    className='title is-4 mt-0 grow-on-hover'
                     style={{ cursor: 'pointer' }}
                     id='whatsapp'
                     onClick={() => {
@@ -1367,7 +1362,7 @@ export default function Index() {
                   <label className='label'>Endereço</label>
 
                   <h1
-                    className={`title is-4 mt-0 ${profile && profile.player.address ? '' : 'is-hidden'}`}
+                    className={`title is-4 mt-0 grow-on-hover ${profile && profile.player.address ? '' : 'is-hidden'}`}
                     style={{ cursor: 'pointer' }}
                     id='address'
                     onClick={() => {
@@ -1445,7 +1440,7 @@ export default function Index() {
             <section className='hero is-small'>
               <div className='hero-body'>
                 <p
-                  className='title'
+                  className='title grow-on-hover'
                   onClick={() => {
                     document.querySelector('#twitter').classList.add('is-hidden')
                     document.querySelector('#twitter-cancel').classList.remove('is-hidden')
@@ -1515,7 +1510,7 @@ export default function Index() {
             <section className='hero is-small'>
               <div className='hero-body'>
                 <p
-                  className='title'
+                  className='title grow-on-hover'
                   onClick={() => {
                     document.querySelector('#twitch').classList.add('is-hidden')
                     document.querySelector('#twitch-cancel').classList.remove('is-hidden')
@@ -1585,7 +1580,7 @@ export default function Index() {
             <section className='hero is-small'>
               <div className='hero-body'>
                 <p
-                  className='title'
+                  className='title grow-on-hover'
                   onClick={() => {
                     document.querySelector('#instagram').classList.add('is-hidden')
                     document.querySelector('#instagram-cancel').classList.remove('is-hidden')
@@ -1654,7 +1649,7 @@ export default function Index() {
             <section className='hero is-small'>
               <div className='hero-body'>
                 <p
-                  className='title'
+                  className='title grow-on-hover'
                   onClick={() => {
                     document.querySelector('#facebook').classList.add('is-hidden')
                     document.querySelector('#facebook-cancel').classList.remove('is-hidden')
@@ -1820,11 +1815,11 @@ export default function Index() {
                         accountId: leagueAccount.accountId,
                         puuid: leagueAccount.puuid,
                         nickname: leagueAccount.name,
-                        leaguePoints: leagueAccount.leaguePoints,
-                        wins: leagueAccount.wins,
-                        losses: leagueAccount.losses,
-                        tier: leagueAccount.tier,
-                        rank: leagueAccount.rank,
+                        leaguePoints: leagueAccount.leaguePoints ? leagueAccount.leaguePoints : 0,
+                        wins: leagueAccount.wins ? leagueAccount.wins : 0,
+                        losses: leagueAccount.losses ? leagueAccount.losses : 0,
+                        tier: leagueAccount.tier ? leagueAccount.tier : 'UNRANKED',
+                        rank: leagueAccount.rank ? leagueAccount.rank : '',
                       }),
                     })
 
