@@ -34,8 +34,8 @@ function takeCards(users) {
         player.city &&
         player.profilePicture &&
         player.setupPhoto &&
-        player.rg &&
-        player.cpf &&
+        // player.rg &&
+        // player.cpf &&
         player.address
 
       if (validPlayer) {
