@@ -1,7 +1,7 @@
 .grow-on-hover {
   transition: all .2s ease-in-out;
   
-  &:hover {
+  :hover {
     transform: scale(1.06);
   }
 }
@@ -25,6 +25,14 @@
 .underline-hover {
   :hover {
     text-decoration: 'underline';
+  }
+}
+
+.on-hover-grow {
+  transition: all .2s ease-in-out;
+  
+  &:hover {
+    transform: scale(1.06);
   }
 }
 

@@ -63,8 +63,8 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <div>
-      <div className='ml-5 mt-5 is-hidden-touch grow-on-hover'>
-        <a href='/'>
+      <div className='ml-5 mt-5 is-hidden-touch'>
+        <a href='/' className='grow-on-hover'>
           <Image src='/tradicional.svg' width={80} height={80} alt='Logo da Empoliga' />
         </a>
       </div>

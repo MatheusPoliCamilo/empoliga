@@ -408,7 +408,7 @@ export default function Index() {
 
                 <div className='ml-4'>
                   <h1
-                    className={`title ml-0 mr-0 mb-0 is-1 is-flex is-align-items-center grow-on-hover ${
+                    className={`title ml-0 mr-0 mb-0 is-1 is-flex is-align-items-center on-hover-grow ${
                       profile && profile.player.leagueAccounts[0].nickname ? '' : 'is-hidden'
                     }`}
                     style={{ fontSize: '4rem', marginTop: '-1rem', textTransform: 'none', cursor: 'pointer' }}
@@ -445,7 +445,7 @@ export default function Index() {
                   </button>
 
                   <h1
-                    className='title grow-on-hover'
+                    className='title on-hover-grow'
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
                       document.querySelector('#name').classList.add('is-hidden')
@@ -510,7 +510,7 @@ export default function Index() {
                   </form>
 
                   <h1
-                    className='title mt-1 grow-on-hover'
+                    className='title mt-1 on-hover-grow'
                     id='role'
                     onClick={() => {
                       document.querySelector('#role').classList.add('is-hidden')
@@ -595,7 +595,7 @@ export default function Index() {
                   </label>
 
                   <h1
-                    className='title is-4 mt-0 grow-on-hover'
+                    className='title is-4 mt-0 on-hover-grow'
                     style={{ cursor: 'pointer' }}
                     id='email'
                     onClick={() => {
@@ -661,7 +661,7 @@ export default function Index() {
                   </label>
 
                   <h1
-                    className='title is-4 mt-0 grow-on-hover'
+                    className='title is-4 mt-0 on-hover-grow'
                     style={{ cursor: 'pointer' }}
                     id='gender'
                     onClick={() => {
@@ -727,7 +727,7 @@ export default function Index() {
                   </label>
 
                   <h1
-                    className='title is-4 mt-0 grow-on-hover'
+                    className='title is-4 mt-0 on-hover-grow'
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
                       document.querySelector('#age').classList.add('is-hidden')
@@ -827,7 +827,7 @@ export default function Index() {
                   </label>
 
                   <h1
-                    className='title is-4 mt-0 grow-on-hover'
+                    className='title is-4 mt-0 on-hover-grow'
                     id='state'
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
@@ -895,7 +895,7 @@ export default function Index() {
                   </label>
 
                   <h1
-                    className='title is-4 mt-0 grow-on-hover'
+                    className='title is-4 mt-0 on-hover-grow'
                     style={{ cursor: 'pointer' }}
                     id='city'
                     onClick={() => {
@@ -1160,7 +1160,7 @@ export default function Index() {
                   <label className='label'>Whatsapp</label>
 
                   <h1
-                    className='title is-4 mt-0 grow-on-hover'
+                    className='title is-4 mt-0 on-hover-grow'
                     style={{ cursor: 'pointer' }}
                     id='whatsapp'
                     onClick={() => {
@@ -1362,7 +1362,7 @@ export default function Index() {
                   <label className='label'>Endereço</label>
 
                   <h1
-                    className={`title is-4 mt-0 grow-on-hover ${profile && profile.player.address ? '' : 'is-hidden'}`}
+                    className={`title is-4 mt-0 on-hover-grow ${profile && profile.player.address ? '' : 'is-hidden'}`}
                     style={{ cursor: 'pointer' }}
                     id='address'
                     onClick={() => {
@@ -1463,7 +1463,7 @@ export default function Index() {
 
                   <div style={{ width: '48rem' }}>
                     <p
-                      className='title grow-on-hover'
+                      className='title on-hover-grow'
                       onClick={() => {
                         document.querySelector('#twitter').classList.add('is-hidden')
                         document.querySelector('#twitter-form').classList.remove('is-hidden')
@@ -1562,7 +1562,7 @@ export default function Index() {
 
                   <div style={{ width: '48rem' }}>
                     <p
-                      className='title grow-on-hover'
+                      className='title on-hover-grow'
                       onClick={() => {
                         document.querySelector('#twitch').classList.add('is-hidden')
                         document.querySelector('#twitch-form').classList.remove('is-hidden')
@@ -1661,7 +1661,7 @@ export default function Index() {
 
                   <div style={{ width: '48rem' }}>
                     <p
-                      className='title grow-on-hover'
+                      className='title on-hover-grow'
                       onClick={() => {
                         document.querySelector('#instagram').classList.add('is-hidden')
                         document.querySelector('#instagram-form').classList.remove('is-hidden')
@@ -1758,7 +1758,7 @@ export default function Index() {
                   </div>
                   <div style={{ width: '48rem' }}>
                     <p
-                      className='title grow-on-hover'
+                      className='title on-hover-grow'
                       onClick={() => {
                         document.querySelector('#facebook').classList.add('is-hidden')
                         document.querySelector('#facebook-form').classList.remove('is-hidden')
