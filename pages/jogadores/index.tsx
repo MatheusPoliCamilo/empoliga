@@ -177,7 +177,7 @@ export default function Index() {
               <div className='field'>
                 <label className='label'>Jogador</label>
                 <div className='control is-flex'>
-                  <input className='input is-large' type='text' id='nickname' placeholder='Digite o nickname' />
+                  <input className='input is-large' type='text' id='nickname' placeholder='Digite o nick' />
                 </div>
               </div>
 
