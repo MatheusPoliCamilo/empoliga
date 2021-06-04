@@ -176,7 +176,7 @@ export default function Index() {
     <div className='has-text-weight-bold'>
       <Navbar />
 
-      <div className='is-flex is-justify-content-center mt-5 is-hidden' id='page'>
+      <div className='is-flex is-justify-content-center mt-4 is-hidden' id='page'>
         <div className='is-flex is-flex-direction-column is-justify-content-center'>
           <button
             className='button is-large is-focused is-primary'
@@ -258,7 +258,7 @@ export default function Index() {
 
         <div
           className='card'
-          style={{ backgroundColor: 'white', height: '49rem', width: '61rem', marginRight: '12rem' }}
+          style={{ backgroundColor: 'white', height: '50rem', width: '61rem', marginRight: '12rem' }}
         >
           <div className='card-content' id='player-card'>
             <div className='content'>
@@ -590,7 +590,7 @@ export default function Index() {
 
               <div className='columns'>
                 <div className='column pt-0'>
-                  <label className='label mt-3' style={{ fontWeight: 'bolder' }}>
+                  <label className='label mt-0' style={{ fontWeight: 'bolder' }}>
                     E-mail
                   </label>
 
@@ -961,7 +961,7 @@ export default function Index() {
                 </div>
 
                 <div
-                  className={`column has-text-centered ${
+                  className={`column has-text-centered is-flex is-flex-direction-column is-justify-content-center ${
                     profile && profile.player.leagueAccounts[0] ? '' : 'is-invisible'
                   }`}
                 >
