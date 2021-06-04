@@ -54,7 +54,7 @@ function takeCards(users) {
 }
 
 function Card({ player }) {
-  const [currentUser, setCurrentUser] = useState({})
+  const [currentUser, setCurrentUser] = useState({ _id: '' })
   const [url, setUrl] = useState('#')
 
   useEffect(() => {
