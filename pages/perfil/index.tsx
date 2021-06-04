@@ -982,7 +982,14 @@ export default function Index() {
                         }}
                       >
                         {profile && profile.player.leagueAccounts[0].tier && (
-                          <Image src={`/elo/${profile && profile.player.leagueAccounts[0].tier}.png`} layout='fill' />
+                          <Image
+                            src={`/elo/${
+                              profile && profile.player.leagueAccounts[0].tier
+                                ? profile.player.leagueAccounts[0].tier
+                                : 'UNRANKED'
+                            }.png`}
+                            layout='fill'
+                          />
                         )}
                       </figure>
                     </a>

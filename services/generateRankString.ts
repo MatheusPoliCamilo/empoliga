@@ -16,5 +16,7 @@ export function generateRankString({ rank, tier, leaguePoints }) {
       return `Grão Mestre ${leaguePoints} PDL`
     case 'CHALLENGER':
       return `Desafiante ${leaguePoints} PDL`
+    default:
+      return 'Unranked'
   }
 }

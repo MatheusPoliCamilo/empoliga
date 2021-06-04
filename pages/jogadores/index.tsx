@@ -73,14 +73,21 @@ function Card({ player }) {
         <div className='media'>
           <div className='media-left'>
             <figure className='image' style={{ height: '50px', width: '63px' }}>
-              <img src={`/elo/${player.player.leagueAccounts[0].tier}.png`} alt='Elo' />
+              <img
+                src={`/elo/${
+                  player.player.leagueAccounts[0].tier ? player.player.leagueAccounts[0].tier : 'UNRANKED'
+                }.png`}
+                alt='Elo'
+              />
             </figure>
           </div>
           <div className='media-content'>
             <p className='title is-4' style={{ textTransform: 'none' }}>
               {player.player.leagueAccounts[0].nickname}
             </p>
-            <p className='subtitle is-6'>{player.name}</p>
+            <p className='subtitle is-6' style={{ minHeight: '2.5rem' }}>
+              {player.name}
+            </p>
           </div>
         </div>
 
