@@ -1,5 +1,7 @@
 export function generateRankString({ rank, tier, leaguePoints }) {
   switch (tier) {
+    case 'UNRANKED':
+      return `Unranked`
     case 'IRON':
       return `Ferro ${rank}`
     case 'BRONZE':
@@ -17,6 +19,6 @@ export function generateRankString({ rank, tier, leaguePoints }) {
     case 'CHALLENGER':
       return `Desafiante ${leaguePoints} PDL`
     default:
-      return 'Unranked'
+      return ''
   }
 }

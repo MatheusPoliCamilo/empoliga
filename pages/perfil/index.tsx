@@ -1443,8 +1443,11 @@ export default function Index() {
                   className='title grow-on-hover'
                   onClick={() => {
                     document.querySelector('#twitter').classList.add('is-hidden')
-                    document.querySelector('#twitter-cancel').classList.remove('is-hidden')
                     document.querySelector('#twitter-form').classList.remove('is-hidden')
+
+                    if (profile && profile.twitter) {
+                      document.querySelector('#twitter-cancel').classList.remove('is-hidden')
+                    }
                   }}
                   style={{ cursor: 'pointer' }}
                 >
@@ -1513,8 +1516,11 @@ export default function Index() {
                   className='title grow-on-hover'
                   onClick={() => {
                     document.querySelector('#twitch').classList.add('is-hidden')
-                    document.querySelector('#twitch-cancel').classList.remove('is-hidden')
                     document.querySelector('#twitch-form').classList.remove('is-hidden')
+
+                    if (profile && profile.twitch) {
+                      document.querySelector('#twitch-cancel').classList.remove('is-hidden')
+                    }
                   }}
                   style={{ cursor: 'pointer' }}
                 >
@@ -1583,8 +1589,11 @@ export default function Index() {
                   className='title grow-on-hover'
                   onClick={() => {
                     document.querySelector('#instagram').classList.add('is-hidden')
-                    document.querySelector('#instagram-cancel').classList.remove('is-hidden')
                     document.querySelector('#instagram-form').classList.remove('is-hidden')
+
+                    if (profile && profile.instagram) {
+                      document.querySelector('#instagram-cancel').classList.remove('is-hidden')
+                    }
                   }}
                   style={{ cursor: 'pointer' }}
                 >
@@ -1652,8 +1661,11 @@ export default function Index() {
                   className='title grow-on-hover'
                   onClick={() => {
                     document.querySelector('#facebook').classList.add('is-hidden')
-                    document.querySelector('#facebook-cancel').classList.remove('is-hidden')
                     document.querySelector('#facebook-form').classList.remove('is-hidden')
+
+                    if (profile && profile.facebook) {
+                      document.querySelector('#facebook-cancel').classList.remove('is-hidden')
+                    }
                   }}
                   style={{ cursor: 'pointer' }}
                 >
@@ -1829,11 +1841,13 @@ export default function Index() {
                         ...profile.player,
                         leagueAccounts: [
                           {
+                            ...profile.player.leagueAccounts[0],
                             nickname: leagueAccount.name,
-                            tier: leagueAccount.tier,
-                            rank: leagueAccount.rank,
-                            wins: leagueAccount.wins,
-                            losses: leagueAccount.losses,
+                            tier: leagueAccount.tier ? leagueAccount.tier : 'UNRANKED',
+                            rank: leagueAccount.rank ? leagueAccount.rank : '',
+                            wins: leagueAccount.wins ? leagueAccount.wins : 0,
+                            losses: leagueAccount.losses ? leagueAccount.losses : 0,
+                            leaguePoints: leagueAccount.leaguePoints ? leagueAccount.leaguePoints : 0,
                           },
                         ],
                       },
