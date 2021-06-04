@@ -1,5 +1,6 @@
 import { connectToDatabase } from '../../../src/database'
 import { User } from '../../../src/schemas/user'
+import { LeagueAccount } from '../../../src/schemas/leagueAccount'
 import { verifyAuthentication } from '../../../src/verifyAuthentication'
 import jwt from 'jsonwebtoken'
 
@@ -15,19 +16,21 @@ export default async (request, response) => {
       // TODO: Retornar informações sensíveis somente se for um juíz
       const { userId } = request.query
 
-      return User.findById(userId, (error, user) => {
-        database.close()
+      return User.findById(userId)
+        .populate({ path: 'player', populate: { path: 'leagueAccounts', model: LeagueAccount } })
+        .exec((error, user) => {
+          database.close()
 
-        if (error) {
-          return response.status(500).json(error)
-        }
+          if (error) {
+            return response.status(500).json(error)
+          }
 
-        if (!user) {
-          return response.status(422).json({ erros: { message: 'Usuário não encontrado' } })
-        }
+          if (!user) {
+            return response.status(422).json({ erros: { message: 'Usuário não encontrado' } })
+          }
 
-        return response.status(200).json(user)
-      })
+          return response.status(200).json(user)
+        })
     }
 
     case 'PATCH': {

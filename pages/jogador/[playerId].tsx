@@ -116,33 +116,19 @@ export default function Index() {
           setEmail(profile.email)
           setGender(profile.gender)
           setBirthDate(profile.birthDate.toString())
-          if (profile.player.state) setState(profile.player.state)
+          setState(profile.player.state)
           setCity(profile.player.city)
           setProfilePicture(profile.player.profilePicture)
           setSetupPhoto(profile.player.setupPhoto)
           setWhatsapp(profile.whatsapp)
-          if (profile.player.rg) setRg(profile.player.rg)
-          if (profile.player.cpf) setCpf(profile.player.cpf)
-          if (profile.player.address) setAddress(profile.player.address)
+          setAddress(profile.player.address)
           setTwitch(profile.twitch)
           setTwitter(profile.twitter)
           setInstagram(profile.instagram)
           setFacebook(profile.facebook)
 
-          fetchStates().then((states) => {
-            setStates(
-              states.map((state) => {
-                return { uf: state.sigla, name: state.nome }
-              })
-            )
-
-            document.querySelector('#loading').classList.add('is-hidden')
-            document.querySelector('#page').classList.remove('is-hidden')
-          })
-
-          if (!profile.player.role) showOnlyInput('role')
-          if (!profile.player.state) showOnlyInput('state')
-          if (!profile.player.city) showOnlyInput('city')
+          document.querySelector('#loading').classList.add('is-hidden')
+          document.querySelector('#page').classList.remove('is-hidden')
         }
       })
     }
@@ -155,16 +141,6 @@ export default function Index() {
     setDate({ day: date.getDate().toString(), month: (date.getMonth() + 1).toString(), year: getYear(date).toString() })
     setAge(`${numberAge} anos`)
   }, [birthDate])
-
-  useEffect(() => {
-    fetchCities(state).then((cities) => {
-      setCities(
-        cities.map((city) => {
-          return { name: city.nome }
-        })
-      )
-    })
-  }, [state])
 
   const minYear = new Date().getFullYear() - 12
   const maxYear = new Date().getFullYear() - 100
@@ -199,8 +175,8 @@ export default function Index() {
             Perfil
           </button>
 
-          <button
-            className='button is-large mt-5 is-primary'
+          {/* <button
+            className='button is-large mt-5 is-primary is-hidden'
             style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
             onClick={() => {
               document.querySelector('#player-card-button').classList.remove('is-focused')
@@ -213,7 +189,7 @@ export default function Index() {
             }}
           >
             Dados pessoais
-          </button>
+          </button> */}
 
           <button
             className='button is-large mt-5 is-primary'
@@ -270,322 +246,37 @@ export default function Index() {
             <div className='content'>
               <div className='is-flex'>
                 <figure
-                  className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter grow-hover ${
+                  className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter ${
                     profile && profile.player.profilePicture ? '' : 'is-hidden'
                   }`}
                   style={{
-                    cursor: 'pointer',
                     width: '20rem',
                     minWidth: '20rem',
                     height: '20rem',
-                  }}
-                  onClick={() => {
-                    document.querySelector('#profile-picture').classList.add('is-hidden')
-                    document.querySelector('#profile-picture-form').classList.remove('is-hidden')
-                    document.querySelector('#profile-picture-cancel').classList.remove('is-hidden')
                   }}
                   id='profile-picture'
                 >
                   <img src={`${profilePicture}`} style={{ maxHeight: '20rem' }} />
                 </figure>
 
-                <form
-                  style={{
-                    width: '20rem',
-                    minWidth: '20rem',
-                    height: '20rem',
-                  }}
-                  className={`is-flex is-flex-direction-column is-justify-content-center pl-6 pr-6 pb-6 mb-5 ml-4 mr-4 ${
-                    profile && profile.player.profilePicture ? 'is-hidden' : ''
-                  }`}
-                  id='profile-picture-form'
-                  onSubmit={(event) => {
-                    event.preventDefault()
-                    const button = document.querySelector('#profile-picture-save') as HTMLButtonElement
-                    button.disabled = true
-                    button.classList.add('is-loading')
-
-                    const form = document.querySelector('#profile-picture-form') as HTMLFormElement
-                    const profilePicture = document.querySelector('#profile-picture')
-
-                    const fileInput = document.querySelector('#profile') as HTMLInputElement
-                    if (fileInput.files.length > 0) {
-                      const file = (document.querySelector('#profile') as HTMLInputElement).files[0]
-
-                      const { publicRuntimeConfig } = getConfig()
-                      const formData = new FormData()
-                      formData.append('file', file)
-                      formData.append('upload_preset', publicRuntimeConfig.CLOUDINARY_UPLOAD_PRESET)
-
-                      fetch(publicRuntimeConfig.CLOUDINARY_URL, {
-                        method: 'POST',
-                        body: formData,
-                      })
-                        .then((response) => response.json())
-                        .then(async (data) => {
-                          if (data.secure_url !== '') {
-                            await fetch(`/api/players/${profile.player._id}`, {
-                              method: 'PATCH',
-                              headers: {
-                                'Content-Type': 'application/json',
-                              },
-                              body: JSON.stringify({ profilePicture: data.secure_url }),
-                            })
-
-                            form.classList.add('is-hidden')
-                            profilePicture.classList.remove('is-hidden')
-                          }
-
-                          setProfilePicture(data.secure_url)
-
-                          button.disabled = false
-                          button.classList.remove('is-loading')
-                        })
-                        .catch((err) => {
-                          console.error(err)
-                          button.disabled = false
-                          button.classList.remove('is-loading')
-                        })
-                    }
-                  }}
-                >
-                  <div className='file is-centered is-boxed is-primary has-name'>
-                    <label className='file-label'>
-                      <input
-                        className='file-input'
-                        type='file'
-                        name='resume'
-                        id='profile'
-                        onChange={() => {
-                          const fileInput = document.querySelector('#profile') as HTMLInputElement
-
-                          if (fileInput.files.length > 0) {
-                            const fileName = document.querySelector('.file-name')
-                            fileName.textContent = fileInput.files[0].name
-                          }
-                        }}
-                      />
-                      <span className='file-cta'>
-                        <span className='file-icon'>
-                          <svg
-                            aria-hidden='true'
-                            focusable='false'
-                            data-prefix='fas'
-                            data-icon='upload'
-                            role='img'
-                            xmlns='http://www.w3.org/2000/svg'
-                            viewBox='0 0 512 512'
-                            className='svg-inline--fa fa-upload fa-w-16 fa-3x'
-                          >
-                            <path
-                              fill='currentColor'
-                              d='M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z'
-                              className=''
-                            />
-                          </svg>
-                        </span>
-                        <span className='file-label'>Foto de perfil</span>
-                      </span>
-                      <span className='file-name'>Escolha a foto de perfil</span>
-                    </label>
-                  </div>
-
-                  <div className='field is-grouped is-grouped-centered mt-2'>
-                    <div className='control'>
-                      <button className='button is-primary' id='profile-picture-save'>
-                        Salvar
-                      </button>
-                    </div>
-                    <div className='control'>
-                      <button
-                        type='button'
-                        className='button is-hidden'
-                        id='profile-picture-cancel'
-                        onClick={() => {
-                          document.querySelector('#profile-picture-form').classList.add('is-hidden')
-                          document.querySelector('#profile-picture').classList.remove('is-hidden')
-                        }}
-                      >
-                        Cancelar
-                      </button>
-                    </div>
-                  </div>
-                </form>
-
                 <div className='ml-4'>
                   <h1
-                    className={`title ml-0 mr-0 mb-0 is-1 is-flex is-align-items-center grow-on-hover ${
+                    className={`title ml-0 mr-0 mb-0 is-1 is-flex is-align-items-center ${
                       profile && profile.player.leagueAccounts[0].nickname ? '' : 'is-hidden'
                     }`}
-                    style={{ fontSize: '4rem', marginTop: '-1rem', textTransform: 'none', cursor: 'pointer' }}
+                    style={{ fontSize: '4rem', marginTop: '-1rem', textTransform: 'none' }}
                     id='player-nick'
-                    onClick={() => {
-                      document.querySelector('#player-nick').classList.add('is-hidden')
-                      document.querySelector('#add-account-button').classList.remove('is-hidden')
-                      document.querySelector('#nickname-cancel').classList.remove('is-hidden')
-                    }}
                   >
                     {profile && profile.player.leagueAccounts[0].nickname}
                   </h1>
 
-                  <button
-                    className={`button is-primary is-large ${
-                      profile && profile.player.leagueAccounts[0].nickname ? 'is-hidden' : ''
-                    }`}
-                    onClick={openLeagueAccountModal}
-                    id='add-account-button'
-                  >
-                    Cadastrar conta
-                  </button>
-
-                  <button
-                    className='button is-large ml-2 is-hidden'
-                    id='nickname-cancel'
-                    onClick={() => {
-                      document.querySelector('#add-account-button').classList.add('is-hidden')
-                      document.querySelector('#nickname-cancel').classList.add('is-hidden')
-                      document.querySelector('#player-nick').classList.remove('is-hidden')
-                    }}
-                  >
-                    Cancelar
-                  </button>
-
-                  <h1
-                    className='title grow-on-hover'
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      document.querySelector('#name').classList.add('is-hidden')
-                      document.querySelector('#name-form').classList.remove('is-hidden')
-                    }}
-                    id='name'
-                  >
+                  <h1 className='title' id='name'>
                     {profile && profile.name}
                   </h1>
 
-                  <form
-                    id='name-form'
-                    className='is-hidden is-flex mt-5 mb-4'
-                    onSubmit={async (event) => {
-                      event.preventDefault()
-
-                      const button = document.querySelector('#name-save') as HTMLButtonElement
-                      button.disabled = true
-                      button.classList.add('is-loading')
-
-                      await fetch(`/api/users/${profile._id}`, {
-                        method: 'PATCH',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ name }),
-                      })
-
-                      setProfile({ ...profile, name })
-
-                      const user = JSON.parse(Cookie.get('currentUser'))
-                      Cookie.set('currentUser', { ...user, name }, { expires: addDays(new Date(), 1) })
-
-                      document.querySelector('#name-form').classList.add('is-hidden')
-                      document.querySelector('#name').classList.remove('is-hidden')
-
-                      button.disabled = false
-                      button.classList.remove('is-loading')
-                    }}
-                  >
-                    <input
-                      type='text'
-                      className='input is-medium'
-                      placeholder='Digite seu nome completo'
-                      value={name}
-                      autoFocus
-                      onChange={(event) => setName(event.target.value)}
-                    />
-                    <button className='button is-primary is-medium ml-2' id='name-save'>
-                      Salvar
-                    </button>
-                    <button
-                      className='button is-medium ml-2'
-                      type='button'
-                      onClick={() => {
-                        document.querySelector('#name-form').classList.add('is-hidden')
-                        document.querySelector('#name').classList.remove('is-hidden')
-                      }}
-                    >
-                      Cancelar
-                    </button>
-                  </form>
-
-                  <h1
-                    className='title mt-1 grow-on-hover'
-                    id='role'
-                    onClick={() => {
-                      document.querySelector('#role').classList.add('is-hidden')
-                      document.querySelector('#role-form').classList.remove('is-hidden')
-                      document.querySelector('#role-cancel').classList.remove('is-hidden')
-                    }}
-                    style={{ cursor: 'pointer' }}
-                  >
+                  <h1 className='title mt-1' id='role'>
                     {profile && profile.player.role}
                   </h1>
-
-                  <form
-                    id='role-form'
-                    className='is-hidden is-flex mt-5 mb-4'
-                    onSubmit={async (event) => {
-                      event.preventDefault()
-
-                      const button = document.querySelector('#role-save') as HTMLButtonElement
-                      button.disabled = true
-                      button.classList.add('is-loading')
-
-                      await fetch(`/api/players/${profile.player._id}`, {
-                        method: 'PATCH',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ role }),
-                      })
-
-                      setProfile({ ...profile, player: { ...profile.player, role } })
-
-                      document.querySelector('#role-form').classList.add('is-hidden')
-                      document.querySelector('#role').classList.remove('is-hidden')
-
-                      button.disabled = false
-                      button.classList.remove('is-loading')
-                    }}
-                  >
-                    <div className='select is-medium'>
-                      <select
-                        onChange={(event) => {
-                          setRole(event.target.value)
-                        }}
-                        value={role}
-                      >
-                        <option value='Top'>Top</option>
-                        <option value='Jungle'>Jungle</option>
-                        <option value='Mid'>Mid</option>
-                        <option value='Adc'>Adc</option>
-                        <option value='Support'>Support</option>
-                      </select>
-                    </div>
-
-                    <button className='button is-primary is-medium ml-2' id='role-save'>
-                      Salvar
-                    </button>
-
-                    <button
-                      type='button'
-                      className='button is-medium ml-2'
-                      id='role-cancel'
-                      onClick={() => {
-                        document.querySelector('#role-form').classList.add('is-hidden')
-                        document.querySelector('#role').classList.remove('is-hidden')
-                      }}
-                    >
-                      Cancelar
-                    </button>
-                  </form>
 
                   {/* TODO: Time/Free agent */}
                   {/* <h1 className='title mt-1'>
@@ -600,370 +291,41 @@ export default function Index() {
                     E-mail
                   </label>
 
-                  <h1
-                    className='title is-4 mt-0 grow-on-hover'
-                    style={{ cursor: 'pointer' }}
-                    id='email'
-                    onClick={() => {
-                      document.querySelector('#email').classList.add('is-hidden')
-                      document.querySelector('#email-form').classList.remove('is-hidden')
-                    }}
-                  >
+                  <h1 className='title is-4 mt-0' id='email'>
                     {profile && profile.email}
                   </h1>
-
-                  <form
-                    id='email-form'
-                    className='is-hidden is-flex mb-3'
-                    onSubmit={async (event) => {
-                      event.preventDefault()
-
-                      const button = document.querySelector('#email-save') as HTMLButtonElement
-                      button.disabled = true
-                      button.classList.add('is-loading')
-
-                      await fetch(`/api/users/${profile._id}`, {
-                        method: 'PATCH',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ email }),
-                      })
-
-                      setProfile({ ...profile, email })
-
-                      document.querySelector('#email-form').classList.add('is-hidden')
-                      document.querySelector('#email').classList.remove('is-hidden')
-
-                      button.disabled = false
-                      button.classList.remove('is-loading')
-                    }}
-                  >
-                    <input
-                      type='text'
-                      className='input'
-                      placeholder='Digite seu e-mail'
-                      value={email}
-                      autoFocus
-                      onChange={(event) => setEmail(event.target.value)}
-                    />
-                    <button className='button is-primary ml-2' id='email-save'>
-                      Salvar
-                    </button>
-                    <button
-                      className='button ml-2'
-                      type='button'
-                      onClick={() => {
-                        document.querySelector('#email-form').classList.add('is-hidden')
-                        document.querySelector('#email').classList.remove('is-hidden')
-                      }}
-                    >
-                      Cancelar
-                    </button>
-                  </form>
 
                   <label className='label' style={{ fontWeight: 'bolder' }}>
                     Gênero
                   </label>
 
-                  <h1
-                    className='title is-4 mt-0 grow-on-hover'
-                    style={{ cursor: 'pointer' }}
-                    id='gender'
-                    onClick={() => {
-                      document.querySelector('#gender').classList.add('is-hidden')
-                      document.querySelector('#gender-form').classList.remove('is-hidden')
-                    }}
-                  >
+                  <h1 className='title is-4 mt-0' id='gender'>
                     {profile && genderText(profile.gender)}
                   </h1>
-
-                  <form
-                    id='gender-form'
-                    className='is-hidden is-flex mb-3'
-                    onSubmit={async (event) => {
-                      event.preventDefault()
-
-                      const button = document.querySelector('#gender-save') as HTMLButtonElement
-                      button.disabled = true
-                      button.classList.add('is-loading')
-
-                      await fetch(`/api/users/${profile._id}`, {
-                        method: 'PATCH',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ gender }),
-                      })
-
-                      setProfile({ ...profile, gender })
-
-                      document.querySelector('#gender-form').classList.add('is-hidden')
-                      document.querySelector('#gender').classList.remove('is-hidden')
-
-                      button.disabled = false
-                      button.classList.remove('is-loading')
-                    }}
-                  >
-                    <div className='select'>
-                      <select onChange={(event) => setGender(event.target.value)} value={gender}>
-                        <option value='M'>Masculino</option>
-                        <option value='F'>Feminino</option>
-                        <option value='O'>Outro</option>
-                      </select>
-                    </div>
-
-                    <button className='button is-primary ml-2' id='gender-save'>
-                      Salvar
-                    </button>
-                    <button
-                      className='button ml-2'
-                      type='button'
-                      onClick={() => {
-                        document.querySelector('#gender-form').classList.add('is-hidden')
-                        document.querySelector('#gender').classList.remove('is-hidden')
-                      }}
-                    >
-                      Cancelar
-                    </button>
-                  </form>
 
                   <label className='label' style={{ fontWeight: 'bolder' }}>
                     Idade
                   </label>
 
-                  <h1
-                    className='title is-4 mt-0 grow-on-hover'
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      document.querySelector('#age').classList.add('is-hidden')
-                      document.querySelector('#age-form').classList.remove('is-hidden')
-                    }}
-                    id='age'
-                  >
+                  <h1 className='title is-4 mt-0' id='age'>
                     {age}
                   </h1>
-
-                  <form
-                    id='age-form'
-                    className='is-hidden is-flex mb-3'
-                    onSubmit={async (event) => {
-                      event.preventDefault()
-
-                      const button = document.querySelector('#age-save') as HTMLButtonElement
-                      button.disabled = true
-                      button.classList.add('is-loading')
-
-                      const birthDate = new Date(`${date.year}-${date.month}-${date.day}`).toISOString()
-
-                      await fetch(`/api/users/${profile._id}`, {
-                        method: 'PATCH',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ birthDate }),
-                      })
-
-                      setBirthDate(birthDate)
-
-                      document.querySelector('#age-form').classList.add('is-hidden')
-                      document.querySelector('#age').classList.remove('is-hidden')
-
-                      button.disabled = false
-                      button.classList.remove('is-loading')
-                    }}
-                  >
-                    <div className='select'>
-                      <select
-                        onClick={(event) => {
-                          setDate({ ...date, day: (event.target as HTMLOptionElement).value })
-                        }}
-                        value={date.day}
-                        onChange={(event) => setDate({ ...date, day: event.target.value })}
-                      >
-                        {[...Array(31)].map((_, day) => (
-                          <option key={day}>{day + 1}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className='select ml-2'>
-                      <select
-                        onClick={(event) => {
-                          setDate({ ...date, month: (event.target as HTMLOptionElement).value })
-                        }}
-                        value={date.month}
-                        onChange={(event) => setDate({ ...date, month: event.target.value })}
-                      >
-                        {[...Array(12)].map((_, month) => (
-                          <option key={month}>{month + 1}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className='select ml-2'>
-                      <select
-                        onClick={(event) => {
-                          setDate({ ...date, year: (event.target as HTMLOptionElement).value })
-                        }}
-                        value={date.year}
-                        onChange={(event) => setDate({ ...date, year: event.target.value })}
-                      >
-                        {yearOptions.map((year) => year)}
-                      </select>
-                    </div>
-
-                    <button className='button is-primary ml-2' id='age-save'>
-                      Salvar
-                    </button>
-                    <button
-                      className='button ml-2'
-                      type='button'
-                      onClick={() => {
-                        document.querySelector('#age-form').classList.add('is-hidden')
-                        document.querySelector('#age').classList.remove('is-hidden')
-                      }}
-                    >
-                      Cancelar
-                    </button>
-                  </form>
 
                   <label className='label' style={{ fontWeight: 'bolder' }}>
                     Estado
                   </label>
 
-                  <h1
-                    className='title is-4 mt-0 grow-on-hover'
-                    id='state'
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      document.querySelector('#state').classList.add('is-hidden')
-                      document.querySelector('#state-form').classList.remove('is-hidden')
-                    }}
-                  >
+                  <h1 className='title is-4 mt-0' id='state'>
                     {profile && profile.player.state}
                   </h1>
-
-                  <form
-                    id='state-form'
-                    className='is-hidden is-flex mb-3'
-                    onSubmit={async (event) => {
-                      event.preventDefault()
-                      const button = document.querySelector('#state-save') as HTMLButtonElement
-                      button.disabled = true
-                      button.classList.add('is-loading')
-
-                      await fetch(`/api/players/${profile.player._id}`, {
-                        method: 'PATCH',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ state }),
-                      })
-
-                      setProfile({ ...profile, player: { ...profile.player, state } })
-
-                      document.querySelector('#state-form').classList.add('is-hidden')
-                      document.querySelector('#state').classList.remove('is-hidden')
-
-                      button.disabled = false
-                      button.classList.remove('is-loading')
-                    }}
-                  >
-                    <div className='select'>
-                      <select value={state} onChange={(event) => setState(event.target.value)}>
-                        {states.map(({ uf, name }) => (
-                          <option value={uf} key={uf}>
-                            {name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <button className='button is-primary ml-2' id='state-save'>
-                      Salvar
-                    </button>
-                    <button
-                      className='button ml-2'
-                      type='button'
-                      id='state-cancel'
-                      onClick={() => {
-                        document.querySelector('#state-form').classList.add('is-hidden')
-                        document.querySelector('#state').classList.remove('is-hidden')
-                      }}
-                    >
-                      Cancelar
-                    </button>
-                  </form>
 
                   <label className='label' style={{ fontWeight: 'bolder' }}>
                     Cidade
                   </label>
 
-                  <h1
-                    className='title is-4 mt-0 grow-on-hover'
-                    style={{ cursor: 'pointer' }}
-                    id='city'
-                    onClick={() => {
-                      document.querySelector('#city').classList.add('is-hidden')
-                      document.querySelector('#city-form').classList.remove('is-hidden')
-                    }}
-                  >
+                  <h1 className='title is-4 mt-0' id='city'>
                     {profile && profile.player.city}
                   </h1>
-
-                  <form
-                    id='city-form'
-                    className='is-hidden is-flex mb-3'
-                    onSubmit={async (event) => {
-                      event.preventDefault()
-
-                      const button = document.querySelector('#city-save') as HTMLButtonElement
-                      button.disabled = true
-                      button.classList.add('is-loading')
-
-                      await fetch(`/api/players/${profile.player._id}`, {
-                        method: 'PATCH',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ city }),
-                      })
-
-                      setProfile({ ...profile, player: { ...profile.player, city } })
-
-                      document.querySelector('#city-form').classList.add('is-hidden')
-                      document.querySelector('#city').classList.remove('is-hidden')
-
-                      button.disabled = false
-                      button.classList.remove('is-loading')
-                    }}
-                  >
-                    <div className='select'>
-                      <select value={city} onChange={(event) => setCity(event.target.value)}>
-                        {cities.map(({ name }) => (
-                          <option value={name} key={name}>
-                            {name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <button className='button is-primary ml-2' id='city-save'>
-                      Salvar
-                    </button>
-                    <button
-                      className='button ml-2'
-                      type='button'
-                      id='city-cancel'
-                      onClick={() => {
-                        document.querySelector('#city-form').classList.add('is-hidden')
-                        document.querySelector('#city').classList.remove('is-hidden')
-                      }}
-                    >
-                      Cancelar
-                    </button>
-                  </form>
                 </div>
 
                 <div
@@ -983,7 +345,6 @@ export default function Index() {
                         <figure
                           className='image ml-0 mt-0 mr-0'
                           style={{
-                            cursor: 'pointer',
                             minWidth: '288px',
                             minHeight: '329.0625px',
                           }}
@@ -1142,11 +503,10 @@ export default function Index() {
                   </form>
 
                   <figure
-                    className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter grow-hover ${
+                    className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter ${
                       profile && profile.player.setupPhoto ? '' : 'is-hidden'
                     }`}
                     style={{
-                      cursor: 'pointer',
                       width: '28rem',
                       minWidth: '20rem',
                       height: '28rem',
@@ -1166,8 +526,7 @@ export default function Index() {
                   <label className='label'>Whatsapp</label>
 
                   <h1
-                    className='title is-4 mt-0 grow-on-hover'
-                    style={{ cursor: 'pointer' }}
+                    className='title is-4 mt-0'
                     id='whatsapp'
                     onClick={() => {
                       document.querySelector('#whatsapp').classList.add('is-hidden')
@@ -1368,8 +727,7 @@ export default function Index() {
                   <label className='label'>Endereço</label>
 
                   <h1
-                    className={`title is-4 mt-0 grow-on-hover ${profile && profile.player.address ? '' : 'is-hidden'}`}
-                    style={{ cursor: 'pointer' }}
+                    className={`title is-4 mt-0 ${profile && profile.player.address ? '' : 'is-hidden'}`}
                     id='address'
                     onClick={() => {
                       document.querySelector('#address').classList.add('is-hidden')
@@ -1445,280 +803,140 @@ export default function Index() {
           >
             <section className='hero is-small'>
               <div className='hero-body'>
-                <p
-                  className='title grow-on-hover'
-                  onClick={() => {
-                    document.querySelector('#twitter').classList.add('is-hidden')
-                    document.querySelector('#twitter-cancel').classList.remove('is-hidden')
-                    document.querySelector('#twitter-form').classList.remove('is-hidden')
-                  }}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Twitter
-                </p>
-                <p className={`subtitle mt-5 ${profile && profile.twitter ? '' : 'is-hidden'}`} id='twitter'>
-                  <a href={`${profile && profile.twitter}`}>{profile && profile.twitter}</a>
-                </p>
+                <div className='is-flex'>
+                  <div>
+                    <figure className='image is-96x96 mr-5'>
+                      <svg
+                        aria-hidden='true'
+                        focusable='false'
+                        data-prefix='fab'
+                        data-icon='twitter'
+                        role='img'
+                        xmlns='http://www.w3.org/2000/svg'
+                        viewBox='0 0 512 512'
+                        className='svg-inline--fa fa-twitter fa-w-16 fa-3x'
+                      >
+                        <path
+                          fill='currentColor'
+                          d='M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z'
+                          className=''
+                        />
+                      </svg>
+                    </figure>
+                  </div>
 
-                <form
-                  id='twitter-form'
-                  className={`is-flex ${profile && profile.twitter ? 'is-hidden' : ''}`}
-                  onSubmit={async (event) => {
-                    event.preventDefault()
+                  <div style={{ width: '48rem' }}>
+                    <p className='title'>Twitter</p>
 
-                    const button = document.querySelector('#twitter-save') as HTMLButtonElement
-                    button.disabled = true
-                    button.classList.add('is-loading')
-
-                    await fetch(`/api/users/${profile._id}`, {
-                      method: 'PATCH',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({ twitter }),
-                    })
-
-                    setProfile({ ...profile, twitter })
-
-                    document.querySelector('#twitter-form').classList.add('is-hidden')
-                    document.querySelector('#twitter').classList.remove('is-hidden')
-
-                    button.disabled = false
-                    button.classList.remove('is-loading')
-                  }}
-                >
-                  <input
-                    type='text'
-                    className='input is-large'
-                    placeholder='Digite o link do seu twitter'
-                    value={twitter}
-                    autoFocus
-                    onChange={(event) => setTwitter(event.target.value)}
-                  />
-                  <button className='button is-primary ml-2 is-large' id='twitter-save'>
-                    Salvar
-                  </button>
-                  <button
-                    className='button ml-2 is-large is-hidden'
-                    type='button'
-                    id='twitter-cancel'
-                    onClick={() => {
-                      document.querySelector('#twitter-form').classList.add('is-hidden')
-                      document.querySelector('#twitter').classList.remove('is-hidden')
-                    }}
-                  >
-                    Cancelar
-                  </button>
-                </form>
+                    <p className={`subtitle mt-5 ${profile && profile.twitter ? '' : 'is-hidden'}`} id='twitter'>
+                      <a href={`${profile && profile.twitter}`}>{profile && profile.twitter}</a>
+                    </p>
+                  </div>
+                </div>
               </div>
             </section>
 
             <section className='hero is-small'>
               <div className='hero-body'>
-                <p
-                  className='title grow-on-hover'
-                  onClick={() => {
-                    document.querySelector('#twitch').classList.add('is-hidden')
-                    document.querySelector('#twitch-cancel').classList.remove('is-hidden')
-                    document.querySelector('#twitch-form').classList.remove('is-hidden')
-                  }}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Twitch
-                </p>
+                <div className='is-flex'>
+                  <div>
+                    <figure className='image is-96x96 mr-5'>
+                      <svg
+                        aria-hidden='true'
+                        focusable='false'
+                        data-prefix='fab'
+                        data-icon='twitch'
+                        role='img'
+                        xmlns='http://www.w3.org/2000/svg'
+                        viewBox='0 0 512 512'
+                        className='svg-inline--fa fa-twitch fa-w-16 fa-3x'
+                      >
+                        <path
+                          fill='currentColor'
+                          d='M391.17,103.47H352.54v109.7h38.63ZM285,103H246.37V212.75H285ZM120.83,0,24.31,91.42V420.58H140.14V512l96.53-91.42h77.25L487.69,256V0ZM449.07,237.75l-77.22,73.12H294.61l-67.6,64v-64H140.14V36.58H449.07Z'
+                          className=''
+                        />
+                      </svg>
+                    </figure>
+                  </div>
 
-                <p className={`subtitle mt-5 ${profile && profile.twitch ? '' : 'is-hidden'}`} id='twitch'>
-                  <a href={`${profile && profile.twitch}`}>{profile && profile.twitch}</a>
-                </p>
+                  <div style={{ width: '48rem' }}>
+                    <p className='title'>Twitch</p>
 
-                <form
-                  id='twitch-form'
-                  className={`is-flex ${profile && profile.twitch ? 'is-hidden' : ''}`}
-                  onSubmit={async (event) => {
-                    event.preventDefault()
-
-                    const button = document.querySelector('#twitch-save') as HTMLButtonElement
-                    button.disabled = true
-                    button.classList.add('is-loading')
-
-                    await fetch(`/api/users/${profile._id}`, {
-                      method: 'PATCH',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({ twitch }),
-                    })
-
-                    setProfile({ ...profile, twitch })
-
-                    document.querySelector('#twitch-form').classList.add('is-hidden')
-                    document.querySelector('#twitch').classList.remove('is-hidden')
-
-                    button.disabled = false
-                    button.classList.remove('is-loading')
-                  }}
-                >
-                  <input
-                    type='text'
-                    className='input is-large'
-                    placeholder='Digite o link do seu canal na Twitch'
-                    value={twitch}
-                    autoFocus
-                    onChange={(event) => setTwitch(event.target.value)}
-                  />
-                  <button className='button is-primary ml-2 is-large' id='twitch-save'>
-                    Salvar
-                  </button>
-                  <button
-                    className='button ml-2 is-large is-hidden'
-                    type='button'
-                    id='twitch-cancel'
-                    onClick={() => {
-                      document.querySelector('#twitch-form').classList.add('is-hidden')
-                      document.querySelector('#twitch').classList.remove('is-hidden')
-                    }}
-                  >
-                    Cancelar
-                  </button>
-                </form>
+                    <p className={`subtitle mt-5 ${profile && profile.twitch ? '' : 'is-hidden'}`} id='twitch'>
+                      <a href={`${profile && profile.twitch}`}>{profile && profile.twitch}</a>
+                    </p>
+                  </div>
+                </div>
               </div>
             </section>
+
             <section className='hero is-small'>
               <div className='hero-body'>
-                <p
-                  className='title grow-on-hover'
-                  onClick={() => {
-                    document.querySelector('#instagram').classList.add('is-hidden')
-                    document.querySelector('#instagram-cancel').classList.remove('is-hidden')
-                    document.querySelector('#instagram-form').classList.remove('is-hidden')
-                  }}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Instagram
-                </p>
-                <p className={`subtitle mt-5 ${profile && profile.instagram ? '' : 'is-hidden'}`} id='instagram'>
-                  <a href={`${profile && profile.instagram}`}>{profile && profile.instagram}</a>
-                </p>
+                <div className='is-flex'>
+                  <div>
+                    <figure className='image is-96x96 mr-5'>
+                      <svg
+                        aria-hidden='true'
+                        focusable='false'
+                        data-prefix='fab'
+                        data-icon='instagram'
+                        role='img'
+                        xmlns='http://www.w3.org/2000/svg'
+                        viewBox='0 0 448 512'
+                        className='svg-inline--fa fa-instagram fa-w-14 fa-3x'
+                      >
+                        <path
+                          fill='currentColor'
+                          d='M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z'
+                          className=''
+                        />
+                      </svg>
+                    </figure>
+                  </div>
 
-                <form
-                  id='instagram-form'
-                  className={`is-flex ${profile && profile.instagram ? 'is-hidden' : ''}`}
-                  onSubmit={async (event) => {
-                    event.preventDefault()
-
-                    const button = document.querySelector('#instagram-save') as HTMLButtonElement
-                    button.disabled = true
-                    button.classList.add('is-loading')
-
-                    await fetch(`/api/users/${profile._id}`, {
-                      method: 'PATCH',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({ instagram }),
-                    })
-
-                    setProfile({ ...profile, instagram })
-
-                    document.querySelector('#instagram-form').classList.add('is-hidden')
-                    document.querySelector('#instagram').classList.remove('is-hidden')
-
-                    button.disabled = false
-                    button.classList.remove('is-loading')
-                  }}
-                >
-                  <input
-                    type='text'
-                    className='input is-large'
-                    placeholder='Digite o link do seu Instagram'
-                    value={instagram}
-                    autoFocus
-                    onChange={(event) => setInstagram(event.target.value)}
-                  />
-                  <button className='button is-primary ml-2 is-large' id='instagram-save'>
-                    Salvar
-                  </button>
-                  <button
-                    className='button ml-2 is-large is-hidden'
-                    type='button'
-                    id='instagram-cancel'
-                    onClick={() => {
-                      document.querySelector('#instagram-form').classList.add('is-hidden')
-                      document.querySelector('#instagram').classList.remove('is-hidden')
-                    }}
-                  >
-                    Cancelar
-                  </button>
-                </form>
+                  <div style={{ width: '48rem' }}>
+                    <p className='title'>Instagram</p>
+                    <p className={`subtitle mt-5 ${profile && profile.instagram ? '' : 'is-hidden'}`} id='instagram'>
+                      <a href={`${profile && profile.instagram}`}>{profile && profile.instagram}</a>
+                    </p>
+                  </div>
+                </div>
               </div>
             </section>
+
             <section className='hero is-small'>
               <div className='hero-body'>
-                <p
-                  className='title grow-on-hover'
-                  onClick={() => {
-                    document.querySelector('#facebook').classList.add('is-hidden')
-                    document.querySelector('#facebook-cancel').classList.remove('is-hidden')
-                    document.querySelector('#facebook-form').classList.remove('is-hidden')
-                  }}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Facebook
-                </p>
-                <p className={`subtitle mt-5 ${profile && profile.facebook ? '' : 'is-hidden'}`} id='facebook'>
-                  <a href={`${profile && profile.facebook}`}>{profile && profile.facebook}</a>
-                </p>
+                <div className='is-flex'>
+                  <div>
+                    <figure className='image is-96x96 mr-5'>
+                      <svg
+                        aria-hidden='true'
+                        focusable='false'
+                        data-prefix='fab'
+                        data-icon='facebook'
+                        role='img'
+                        xmlns='http://www.w3.org/2000/svg'
+                        viewBox='0 0 512 512'
+                        className='svg-inline--fa fa-facebook fa-w-16 fa-3x'
+                      >
+                        <path
+                          fill='currentColor'
+                          d='M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z'
+                          className=''
+                        />
+                      </svg>
+                    </figure>
+                  </div>
 
-                <form
-                  id='facebook-form'
-                  className={`is-flex ${profile && profile.facebook ? 'is-hidden' : ''}`}
-                  onSubmit={async (event) => {
-                    event.preventDefault()
+                  <div style={{ width: '48rem' }}>
+                    <p className='title'>Facebook</p>
 
-                    const button = document.querySelector('#facebook-save') as HTMLButtonElement
-                    button.disabled = true
-                    button.classList.add('is-loading')
-
-                    await fetch(`/api/users/${profile._id}`, {
-                      method: 'PATCH',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({ facebook }),
-                    })
-
-                    setProfile({ ...profile, facebook })
-
-                    document.querySelector('#facebook-form').classList.add('is-hidden')
-                    document.querySelector('#facebook').classList.remove('is-hidden')
-
-                    button.disabled = false
-                    button.classList.remove('is-loading')
-                  }}
-                >
-                  <input
-                    type='text'
-                    className='input is-large'
-                    placeholder='Digite o link do seu facebook'
-                    value={facebook}
-                    autoFocus
-                    onChange={(event) => setFacebook(event.target.value)}
-                  />
-                  <button className='button is-primary ml-2 is-large' id='facebook-save'>
-                    Salvar
-                  </button>
-                  <button
-                    className='button ml-2 is-large is-hidden'
-                    type='button'
-                    id='facebook-cancel'
-                    onClick={() => {
-                      document.querySelector('#facebook-form').classList.add('is-hidden')
-                      document.querySelector('#facebook').classList.remove('is-hidden')
-                    }}
-                  >
-                    Cancelar
-                  </button>
-                </form>
+                    <p className={`subtitle mt-5 ${profile && profile.facebook ? '' : 'is-hidden'}`} id='facebook'>
+                      <a href={`${profile && profile.facebook}`}>{profile && profile.facebook}</a>
+                    </p>
+                  </div>
+                </div>
               </div>
             </section>
           </div>
@@ -1727,148 +945,6 @@ export default function Index() {
             Smurfs
           </div>
         </div>
-      </div>
-
-      <div className='modal'>
-        <div className='modal-background' onClick={() => closeLeagueAccountModal()} style={{ cursor: 'pointer' }} />
-
-        <div className='modal-content'>
-          <div className='card'>
-            <header className='card-header'>
-              <p className='card-header-title'>Adicionar conta</p>
-            </header>
-            <div className='card-content'>
-              <div className='content'>
-                <form
-                  action=''
-                  onSubmit={async (event) => {
-                    event.preventDefault()
-
-                    const button = document.querySelector('#nickname-search')
-                    button.classList.add('is-loading')
-
-                    const nickname = (document.querySelector('#nickname-input') as HTMLInputElement).value
-                    const response = await fetch(`api/riot/summoner?nickname=${nickname}`)
-                    const responseJson = await response.json()
-
-                    setLeagueAccount({
-                      ...responseJson,
-                      confirmationIconId: generateProfileIconId(leagueAccount.profileIconId),
-                    })
-
-                    document.querySelector('#nickname-change').classList.remove('is-hidden')
-
-                    button.classList.remove('is-loading')
-                  }}
-                >
-                  <div className='field'>
-                    <label className='label'>Nickname</label>
-                    <div className='control is-flex'>
-                      <input
-                        className='input is-large'
-                        type='text'
-                        id='nickname-input'
-                        placeholder='Digite o seu nome de invocador'
-                      />
-
-                      <button className='button is-large is-primary ml-2' id='nickname-search'>
-                        Pesquisar
-                      </button>
-                    </div>
-                  </div>
-                </form>
-
-                <form className='is-hidden mt-5' id='nickname-change'>
-                  <div className='field'>
-                    <label className='label'>Agora, altere o seu ícone de invocador</label>
-
-                    <div className='control is-flex'>
-                      <figure className='image is-128x128 mb-0'>
-                        <Image src={`/icons/${leagueAccount.confirmationIconId}.png`} layout='fill' />
-                      </figure>
-                    </div>
-
-                    <p className='has-text-danger-dark pt-3 is-hidden' id='nickname-error'>
-                      Erro: O ícone da conta não está igual ao solicitado
-                    </p>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <footer className='card-footer'>
-              <a
-                type='button'
-                className='card-footer-item'
-                id='nickname-confirm'
-                onClick={async () => {
-                  const button = document.querySelector('#nickname-confirm')
-                  const buttonLoading = document.querySelector('#nickname-loading')
-
-                  button.classList.add('is-hidden')
-                  buttonLoading.classList.remove('is-hidden')
-
-                  const response = await fetch(`api/riot/summoner?nickname=${leagueAccount.name}`)
-                  const { profileIconId } = await response.json()
-
-                  if (profileIconId === leagueAccount.confirmationIconId) {
-                    await fetch(`/api/leagueAccounts/${profile.player.leagueAccounts[0]._id}`, {
-                      method: 'PATCH',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({
-                        summonerId: leagueAccount.id,
-                        accountId: leagueAccount.accountId,
-                        puuid: leagueAccount.puuid,
-                        nickname: leagueAccount.name,
-                        leaguePoints: leagueAccount.leaguePoints ? leagueAccount.leaguePoints : 0,
-                        wins: leagueAccount.wins ? leagueAccount.wins : 0,
-                        losses: leagueAccount.losses ? leagueAccount.losses : 0,
-                        tier: leagueAccount.tier ? leagueAccount.tier : 'UNRANKED',
-                        rank: leagueAccount.rank ? leagueAccount.rank : '',
-                      }),
-                    })
-
-                    setProfile({
-                      ...profile,
-                      player: {
-                        ...profile.player,
-                        leagueAccounts: [
-                          {
-                            nickname: leagueAccount.name,
-                            tier: leagueAccount.tier,
-                            rank: leagueAccount.rank,
-                            wins: leagueAccount.wins,
-                            losses: leagueAccount.losses,
-                          },
-                        ],
-                      },
-                    })
-
-                    buttonLoading.classList.add('is-hidden')
-                    button.classList.remove('is-hidden')
-
-                    document.querySelector('#add-account-button').classList.add('is-hidden')
-                    document.querySelector('#nickname-cancel').classList.add('is-hidden')
-                    document.querySelector('#nickname-error').classList.add('is-hidden')
-                    document.querySelector('#player-nick').classList.remove('is-hidden')
-
-                    closeLeagueAccountModal()
-                  } else {
-                    document.querySelector('#nickname-error').classList.remove('is-hidden')
-                    buttonLoading.classList.add('is-hidden')
-                    button.classList.remove('is-hidden')
-                  }
-                }}
-              >
-                Salvar
-              </a>
-              <button className='button card-footer-item is-loading is-hidden' id='nickname-loading' />
-            </footer>
-          </div>
-        </div>
-
-        <button className='modal-close is-large' aria-label='close' onClick={() => closeLeagueAccountModal()} />
       </div>
 
       <div className='is-flex is-justify-content-center'>
