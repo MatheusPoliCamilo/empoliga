@@ -1221,7 +1221,7 @@ export default function Index() {
                     </button>
                   </form>
 
-                  <label className='label'>RG</label>
+                  {/* <label className='label'>RG</label>
 
                   <h1
                     className={`title is-4 mt-0 ${profile && profile.player.rg ? '' : 'is-hidden'}`}
@@ -1355,7 +1355,7 @@ export default function Index() {
                     >
                       Cancelar
                     </button>
-                  </form>
+                  </form> */}
 
                   <label className='label'>Endereço</label>
 
