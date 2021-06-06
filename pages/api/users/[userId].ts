@@ -19,8 +19,7 @@ export default async (request, response) => {
       return User.findById(userId)
         .populate({ path: 'player', populate: { path: 'leagueAccounts', model: LeagueAccount } })
         .exec((error, user) => {
-          // FIXME: Removido para testes
-          // database.close()
+          database.close()
 
           if (error) {
             return response.status(500).json(error)
