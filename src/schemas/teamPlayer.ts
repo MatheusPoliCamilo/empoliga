@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const teamPlayerSchema = new mongoose.Schema({
   player: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Team',
+    ref: 'User',
   },
   firstString: {
     type: Boolean,
