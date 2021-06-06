@@ -2,6 +2,8 @@ import { connectToDatabase } from '../../../src/database'
 import { User } from '../../../src/schemas/user'
 import { TeamPlayer } from '../../../src/schemas/teamPlayer'
 import { Team } from '../../../src/schemas/team'
+import { Player } from '../../../src/schemas/player'
+import { LeagueAccount } from '../../../src/schemas/leagueAccount'
 import jwt from 'jsonwebtoken'
 
 export default async (request, response) => {
@@ -12,23 +14,27 @@ export default async (request, response) => {
   })
 
   switch (request.method) {
-    // case 'GET': {
-    //   const { nickname } = request.query
+    case 'GET': {
+      const teams = await Team.find({})
+        .populate({
+          path: 'captain',
+          populate: { path: 'player', model: Player, populate: { path: 'leagueAccounts', model: LeagueAccount } },
+        })
+        .populate({
+          path: 'players',
+          model: TeamPlayer,
+          populate: {
+            path: 'player',
+            model: User,
+            populate: { path: 'player', model: Player, populate: { path: 'leagueAccounts', model: LeagueAccount } },
+          },
+        })
+        .exec()
 
-    //   let users = await User.find({})
-    //     .populate({ path: 'player', populate: { path: 'leagueAccounts', model: LeagueAccount } })
-    //     .exec()
+      database.close()
 
-    //   if (nickname) {
-    //     users = users.filter((user) => {
-    //       return user.player?.leagueAccounts[0].nickname === nickname
-    //     })
-    //   }
-
-    //   database.close()
-
-    //   return response.status(200).json({ users })
-    // }
+      return response.status(200).json({ teams })
+    }
 
     case 'POST': {
       const { name, acronym, captain, logo } = request.body
