@@ -37,7 +37,20 @@ export default async (request, response) => {
     }
 
     case 'POST': {
+      const token = request.cookies.token
+      const { error, decoded } = jwt.verify(token, process.env.AUTH_SECRET, (error, decoded) => {
+        return { error, decoded }
+      })
+
+      if (error) return response.status(401).json({ errors: { message: 'Usuário não autenticado' } })
+      if (!decoded.id) return response.status(401).json({ errors: { message: 'Usuário não autenticado' } })
+
       const { name, acronym, captain, logo } = request.body
+
+      if (decoded.id !== captain)
+        return response
+          .status(401)
+          .json({ errors: { message: 'Tentativa de criação de time no nome de outro jogador' } })
 
       const teamPlayer = await TeamPlayer.create({ player: captain, firstString: true })
 
