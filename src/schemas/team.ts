@@ -10,7 +10,7 @@ const teamSchema = new mongoose.Schema({
     required: [true, 'Informe a sigla da equipe'],
   },
   logo: {
-    type: Date,
+    type: String,
     required: [true, 'Informe a logo da equipe'],
   },
   captain: {
