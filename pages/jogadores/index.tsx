@@ -20,7 +20,6 @@ function takeCards(users) {
       user.birthDate &&
       user.name &&
       user.email &&
-      user.whatsapp &&
       user.twitter &&
       user.twitch &&
       user.instagram &&
@@ -28,16 +27,7 @@ function takeCards(users) {
 
     if (validUser) {
       const player = user.player
-      const validPlayer =
-        player &&
-        player.role &&
-        player.state &&
-        player.city &&
-        player.profilePicture &&
-        player.setupPhoto &&
-        // player.rg &&
-        // player.cpf &&
-        player.address
+      const validPlayer = player && player.role && player.state && player.city && player.profilePicture
 
       if (validPlayer) {
         const leagueAccount = player && player.leagueAccounts[0]

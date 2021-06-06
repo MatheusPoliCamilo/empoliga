@@ -25,46 +25,48 @@ export default async (request, response) => {
 
       const id = decoded.id
 
-      return User.findById(id, async (error, user) => {
-        if (error) {
+      return User.findById(id)
+        .select('+whatsapp')
+        .exec(async (error, user) => {
+          if (error) {
+            database.close()
+            return response.status(500).json(error)
+          }
+
+          if (!user) {
+            database.close()
+            return response.status(422).json({ erros: { message: 'Usuário não encontrado' } })
+          }
+
+          if (!user.player) {
+            const player = await Player.create({ valid: false })
+            user.player = player.id
+            player.user = user.id
+            await player.save()
+            user = await user.save()
+          }
+
+          let player = await Player.findById(user.player).select('+address +setupPhoto')
+
+          if (player.leagueAccounts.length === 0) {
+            const leagueAccount = await LeagueAccount.create({})
+            leagueAccount.player = player.id
+            await leagueAccount.save()
+
+            player.leagueAccounts.push(leagueAccount.id)
+            player = await player.save()
+          }
+
+          const leagueAccounts = await Promise.all(
+            player.leagueAccounts.map(async (id) => {
+              return await LeagueAccount.findById(id)
+            })
+          )
+
           database.close()
-          return response.status(500).json(error)
-        }
 
-        if (!user) {
-          database.close()
-          return response.status(422).json({ erros: { message: 'Usuário não encontrado' } })
-        }
-
-        if (!user.player) {
-          const player = await Player.create({ valid: false })
-          user.player = player.id
-          player.user = user.id
-          await player.save()
-          user = await user.save()
-        }
-
-        let player = await Player.findById(user.player)
-
-        if (player.leagueAccounts.length === 0) {
-          const leagueAccount = await LeagueAccount.create({})
-          leagueAccount.player = player.id
-          await leagueAccount.save()
-
-          player.leagueAccounts.push(leagueAccount.id)
-          player = await player.save()
-        }
-
-        const leagueAccounts = await Promise.all(
-          player.leagueAccounts.map(async (id) => {
-            return await LeagueAccount.findById(id)
-          })
-        )
-
-        database.close()
-
-        return response.status(200).json({ ...user._doc, player: { ...player._doc, leagueAccounts } })
-      })
+          return response.status(200).json({ ...user._doc, player: { ...player._doc, leagueAccounts } })
+        })
     }
 
     default: {

@@ -13,12 +13,14 @@ const playerSchema = new mongoose.Schema({
   },
   address: {
     type: String,
+    select: false,
   },
   profilePicture: {
     type: String,
   },
   setupPhoto: {
     type: String,
+    select: false,
   },
   rg: {
     type: String,
