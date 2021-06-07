@@ -115,7 +115,7 @@ function Invite({ teamInvites, currentUserId, setCurrentUser }) {
 export default function Index() {
   const [teams, setTeams] = useState([])
   const [cards, setCards] = useState([])
-  const [currentUser, setCurrentUser] = useState({ _id: '', teamInvites: [] })
+  const [currentUser, setCurrentUser] = useState({ _id: '', teamInvites: [], teams: [] })
 
   useEffect(() => {
     const currentUserCookie = Cookie.get('currentUser')
@@ -152,11 +152,31 @@ export default function Index() {
     setCards(cardsChunks)
   }, [teams])
 
+  useEffect(() => {
+    if (currentUser._id) document.querySelector('#equipe-button').classList.remove('is-hidden')
+  }, [currentUser])
+
   return (
     <div className='has-text-weight-bold'>
       <Navbar />
 
       <div className='p-6'>
+        {currentUser.teams.length > 0 && (
+          <a
+            className='button is-medium is-primary is-hidden'
+            id='equipe-button'
+            href={`/equipe/${currentUser.teams[0]._id}`}
+          >
+            Minha equipe
+          </a>
+        )}
+
+        {!(currentUser.teams.length > 0) && currentUser._id && (
+          <a className='button is-medium is-primary is-hidden' href='/equipes/criar' id='equipe-button'>
+            Criar equipe
+          </a>
+        )}
+
         <div className='tabs is-centered is-boxed is-medium is-hidden' id='tabs'>
           <ul>
             <li className='is-active' id='li-cards'>

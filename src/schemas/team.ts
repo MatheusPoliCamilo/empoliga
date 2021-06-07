@@ -8,6 +8,8 @@ const teamSchema = new mongoose.Schema({
   acronym: {
     type: String,
     required: [true, 'Informe a sigla da equipe'],
+    maxLength: 4,
+    minLength: 2,
   },
   logo: {
     type: String,
