@@ -24,7 +24,7 @@ export default function Index() {
 
   useEffect(() => {
     if (currentUser._id) {
-      const button = document.querySelector('#create-team')
+      const button = document.querySelector('#create-team') as HTMLButtonElement
 
       button.disabled = false
       button.classList.remove('is-loading')
