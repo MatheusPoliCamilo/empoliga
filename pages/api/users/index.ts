@@ -22,7 +22,7 @@ export default async (request, response) => {
 
       if (nickname) {
         users = users.filter((user) => {
-          return user.player?.leagueAccounts[0].nickname === nickname
+          return user.player?.leagueAccounts[0]?.nickname === nickname
         })
       }
 
