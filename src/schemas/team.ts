@@ -23,6 +23,12 @@ const teamSchema = new mongoose.Schema({
       ref: 'TeamPlayer',
     },
   ],
+  invites: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
 })
 
 const Team = mongoose.models.Team || mongoose.model('Team', teamSchema)

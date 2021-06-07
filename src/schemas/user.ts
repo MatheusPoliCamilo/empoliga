@@ -53,6 +53,12 @@ const userSchema = new mongoose.Schema({
       ref: 'Team',
     },
   ],
+  teamInvites: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Team',
+    },
+  ],
 })
 
 interface UserInterface extends mongoose.Document {
