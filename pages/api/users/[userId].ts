@@ -18,9 +18,8 @@ export default async (request, response) => {
 
       return User.findById(userId)
         .populate({ path: 'player', populate: { path: 'leagueAccounts', model: LeagueAccount } })
+        .populate({ path: 'teams teamInvites' })
         .exec((error, user) => {
-          database.close()
-
           if (error) {
             return response.status(500).json(error)
           }

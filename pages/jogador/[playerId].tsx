@@ -4,6 +4,7 @@ import { parseISO, getYear, differenceInYears } from 'date-fns'
 import Image from 'next/image'
 import { generateRankString } from '../../services/generateRankString'
 import { useRouter } from 'next/router'
+import Cookie from 'js-cookie'
 
 async function fetchUser(userId) {
   const response = await fetch(`/api/users/${userId}`)
@@ -62,10 +63,23 @@ export default function Index() {
     tier: '',
     rank: '',
   })
+  const [currentUser, setCurrentUser] = useState({ _id: '1', teams: [{ captain: '2', invites: [] }] })
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
     document.querySelector('html').style.backgroundColor = 'black'
+
+    const currentUserCookie = Cookie.get('currentUser')
+
+    if (currentUserCookie) {
+      const id = JSON.parse(currentUserCookie)._id
+
+      fetch(`/api/users/${id}`).then((response) => {
+        response.json().then((user) => {
+          setCurrentUser(user)
+        })
+      })
+    }
 
     if (playerId) {
       fetchUser(playerId).then(async (profile) => {
@@ -200,10 +214,7 @@ export default function Index() {
           </button> */}
         </div>
 
-        <div
-          className='card'
-          style={{ backgroundColor: 'white', height: '50rem', width: '61rem', marginRight: '12rem' }}
-        >
+        <div className='card' style={{ backgroundColor: 'white', width: '61rem', marginRight: '12rem' }}>
           <div className='card-content' id='player-card'>
             <div className='content'>
               <div className='is-flex'>
@@ -533,6 +544,43 @@ export default function Index() {
           <div className='card-content is-hidden' id='smurfs-card'>
             Smurfs
           </div>
+
+          {currentUser.teams.length > 0 &&
+            currentUser._id === currentUser.teams[0].captain &&
+            !currentUser.teams[0].invites.includes(playerId) && (
+              <footer className='card-footer'>
+                <a
+                  className='card-footer-item'
+                  id='contratar'
+                  onClick={() => {
+                    const button = document.querySelector('#contratar')
+                    button.classList.add('is-loading')
+                    button.classList.add('button')
+
+                    fetch('/api/hire', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        captain: currentUser._id,
+                        playerToHire: playerId,
+                      }),
+                    })
+                      .then((response) => response.json())
+                      .then(({ newPlayer }) => {
+                        console.log(newPlayer)
+                        button.classList.remove('button')
+                        button.classList.remove('is-loading')
+
+                        setCurrentUser(newPlayer)
+                      })
+                  }}
+                >
+                  Contratar
+                </a>
+              </footer>
+            )}
         </div>
       </div>
 

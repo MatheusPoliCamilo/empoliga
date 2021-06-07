@@ -1,60 +1,66 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Navbar } from '../../components/navbar'
+import Cookie from 'js-cookie'
 
 async function fetchTeam(teamId) {
   const response = await fetch(`/api/teams/${teamId}`)
   return await response.json()
 }
 
-function Player({ teamPlayer, captain }) {
-  console.log(teamPlayer)
-
+function Player({ teamPlayer, captain, currentUser }) {
   return (
-    <div className='columns'>
-      <div className='column has-text-centered'>
-        <div>
-          <figure
-            className='image m-0 is-flex is-flex-direction-column is-justify-content-center'
-            style={{
-              width: '6rem',
-              minWidth: '6rem',
-              height: '6rem',
-              maxHeight: '6rem',
-            }}
-          >
-            <img className='is-rounded' src={teamPlayer.player.player.profilePicture} style={{ maxHeight: '20rem' }} />
-          </figure>
+    <a href={teamPlayer.player._id === currentUser._id ? '/perfil' : `/jogador/${teamPlayer.player._id}`}>
+      <div className='columns'>
+        <div className='column has-text-centered'>
+          <div>
+            <figure
+              className='image m-0 is-flex is-flex-direction-column is-justify-content-center'
+              style={{
+                width: '6rem',
+                minWidth: '6rem',
+                height: '6rem',
+                maxHeight: '6rem',
+              }}
+            >
+              <img
+                className='is-rounded'
+                src={teamPlayer.player.player.profilePicture}
+                style={{ maxHeight: '20rem' }}
+              />
+            </figure>
+          </div>
+        </div>
+
+        <div className='column is-flex is-flex-direction-column is-justify-content-center has-text-centered'>
+          <p className='title'>{teamPlayer.player.player.leagueAccounts[0].nickname}</p>
+        </div>
+
+        <div className='column is-flex is-flex-direction-column is-justify-content-center has-text-centered'>
+          <p className='title'>{captain ? 'Capitão' : ''}</p>
+        </div>
+
+        <div className='column is-flex is-flex-direction-column is-justify-content-center has-text-centered'>
+          <p className='title'>{teamPlayer.player.player.role}</p>
         </div>
       </div>
-
-      <div className='column is-flex is-flex-direction-column is-justify-content-center has-text-centered'>
-        <p className='title'>{teamPlayer.player.player.leagueAccounts[0].nickname}</p>
-      </div>
-
-      <div className='column is-flex is-flex-direction-column is-justify-content-center has-text-centered'>
-        <p className='title'>{captain ? 'Capitão' : ''}</p>
-      </div>
-
-      <div className='column is-flex is-flex-direction-column is-justify-content-center has-text-centered'>
-        <p className='title'>{teamPlayer.player.player.role}</p>
-      </div>
-    </div>
+    </a>
   )
 }
 
-function Players({ teamPlayers, captain }) {
+function Players({ teamPlayers, captain, currentUser }) {
   return teamPlayers.map((teamPlayer, key) => {
     const isCaptain = teamPlayer.player._id === captain._id
 
-    return <Player teamPlayer={teamPlayer} key={key} captain={isCaptain} />
+    return <Player teamPlayer={teamPlayer} key={key} currentUser={currentUser} captain={isCaptain} />
   })
 }
 
 export default function Index() {
   const router = useRouter()
   const { teamId } = router.query
-  const [team, setTeam] = useState({ logo: '', acronym: '', name: '', players: [] })
+  const [team, setTeam] = useState({ logo: '', acronym: '', name: '', players: [], captain: {} })
+  const [currentUser, setCurrentUser] = useState({ _id: '' })
 
   useEffect(() => {
     document.querySelector('body').classList.add('has-navbar-fixed-top')
@@ -63,6 +69,12 @@ export default function Index() {
     if (teamId) {
       fetchTeam(teamId).then(async (team) => {
         setTeam(team)
+
+        const currentUserCookie = Cookie.get('currentUser')
+
+        if (currentUserCookie) {
+          setCurrentUser(JSON.parse(currentUserCookie))
+        }
 
         document.querySelector('#loading').classList.add('is-hidden')
         document.querySelector('#card').classList.remove('is-hidden')
@@ -101,7 +113,9 @@ export default function Index() {
                   </div>
                 </div>
 
-                {team.players && <Players teamPlayers={team.players} captain={team.captain} />}
+                {team.players && (
+                  <Players teamPlayers={team.players} captain={team.captain} currentUser={currentUser} />
+                )}
               </div>
             </div>
           </div>
