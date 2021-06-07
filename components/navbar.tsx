@@ -56,10 +56,7 @@ function Navbar() {
             </div>
           </div> */}
 
-          <a
-            className='navbar-item is-justify-content-center pl-5 pr-5 has-text-grey-light'
-            style={{ pointerEvents: 'none' }}
-          >
+          <a className='navbar-item is-justify-content-center pl-5 pr-5' href='/equipes'>
             Equipes
           </a>
 

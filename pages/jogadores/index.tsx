@@ -227,6 +227,7 @@ export default function Index() {
               </div>
             </form>
           </div>
+
           <div className='column' />
         </div>
 
