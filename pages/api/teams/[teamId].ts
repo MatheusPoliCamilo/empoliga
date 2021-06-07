@@ -5,6 +5,7 @@ import { verifyAuthentication } from '../../../src/verifyAuthentication'
 import jwt from 'jsonwebtoken'
 import { Team } from '../../../src/schemas/team'
 import { Player } from '../../../src/schemas/player'
+import { TeamPlayer } from '../../../src/schemas/teamPlayer'
 
 export default async (request, response) => {
   const database = await connectToDatabase(process.env.MONGODB_URI)
@@ -21,7 +22,7 @@ export default async (request, response) => {
         .populate({ path: 'captain', model: User })
         .populate({
           path: 'players',
-          model: User,
+          model: TeamPlayer,
           populate: {
             path: 'player',
             model: User,
