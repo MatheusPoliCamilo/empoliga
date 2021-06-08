@@ -1,5 +1,7 @@
 import { connectToDatabase } from '../../../src/database'
 import { User } from '../../../src/schemas/user'
+import { Player } from '../../../src/schemas/player'
+import { Team } from '../../../src/schemas/team'
 import { LeagueAccount } from '../../../src/schemas/leagueAccount'
 import { verifyAuthentication } from '../../../src/verifyAuthentication'
 import jwt from 'jsonwebtoken'
@@ -16,20 +18,34 @@ export default async (request, response) => {
       // TODO: Retornar informações sensíveis somente se for um juíz
       const { userId } = request.query
 
-      return User.findById(userId)
-        .populate({ path: 'player', populate: { path: 'leagueAccounts', model: LeagueAccount } })
-        .populate({ path: 'teams teamInvites' })
-        .exec((error, user) => {
-          if (error) {
-            return response.status(500).json(error)
-          }
+      const user = await User.findById(userId)
+        .populate({ path: 'player', model: Player, populate: { path: 'leagueAccounts', model: LeagueAccount } })
+        .populate({ path: 'teams', model: Team })
+        .populate({ path: 'teamInvites', model: Team })
+        .exec()
 
-          if (!user) {
-            return response.status(422).json({ erros: { message: 'Usuário não encontrado' } })
-          }
+      if (!user) {
+        database.close()
 
-          return response.status(200).json(user)
-        })
+        return response.status(422).json({ erros: { message: 'Usuário não encontrado' } })
+      }
+
+      return response.status(200).json(user)
+
+      // return User.findById(userId)
+      //   .populate({ path: 'player', populate: { path: 'leagueAccounts', model: LeagueAccount } })
+      //   .populate({ path: 'teams teamInvites' })
+      //   .exec((error, user) => {
+      //     if (error) {
+      //       return response.status(500).json(error)
+      //     }
+
+      //     if (!user) {
+      //       return response.status(422).json({ erros: { message: 'Usuário não encontrado' } })
+      //     }
+
+      //     return response.status(200).json(user)
+      //   })
     }
 
     case 'PATCH': {

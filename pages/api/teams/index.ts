@@ -31,7 +31,7 @@ export default async (request, response) => {
         })
         .exec()
 
-      database.close()
+      // database.close()
 
       return response.status(200).json({ teams })
     }

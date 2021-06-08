@@ -581,10 +581,11 @@ export default function Index() {
                     </button>
                   </form>
 
-                  {/* TODO: Time/Free agent */}
-                  {/* <h1 className='title mt-1'>
-                    <a href=''>paiN Gaming</a>
-                  </h1> */}
+                  {profile?.teams?.length > 0 && (
+                    <h1 className='title mt-1'>
+                      <a href={`/equipe/${profile.teams[0]._id}`}>{profile.teams[0].name}</a>
+                    </h1>
+                  )}
                 </div>
               </div>
 
@@ -1205,6 +1206,7 @@ export default function Index() {
                       value={whatsapp}
                       autoFocus
                       onChange={(event) => setWhatsapp(event.target.value)}
+                      style={{ width: '17rem' }}
                     />
 
                     <button className='button is-primary ml-2' id='whatsapp-save'>
