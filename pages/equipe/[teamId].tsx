@@ -68,16 +68,18 @@ export default function Index() {
 
     if (teamId) {
       fetchTeam(teamId).then(async (team) => {
-        setTeam(team)
+        if (team._id) {
+          setTeam(team)
 
-        const currentUserCookie = Cookie.get('currentUser')
+          const currentUserCookie = Cookie.get('currentUser')
 
-        if (currentUserCookie) {
-          setCurrentUser(JSON.parse(currentUserCookie))
+          if (currentUserCookie) {
+            setCurrentUser(JSON.parse(currentUserCookie))
+          }
+
+          document.querySelector('#loading').classList.add('is-hidden')
+          document.querySelector('#card').classList.remove('is-hidden')
         }
-
-        document.querySelector('#loading').classList.add('is-hidden')
-        document.querySelector('#card').classList.remove('is-hidden')
       })
     }
   }, [teamId])

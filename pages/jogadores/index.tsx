@@ -74,8 +74,8 @@ function Card({ player }) {
           </figure>
         </div>
 
-        <div className='card-content'>
-          <div className='media'>
+        <div className='card-content pt-3 pl-4'>
+          <div className='media mb-2'>
             <div className='media-left'>
               <figure className='image' style={{ height: '50px', width: '63px' }}>
                 <img
@@ -86,20 +86,18 @@ function Card({ player }) {
                 />
               </figure>
             </div>
-            <div className='media-content'>
+            <div className='media-content' style={{ minHeight: '7.3rem' }}>
               <p className='title is-4' style={{ textTransform: 'none' }}>
                 {player.player.leagueAccounts[0].nickname}
               </p>
-              <p className='subtitle is-6' style={{ minHeight: '2.5rem' }}>
-                {player.name}
-              </p>
+              <p className='subtitle is-6'>{player.name}</p>
             </div>
           </div>
 
-          <div className='content'>
+          <div className='content' style={{ minHeight: '3rem' }}>
             {player.player.city} - {player.player.state}
             <br />
-            {/* <a href='#'>Furnace e-Sports - Major A</a> */}
+            {player.teams.length > 0 && <b>{player.teams[0].name}</b>}
           </div>
         </div>
 

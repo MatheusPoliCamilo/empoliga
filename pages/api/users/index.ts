@@ -1,6 +1,7 @@
 import { connectToDatabase } from '../../../src/database'
 import { User } from '../../../src/schemas/user'
 import { Player } from '../../../src/schemas/player'
+import { Team } from '../../../src/schemas/team'
 import { LeagueAccount } from '../../../src/schemas/leagueAccount'
 import jwt from 'jsonwebtoken'
 
@@ -18,6 +19,7 @@ export default async (request, response) => {
 
       let users = await User.find({})
         .populate({ path: 'player', populate: { path: 'leagueAccounts', model: LeagueAccount } })
+        .populate({ path: 'teams', model: Team })
         .exec()
 
       if (nickname) {
