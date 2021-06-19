@@ -91,7 +91,7 @@ export default function Index() {
         }}
       >
         <div className='is-flex is-justify-content-center' style={{ paddingTop: '7rem' }}>
-          <div className='grow-on-hover' style={{ cursor: 'pointer' }}>
+          <div>
             <Image
               src='/tradicional.svg'
               width={200}
@@ -103,11 +103,11 @@ export default function Index() {
         </div>
 
         <div className='pt-5 is-flex is-justify-content-space-around'>
-          <div className='grow-on-hover fix-scale' style={{ cursor: 'pointer' }} title='Empoliga Minor'>
+          <div className='fix-scale' title='Empoliga Minor'>
             <Image src='/minor.svg' width={200} height={200} alt='Logo da Empoliga' />
           </div>
-          <div className='' style={{ height: '200px', width: '200px' }} />
-          <div className='grow-on-hover' style={{ cursor: 'pointer' }}>
+          <div style={{ height: '200px', width: '200px' }} />
+          <div>
             <Image src='/major.svg' width={200} height={200} alt='Logo da Empoliga' title='Empoliga Major' />
           </div>
         </div>
