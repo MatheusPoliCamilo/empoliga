@@ -1861,12 +1861,21 @@ export default function Index() {
                     const response = await fetch(`api/riot/summoner?nickname=${nickname}`)
                     const responseJson = await response.json()
 
-                    setLeagueAccount({
-                      ...responseJson,
-                      confirmationIconId: generateProfileIconId(leagueAccount.profileIconId),
-                    })
+                    if (responseJson.errors) {
+                      document.querySelector('#find-nick-error').classList.remove('is-hidden')
+                      document.querySelector('#nickname-input').classList.add('is-danger')
+                      document.querySelector('#nickname-change').classList.add('is-hidden')
+                    } else {
+                      document.querySelector('#find-nick-error').classList.add('is-hidden')
+                      document.querySelector('#nickname-input').classList.remove('is-danger')
 
-                    document.querySelector('#nickname-change').classList.remove('is-hidden')
+                      setLeagueAccount({
+                        ...responseJson,
+                        confirmationIconId: generateProfileIconId(leagueAccount.profileIconId),
+                      })
+
+                      document.querySelector('#nickname-change').classList.remove('is-hidden')
+                    }
 
                     button.classList.remove('is-loading')
                   }}
@@ -1885,6 +1894,10 @@ export default function Index() {
                         Pesquisar
                       </button>
                     </div>
+                  </div>
+
+                  <div className='field is-hidden' id='find-nick-error'>
+                    <p className='has-text-danger'>Erro: Nickname não encontrado</p>
                   </div>
                 </form>
 

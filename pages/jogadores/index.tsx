@@ -16,26 +16,15 @@ function chunkArray(array, chunkSize) {
 function takeCards(users) {
   return users.filter((user) => {
     const validUser =
-      user.gender &&
-      user.birthDate &&
-      user.name &&
-      user.email &&
-      user.twitter &&
-      user.twitch &&
-      user.instagram &&
-      user.facebook
+      user.gender && user.birthDate && user.name && user.email && user.player && user.player.profilePicture
+    const player = user.player
 
     if (validUser) {
-      const player = user.player
-      const validPlayer = player && player.role && player.state && player.city && player.profilePicture
+      const leagueAccount = player && player.leagueAccounts[0]
+      const validLeagueAccout = leagueAccount && leagueAccount.accountId
 
-      if (validPlayer) {
-        const leagueAccount = player && player.leagueAccounts[0]
-        const validLeagueAccout = leagueAccount && leagueAccount.accountId
-
-        if (validLeagueAccout) {
-          return user
-        }
+      if (validLeagueAccout) {
+        return user
       }
     }
 
@@ -64,7 +53,7 @@ function Card({ player }) {
       <div className='card'>
         <header className='card-header'>
           <p className='card-header-title' style={{ justifyContent: 'center' }}>
-            {player.player.role}
+            {player.player.role ? player.player.role : 'Preencher'}
           </p>
         </header>
 
@@ -95,7 +84,7 @@ function Card({ player }) {
           </div>
 
           <div className='content' style={{ minHeight: '3rem' }}>
-            {player.player.city} - {player.player.state}
+            {player.player.city && player.player.state && `${player.player.city} - ${player.player.state}`}
             <br />
             {player.teams.length > 0 && <b>{player.teams[0].name}</b>}
           </div>

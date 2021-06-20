@@ -41,7 +41,7 @@ function Player({ teamPlayer, captain, currentUser }) {
         </div>
 
         <div className='column is-flex is-flex-direction-column is-justify-content-center has-text-centered'>
-          <p className='title'>{teamPlayer.player.player.role}</p>
+          <p className='title'>{teamPlayer.player.player.role ? teamPlayer.player.player.role : 'Preencher'}</p>
         </div>
       </div>
     </a>
