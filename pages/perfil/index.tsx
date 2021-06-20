@@ -1865,9 +1865,11 @@ export default function Index() {
                       document.querySelector('#find-nick-error').classList.remove('is-hidden')
                       document.querySelector('#nickname-input').classList.add('is-danger')
                       document.querySelector('#nickname-change').classList.add('is-hidden')
+                      document.querySelector('#nickname-confirm').classList.add('is-hidden')
                     } else {
                       document.querySelector('#find-nick-error').classList.add('is-hidden')
                       document.querySelector('#nickname-input').classList.remove('is-danger')
+                      document.querySelector('#nickname-confirm').classList.remove('is-hidden')
 
                       setLeagueAccount({
                         ...responseJson,
