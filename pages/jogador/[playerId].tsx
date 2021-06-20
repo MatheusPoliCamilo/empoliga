@@ -248,7 +248,7 @@ export default function Index() {
                   </h1>
 
                   <h1 className='title mt-1' id='role'>
-                    {profile && profile.player.role}
+                    {profile && profile.player.role ? profile.player.role : 'Preencher'}
                   </h1>
 
                   {/* TODO: Time/Free agent */}

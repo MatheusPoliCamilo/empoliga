@@ -15,6 +15,10 @@ export default async (request, response) => {
 
       const riotAccount = await riotAccountRequest.json()
 
+      if (riotAccount.status) {
+        return response.status(404).json({ errors: { message: 'Jogador não encontrado' } })
+      }
+
       const leagueRequest = await fetch(
         `https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/${riotAccount.id}`,
         {
