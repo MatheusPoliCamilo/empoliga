@@ -9,14 +9,16 @@ function onPasswordConfirmationChange(event, user, setUser) {
   const passwordConfirmation = event.target.value
   const password = (document.querySelector('#password') as HTMLInputElement).value
   const button = document.querySelector('#create-account') as HTMLButtonElement
+  const errorMessage = document.querySelector('#error-message') as HTMLParagraphElement
 
   if (passwordConfirmation !== password) {
-    document.querySelector('#error-message').classList.remove('is-hidden')
+    errorMessage.textContent = 'As senhas não coincidem'
+    errorMessage.classList.remove('is-hidden')
     document.querySelector('#password-confirmation').classList.remove('is-primary')
     document.querySelector('#password-confirmation').classList.add('is-danger')
     button.disabled = true
   } else {
-    document.querySelector('#error-message').classList.add('is-hidden')
+    errorMessage.classList.add('is-hidden')
     document.querySelector('#password-confirmation').classList.remove('is-danger')
     document.querySelector('#password-confirmation').classList.add('is-primary')
     button.disabled = false
@@ -27,15 +29,20 @@ function onPasswordConfirmationChange(event, user, setUser) {
 function onPasswordChange(event) {
   const password = event.target.value
   const passwordConfirmation = (document.querySelector('#password-confirmation') as HTMLInputElement).value
+  const button = document.querySelector('#create-account') as HTMLButtonElement
+  const errorMessage = document.querySelector('#error-message') as HTMLParagraphElement
 
-  if (passwordConfirmation !== password) {
-    document.querySelector('#error-message').classList.remove('is-hidden')
+  if (password && passwordConfirmation !== password) {
+    errorMessage.textContent = 'As senhas não coincidem'
+    errorMessage.classList.remove('is-hidden')
     document.querySelector('#password-confirmation').classList.remove('is-primary')
     document.querySelector('#password-confirmation').classList.add('is-danger')
+    button.disabled = true
   } else {
-    document.querySelector('#error-message').classList.add('is-hidden')
+    errorMessage.classList.add('is-hidden')
     document.querySelector('#password-confirmation').classList.remove('is-danger')
     document.querySelector('#password-confirmation').classList.add('is-primary')
+    button.disabled = false
   }
 }
 
@@ -43,36 +50,56 @@ function handleSubmit(event, user) {
   event.preventDefault()
   const button = document.querySelector('#create-account') as HTMLButtonElement
   const buttonBack = document.querySelector('#backFifthStep') as HTMLButtonElement
+  const errorMessage = document.querySelector('#error-message') as HTMLParagraphElement
 
   button.classList.add('is-loading')
   buttonBack.disabled = true
 
-  fetch('/api/users', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(user),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      button.classList.remove('is-loading')
-      buttonBack.disabled = false
+  errorMessage.classList.add('is-hidden')
+  errorMessage.textContent = 'As senhas não coincidem'
 
-      console.log('Data:', data)
-      if (data.name === 'MongoError' || data.errors || Object.keys(data).length === 0) {
-        console.log('Errors:', data.errors)
-      } else {
-        Cookie.set('token', data.token, { expires: addDays(new Date(), 1) })
-        Cookie.set('currentUser', data.user, { expires: addDays(new Date(), 1) })
-        window.location.href = '/'
-      }
+  const schema = yup.object().shape({
+    password: yup.string().required('Informe a senha').min(8, 'A senha precisa de no mínimo 8 caracteres'),
+  })
+
+  schema
+    .validate({ password: user.password })
+    .then(() => {
+      fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          button.classList.remove('is-loading')
+          buttonBack.disabled = false
+
+          console.log('Data:', data)
+          if (data.name === 'MongoError' || data.errors || Object.keys(data).length === 0) {
+            console.log('Errors:', data.errors)
+          } else {
+            Cookie.set('token', data.token, { expires: addDays(new Date(), 1) })
+            Cookie.set('currentUser', data.user, { expires: addDays(new Date(), 1) })
+            window.location.href = '/'
+          }
+        })
+        .catch((error) => {
+          button.classList.remove('is-loading')
+          buttonBack.disabled = false
+
+          errorMessage.textContent = error
+          errorMessage.classList.remove('is-hidden')
+
+          console.error('Error:', error)
+        })
     })
     .catch((error) => {
+      errorMessage.textContent = (error.errors && error.errors[0]) || error
+      errorMessage.classList.remove('is-hidden')
       button.classList.remove('is-loading')
-      buttonBack.disabled = false
-
-      console.error('Error:', error)
     })
 }
 
@@ -304,6 +331,12 @@ function FifthStep(user, setUser) {
           value={user.email}
         />
       </div>
+
+      <div className='is-flex is-justify-content-center mt-5 is-hidden' id='email-error'>
+        <article className='message is-danger is-flex' style={{ width: '18rem' }}>
+          <div className='message-body' style={{ textTransform: 'none', fontWeight: 400 }} />
+        </article>
+      </div>
     </>
   )
 }
@@ -394,7 +427,7 @@ export default function MyApp({ Component, pageProps }) {
         {step === 'firstStep' && FirstStep(currentUser, setCurrentUser)}
         {step === 'secondStep' && SecondStep(currentUser, setCurrentUser)}
         {step === 'thirdStep' && ThirdStep(date, setDate)}
-        {step === 'fourthStep' && FourthStep(currentUser, setCurrentUser)}
+        {/* {step === 'fourthStep' && FourthStep(currentUser, setCurrentUser)} */}
         {step === 'fifthStep' && FifthStep(currentUser, setCurrentUser)}
         {step === 'sixthStep' && SixthStep(currentUser, setCurrentUser)}
 
@@ -402,33 +435,39 @@ export default function MyApp({ Component, pageProps }) {
           {step === 'firstStep' && (
             <progress
               className='progress is-primary is-small'
-              value='16.7'
+              // value='16.7'
+              value='20'
               max='100'
               style={{ margin: 'auto', maxWidth: '18rem' }}
             >
-              16.7%
+              {/* 16.7% */}
+              20%
             </progress>
           )}
 
           {step === 'secondStep' && (
             <progress
               className='progress is-primary is-small'
-              value='33.4'
+              // value='33.4'
+              value='40'
               max='100'
               style={{ margin: 'auto', maxWidth: '18rem' }}
             >
-              33.4%
+              40%
+              {/* 33.4% */}
             </progress>
           )}
 
           {step === 'thirdStep' && (
             <progress
               className='progress is-primary is-small'
-              value='50.1'
+              value='60'
+              // value='50.1'
               max='100'
               style={{ margin: 'auto', maxWidth: '18rem' }}
             >
-              50.1%
+              {/* 50.1% */}
+              60%
             </progress>
           )}
 
@@ -446,11 +485,13 @@ export default function MyApp({ Component, pageProps }) {
           {step === 'fifthStep' && (
             <progress
               className='progress is-primary is-small'
-              value='83.5'
+              // value='80'
+              value='80'
               max='100'
               style={{ margin: 'auto', maxWidth: '18rem' }}
             >
-              83.5%
+              80%
+              {/* 83.5% */}
             </progress>
           )}
 
@@ -576,7 +617,7 @@ export default function MyApp({ Component, pageProps }) {
                       dateError.classList.add('is-hidden')
                       dateError.querySelector('div').textContent = ''
                       setCurrentUser({ ...currentUser, birthDate: date.date.toISOString() })
-                      setStep('fourthStep')
+                      setStep('fifthStep')
                     })
                     .catch((error) => {
                       dateError.querySelector('div').textContent = (error.errors && error.errors[0]) || error
@@ -610,12 +651,34 @@ export default function MyApp({ Component, pageProps }) {
               <button
                 className='button is-large is-primary is-light'
                 type='button'
-                onClick={() => setStep('fourthStep')}
+                onClick={() => setStep('thirdStep')}
               >
                 Voltar
               </button>
 
-              <button className='button is-large is-primary ml-5' onClick={() => setStep('sixthStep')}>
+              <button
+                className='button is-large is-primary ml-5'
+                onClick={(event) => {
+                  event.preventDefault()
+
+                  const emailError: HTMLDivElement = document.querySelector('#email-error')
+                  const schema = yup.object().shape({
+                    email: yup.string().required('Informe seu email').email('Email inválido'),
+                  })
+
+                  schema
+                    .validate({ email: currentUser.email })
+                    .then(() => {
+                      emailError.classList.add('is-hidden')
+                      emailError.querySelector('div').textContent = ''
+                      setStep('sixthStep')
+                    })
+                    .catch((error) => {
+                      emailError.querySelector('div').textContent = (error.errors && error.errors[0]) || error
+                      emailError.classList.remove('is-hidden')
+                    })
+                }}
+              >
                 Continuar
               </button>
             </>
@@ -632,7 +695,12 @@ export default function MyApp({ Component, pageProps }) {
                 Voltar
               </button>
 
-              <button className='button is-large is-primary ml-5 has-text-weight-semibold' id='create-account'>
+              <button
+                type='submit'
+                className='button is-large is-primary ml-5 has-text-weight-semibold'
+                id='create-account'
+                disabled
+              >
                 Criar conta
               </button>
             </>
