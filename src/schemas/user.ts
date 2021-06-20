@@ -22,7 +22,6 @@ const userSchema = new mongoose.Schema({
   },
   whatsapp: {
     type: String,
-    unique: [true, 'Esse número já está cadastrado'],
     select: false,
   },
   twitter: {
