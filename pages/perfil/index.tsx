@@ -1872,6 +1872,7 @@ export default function Index() {
                       document.querySelector('#find-nick-error').classList.add('is-hidden')
                       document.querySelector('#nickname-input').classList.remove('is-danger')
                       document.querySelector('#nickname-confirm').classList.remove('is-hidden')
+                      document.querySelector('#nickname-footer').classList.remove('is-hidden')
 
                       setLeagueAccount({
                         ...responseJson,
@@ -1922,7 +1923,7 @@ export default function Index() {
                 </form>
               </div>
             </div>
-            <footer className='card-footer'>
+            <footer className='card-footer is-hidden' id='nickname-footer'>
               <a
                 type='button'
                 className='card-footer-item'
