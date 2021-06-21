@@ -107,7 +107,7 @@ export default function Index() {
       } else {
         setProfile(profile)
         setName(profile.name)
-        setRole(profile.player.role)
+        if (profile.player.role) setRole(profile.player.role)
         setEmail(profile.email)
         setGender(profile.gender)
         setBirthDate(profile.birthDate.toString())
@@ -531,6 +531,8 @@ export default function Index() {
                       const button = document.querySelector('#role-save') as HTMLButtonElement
                       button.disabled = true
                       button.classList.add('is-loading')
+
+                      console.log(role)
 
                       await fetch(`/api/players/${profile.player._id}`, {
                         method: 'PATCH',
