@@ -75,7 +75,7 @@ function Card({ player }) {
                 />
               </figure>
             </div>
-            <div className='media-content' style={{ minHeight: '7.3rem' }}>
+            <div className='media-content' style={{ minHeight: '8.5rem' }}>
               <p className='title is-4' style={{ textTransform: 'none' }}>
                 {player.player.leagueAccounts[0].nickname}
               </p>
@@ -83,16 +83,17 @@ function Card({ player }) {
             </div>
           </div>
 
-          <div className='content' style={{ minHeight: '3rem' }}>
-            {player.player.city && player.player.state && `${player.player.city} - ${player.player.state}`}
+          {/* <div className='content' style={{ minHeight: '3rem' }}> */}
+          {/* {player.player.city && player.player.state && `${player.player.city} - ${player.player.state}`}
             <br />
-            {player.teams.length > 0 && <b>{player.teams[0].name}</b>}
-          </div>
+            {player.teams.length > 0 && <b>{player.teams[0].name}</b>} */}
+          {/* </div> */}
         </div>
 
         <footer className='card-footer'>
           <p className='card-header-title' style={{ justifyContent: 'center' }}>
-            {generateRankString(player.player.leagueAccounts[0])}
+            {/* {generateRankString(player.player.leagueAccounts[0])} */}
+            {player.teams.length > 0 ? <b>{player.teams[0].name}</b> : 'Free agent'}
           </p>
         </footer>
       </div>
