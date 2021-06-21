@@ -5,6 +5,33 @@ import { Team } from '../../../src/schemas/team'
 import { LeagueAccount } from '../../../src/schemas/leagueAccount'
 import jwt from 'jsonwebtoken'
 
+function eloWeigth(elo) {
+  switch (elo) {
+    case 'CHALLENGER':
+      return 11
+    case 'GRANDMASTER':
+      return 10
+    case 'MASTER':
+      return 9
+    case 'DIAMOND':
+      return 8
+    case 'PLATINUM':
+      return 7
+    case 'GOLD':
+      return 6
+    case 'SILVER':
+      return 5
+    case 'BRONZE':
+      return 4
+    case 'IRON':
+      return 3
+    case 'UNRANKED':
+      return 2
+    default:
+      return 1
+  }
+}
+
 export default async (request, response) => {
   const database = await connectToDatabase(process.env.MONGODB_URI)
 
@@ -20,6 +47,7 @@ export default async (request, response) => {
       let users = await User.find({})
         .populate({ path: 'player', populate: { path: 'leagueAccounts', model: LeagueAccount } })
         .populate({ path: 'teams', model: Team })
+        .sort({ name: 'ascending' })
         .exec()
 
       if (nickname) {
@@ -28,9 +56,16 @@ export default async (request, response) => {
         })
       }
 
+      const usersSortedByElo = users.sort((user, anotherUser) => {
+        const userElo = eloWeigth(user.player?.leagueAccounts[0]?.tier)
+        const anotherUserElo = eloWeigth(anotherUser.player?.leagueAccounts[0]?.tier)
+
+        return anotherUserElo - userElo
+      })
+
       database.close()
 
-      return response.status(200).json({ users })
+      return response.status(200).json({ users: usersSortedByElo })
     }
 
     case 'POST': {
