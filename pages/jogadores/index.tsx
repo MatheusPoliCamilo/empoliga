@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/navbar'
-import { generateRankString } from '../../services/generateRankString'
 import Cookie from 'js-cookie'
+// import { generateRankString } from '../../services/generateRankString'
 
 function chunkArray(array, chunkSize) {
   const chunks = []
