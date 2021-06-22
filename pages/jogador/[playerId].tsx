@@ -244,7 +244,7 @@ export default function Index() {
                   </h1>
 
                   <h1 className='title' id='name'>
-                    {profile && profile.name}
+                    {profile && profile.name.split(' ')[0]}
                   </h1>
 
                   <h1 className='title mt-1' id='role'>

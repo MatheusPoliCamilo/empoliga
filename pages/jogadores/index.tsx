@@ -52,8 +52,8 @@ function Card({ player }) {
     <a href={url}>
       <div className='card'>
         <header className='card-header'>
-          <p className='card-header-title' style={{ justifyContent: 'center' }}>
-            {player.player.role ? player.player.role : 'Preencher'}
+          <p className='card-header-title' style={{ justifyContent: 'center', textTransform: 'none' }}>
+            {player.player.leagueAccounts[0].nickname}
           </p>
         </header>
 
@@ -75,11 +75,8 @@ function Card({ player }) {
                 />
               </figure>
             </div>
-            <div className='media-content' style={{ minHeight: '8.5rem' }}>
-              <p className='title is-4' style={{ textTransform: 'none' }}>
-                {player.player.leagueAccounts[0].nickname}
-              </p>
-              <p className='subtitle is-6'>{player.name}</p>
+            <div className='media-content is-flex is-align-items-center' style={{ minHeight: '4.9rem' }}>
+              <p className='title is-4'>{player.player.role ? player.player.role : 'Preencher'}</p>
             </div>
           </div>
 

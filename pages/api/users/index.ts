@@ -5,30 +5,49 @@ import { Team } from '../../../src/schemas/team'
 import { LeagueAccount } from '../../../src/schemas/leagueAccount'
 import jwt from 'jsonwebtoken'
 
-function eloWeigth(elo) {
+function rankWeigth(rank) {
+  switch (rank) {
+    case 'I':
+      return 0.4
+    case 'II':
+      return 0.3
+    case 'III':
+      return 0.2
+    case 'IV':
+      return 0.1
+    default:
+      return 0
+  }
+}
+
+function calculateWeigth(rank, leaguePoints) {
+  return rankWeigth(rank) + (leaguePoints ? leaguePoints / 1000 : 0)
+}
+
+function eloWeigth(elo, rank, leaguePoints) {
   switch (elo) {
     case 'CHALLENGER':
-      return 11
+      return 11 + calculateWeigth(rank, leaguePoints)
     case 'GRANDMASTER':
-      return 10
+      return 10 + calculateWeigth(rank, leaguePoints)
     case 'MASTER':
-      return 9
+      return 9 + calculateWeigth(rank, leaguePoints)
     case 'DIAMOND':
-      return 8
+      return 8 + calculateWeigth(rank, leaguePoints)
     case 'PLATINUM':
-      return 7
+      return 7 + calculateWeigth(rank, leaguePoints)
     case 'GOLD':
-      return 6
+      return 6 + calculateWeigth(rank, leaguePoints)
     case 'SILVER':
-      return 5
+      return 5 + calculateWeigth(rank, leaguePoints)
     case 'BRONZE':
-      return 4
+      return 4 + calculateWeigth(rank, leaguePoints)
     case 'IRON':
-      return 3
+      return 3 + calculateWeigth(rank, leaguePoints)
     case 'UNRANKED':
-      return 2
+      return 2 + calculateWeigth(rank, leaguePoints)
     default:
-      return 1
+      return 1 + calculateWeigth(rank, leaguePoints)
   }
 }
 
@@ -57,8 +76,15 @@ export default async (request, response) => {
       }
 
       const usersSortedByElo = users.sort((user, anotherUser) => {
-        const userElo = eloWeigth(user.player?.leagueAccounts[0]?.tier)
-        const anotherUserElo = eloWeigth(anotherUser.player?.leagueAccounts[0]?.tier)
+        const userAccount = user.player?.leagueAccounts[0]
+        const anotherUserAccount = anotherUser.player?.leagueAccounts[0]
+
+        const userElo = eloWeigth(userAccount?.tier, userAccount?.rank, userAccount?.leaguePoints)
+        const anotherUserElo = eloWeigth(
+          anotherUserAccount?.tier,
+          anotherUserAccount?.rank,
+          anotherUserAccount?.leaguePoints
+        )
 
         return anotherUserElo - userElo
       })
