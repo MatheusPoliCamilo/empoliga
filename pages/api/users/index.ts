@@ -71,7 +71,13 @@ export default async (request, response) => {
 
       if (nickname) {
         users = users.filter((user) => {
-          return user.player?.leagueAccounts[0]?.nickname === nickname
+          const userNickname = user.player?.leagueAccounts[0]?.nickname
+
+          if (userNickname) {
+            return userNickname.toLowerCase().includes(nickname.toLowerCase())
+          }
+
+          return false
         })
       }
 
