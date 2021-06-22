@@ -466,21 +466,26 @@ export default function Index() {
                       button.disabled = true
                       button.classList.add('is-loading')
 
-                      await fetch(`/api/users/${profile._id}`, {
-                        method: 'PATCH',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ name }),
-                      })
+                      if (name) {
+                        await fetch(`/api/users/${profile._id}`, {
+                          method: 'PATCH',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({ name }),
+                        })
 
-                      setProfile({ ...profile, name })
+                        setProfile({ ...profile, name })
 
-                      const user = JSON.parse(Cookie.get('currentUser'))
-                      Cookie.set('currentUser', { ...user, name }, { expires: addDays(new Date(), 1) })
+                        const user = JSON.parse(Cookie.get('currentUser'))
+                        Cookie.set('currentUser', { ...user, name }, { expires: addDays(new Date(), 1) })
 
-                      document.querySelector('#name-form').classList.add('is-hidden')
-                      document.querySelector('#name').classList.remove('is-hidden')
+                        document.querySelector('#name-form').classList.add('is-hidden')
+                        document.querySelector('#name').classList.remove('is-hidden')
+                        document.querySelector('#name-input').classList.remove('is-danger')
+                      } else {
+                        document.querySelector('#name-input').classList.add('is-danger')
+                      }
 
                       button.disabled = false
                       button.classList.remove('is-loading')
@@ -489,9 +494,10 @@ export default function Index() {
                     <input
                       type='text'
                       className='input is-medium'
-                      placeholder='Digite seu nome completo'
+                      placeholder='Digite seu nome'
                       value={name}
                       autoFocus
+                      id='name-input'
                       onChange={(event) => setName(event.target.value)}
                     />
                     <button className='button is-primary is-medium ml-2' id='name-save'>
@@ -503,6 +509,7 @@ export default function Index() {
                       onClick={() => {
                         document.querySelector('#name-form').classList.add('is-hidden')
                         document.querySelector('#name').classList.remove('is-hidden')
+                        document.querySelector('#name-input').classList.remove('is-danger')
                       }}
                     >
                       Cancelar
