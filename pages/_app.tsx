@@ -20,6 +20,13 @@ export default function MyApp({ Component, pageProps }) {
         <link rel='manifest' href='/site.webmanifest' />
         <link rel='mask-icon' href='/safari-pinned-tab.svg' color='#b27826' />
 
+        <meta
+          name='description'
+          content='Empoliga é um campeonato amador de League of Legends que busca sair dos moldes de torneios de tiro 
+          curto e faz com que equipes e jogadores se sintam num ambiente competitivo similar ao profissional, com 
+          transmissões, rivalidades, contratações, calendário, acesso e rebaixamento.'
+        />
+
         <meta name='msapplication-TileColor' content='#da532c' />
         <meta name='msapplication-TileImage' content='/mstile-144x144.png' />
         <meta name='theme-color' content='#ff0000' />
