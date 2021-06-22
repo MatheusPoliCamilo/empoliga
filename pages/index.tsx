@@ -96,7 +96,7 @@ export default function Index() {
               src='/tradicional.svg'
               width={200}
               height={200}
-              alt='Logo da Empoliga'
+              alt='Logo da Empoliga Tradicional'
               title='Empoliga Tradicional'
             />
           </div>
@@ -104,11 +104,11 @@ export default function Index() {
 
         <div className='pt-5 is-flex is-justify-content-space-around'>
           <div className='fix-scale' title='Empoliga Minor'>
-            <Image src='/minor.svg' width={200} height={200} alt='Logo da Empoliga' />
+            <Image src='/minor.svg' width={200} height={200} alt='Logo da Empoliga Minor' title='Empoliga Minor' />
           </div>
           <div style={{ height: '200px', width: '200px' }} />
           <div>
-            <Image src='/major.svg' width={200} height={200} alt='Logo da Empoliga' title='Empoliga Major' />
+            <Image src='/major.svg' width={200} height={200} alt='Logo da Empoliga Major' title='Empoliga Major' />
           </div>
         </div>
       </div>
