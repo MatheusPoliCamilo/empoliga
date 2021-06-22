@@ -80,6 +80,11 @@ function handleSubmit(event, user) {
           console.log('Data:', data)
           if (data.name === 'MongoError' || data.errors || Object.keys(data).length === 0) {
             console.log('Errors:', data.errors)
+
+            if (data?.keyValue?.email) {
+              errorMessage.textContent = 'Erro: E-mail já cadastrado!'
+              errorMessage.classList.remove('is-hidden')
+            }
           } else {
             Cookie.set('token', data.token, { expires: addDays(new Date(), 1) })
             Cookie.set('currentUser', data.user, { expires: addDays(new Date(), 1) })
