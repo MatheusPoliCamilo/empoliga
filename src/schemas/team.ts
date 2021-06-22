@@ -13,7 +13,6 @@ const teamSchema = new mongoose.Schema({
   },
   logo: {
     type: String,
-    required: [true, 'Informe a logo da equipe'],
   },
   captain: {
     type: mongoose.Schema.Types.ObjectId,

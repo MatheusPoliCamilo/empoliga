@@ -24,7 +24,7 @@ function Card({ team }) {
 
         <div className='card-image'>
           <figure className='image is-1by1'>
-            <img src={team.logo} alt='Logo do time' />
+            <img src={team.logo} className='has-background-grey-lighter' />
           </figure>
         </div>
 
@@ -33,7 +33,7 @@ function Card({ team }) {
             <p className='title is-4' style={{ textTransform: 'none' }}>
               Capitão
             </p>
-            <p className='subtitle is-6'>{team.captain.name}</p>
+            <p className='subtitle is-6'>{team.captain.player.leagueAccounts[0].nickname}</p>
           </div>
         </div>
       </div>
