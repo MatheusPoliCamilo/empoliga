@@ -46,7 +46,7 @@ function Card({ player }) {
 
   useEffect(() => {
     setUrl(currentUser._id === player._id ? '/perfil' : `/jogador/${player._id}`)
-  }, [currentUser])
+  }, [player])
 
   return (
     <a href={url}>
