@@ -45,7 +45,8 @@ export default function Index() {
               document.querySelector('#create-team').classList.add('is-loading')
 
               const fileInput = document.querySelector('#logo') as HTMLInputElement
-              let logo
+              const acronym = (document.querySelector('#acronym') as HTMLInputElement).value
+              const name = (document.querySelector('#name') as HTMLInputElement).value
 
               if (fileInput.files.length > 0) {
                 const file = (document.querySelector('#logo') as HTMLInputElement).files[0]
@@ -62,33 +63,45 @@ export default function Index() {
                   .then((response) => response.json())
                   .then(async (data) => {
                     if (data.secure_url !== '') {
-                      logo = data.secure_url
+                      await fetch(`/api/teams`, {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ logo: data.secure_url, acronym, name, captain: currentUser._id }),
+                      }).then((response) => {
+                        response
+                          .json()
+                          .then(({ team }) => {
+                            window.location.href = `/equipe/${team._id}`
+                          })
+                          .catch((error) => {
+                            console.log(error)
+                          })
+                      })
                     }
                   })
                   .catch((err) => {
                     console.error(err)
                   })
+              } else {
+                await fetch(`/api/teams`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ acronym, name, captain: currentUser._id }),
+                }).then((response) => {
+                  response
+                    .json()
+                    .then(({ team }) => {
+                      window.location.href = `/equipe/${team._id}`
+                    })
+                    .catch((error) => {
+                      console.log(error)
+                    })
+                })
               }
-
-              const acronym = (document.querySelector('#acronym') as HTMLInputElement).value
-              const name = (document.querySelector('#name') as HTMLInputElement).value
-
-              await fetch(`/api/teams`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ logo, acronym, name, captain: currentUser._id }),
-              }).then((response) => {
-                response
-                  .json()
-                  .then(({ team }) => {
-                    window.location.href = `/equipe/${team._id}`
-                  })
-                  .catch((error) => {
-                    console.log(error)
-                  })
-              })
             }}
           >
             <div className='field'>
