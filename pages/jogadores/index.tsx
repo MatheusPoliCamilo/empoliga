@@ -63,8 +63,8 @@ function Card({ player }) {
           </figure>
         </div>
 
-        <div className='card-content pt-3 pl-4'>
-          <div className='media mb-2'>
+        <div className='card-content is-flex is-justify-content-center'>
+          <div className='media'>
             <div className='media-left'>
               <figure className='image' style={{ height: '50px', width: '63px' }}>
                 <img

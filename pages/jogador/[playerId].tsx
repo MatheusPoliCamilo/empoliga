@@ -251,10 +251,11 @@ export default function Index() {
                     {profile && profile.player.role ? profile.player.role : 'Preencher'}
                   </h1>
 
-                  {/* TODO: Time/Free agent */}
-                  {/* <h1 className='title mt-1'>
-                    <a href=''>paiN Gaming</a>
-                  </h1> */}
+                  {profile?.teams?.length > 0 && (
+                    <h1 className='title mt-1'>
+                      <a href={`/equipe/${profile.teams[0]._id}`}>{profile.teams[0].name}</a>
+                    </h1>
+                  )}
                 </div>
               </div>
 
