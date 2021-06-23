@@ -116,7 +116,7 @@ function Navbar() {
                     Sair
                   </button>
                   <a href='/perfil' className='button is-primary p-5 ml-1'>
-                    {user.name}
+                    Minha conta
                   </a>
                 </>
               ) : (

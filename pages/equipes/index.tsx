@@ -60,8 +60,8 @@ function Invite({ teamInvites, currentUserId, setCurrentUser }) {
       <div className='columns' key={key}>
         <a href={`/equipe/${team._id}`}>
           <div className='column is-one-fifth'>
-            <figure className='image' style={{ height: '4rem', width: '4rem' }}>
-              <img src={team.logo} alt='Logo do time' />
+            <figure className='image has-background-grey-lighter' style={{ height: '4rem', width: '4rem' }}>
+              <img src={team.logo} />
             </figure>
           </div>
         </a>
