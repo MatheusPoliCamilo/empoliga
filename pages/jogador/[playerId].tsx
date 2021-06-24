@@ -259,13 +259,13 @@ export default function Index() {
 
               <div className='columns'>
                 <div className='column pt-0'>
-                  <label className='label mt-0' style={{ fontWeight: 'bolder' }}>
+                  {/* <label className='label mt-0' style={{ fontWeight: 'bolder' }}>
                     E-mail
                   </label>
 
                   <h1 className='title is-4 mt-0' id='email'>
                     {profile && profile.email}
-                  </h1>
+                  </h1> */}
 
                   <label className='label' style={{ fontWeight: 'bolder' }}>
                     Gênero
