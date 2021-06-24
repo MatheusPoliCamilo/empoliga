@@ -49,9 +49,12 @@ function Card({ player }) {
 
   return (
     <a href={url}>
-      <div className='card'>
+      <div className='card on-hover-grow'>
         <header className='card-header'>
-          <p className='card-header-title' style={{ justifyContent: 'center', textTransform: 'none' }}>
+          <p
+            className='card-header-title'
+            style={{ justifyContent: 'center', textTransform: 'none', minHeight: '4.5rem' }}
+          >
             {player.player.leagueAccounts[0].nickname}
           </p>
         </header>
@@ -62,10 +65,10 @@ function Card({ player }) {
           </figure>
         </div>
 
-        <div className='card-content is-flex is-justify-content-center'>
-          <div className='media'>
-            <div className='media-left'>
-              <figure className='image' style={{ height: '50px', width: '63px' }}>
+        <div className='card-content is-flex is-justify-content-center p-4'>
+          <div>
+            <div className='is-flex is-justify-content-center'>
+              <figure className='image mb-4 is-64x64'>
                 <img
                   src={`/elo/${
                     player.player.leagueAccounts[0].tier ? player.player.leagueAccounts[0].tier : 'UNRANKED'
@@ -74,8 +77,10 @@ function Card({ player }) {
                 />
               </figure>
             </div>
-            <div className='media-content is-flex is-align-items-center' style={{ minHeight: '4.9rem' }}>
-              <p className='title is-4'>{player.player.role ? player.player.role : 'Preencher'}</p>
+            <div className='is-flex is-justify-content-center'>
+              <p className='title is-4' style={{ textAlign: 'center' }}>
+                {player.player.role ? player.player.role : 'Preencher'}
+              </p>
             </div>
           </div>
 
@@ -87,7 +92,7 @@ function Card({ player }) {
         </div>
 
         <footer className='card-footer'>
-          <p className='card-header-title' style={{ justifyContent: 'center' }}>
+          <p className='card-header-title' style={{ justifyContent: 'center', textAlign: 'center', minHeight: '6rem' }}>
             {/* {generateRankString(player.player.leagueAccounts[0])} */}
             {player.teams.length > 0 ? <b>{player.teams[0].name}</b> : 'Free agent'}
           </p>
