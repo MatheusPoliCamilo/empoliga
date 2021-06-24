@@ -264,7 +264,9 @@ export default function Index() {
             <div className='content'>
               <div className='is-flex'>
                 <figure
-                  className='image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter grow-hover'
+                  className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter grow-hover ${
+                    profilePicture ? '' : 'is-hidden'
+                  }`}
                   style={{
                     cursor: 'pointer',
                     width: '20rem',
