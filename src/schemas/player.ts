@@ -9,7 +9,20 @@ const playerSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['Top', 'Jungle', 'Mid', 'Adc', 'Support'],
+    enum: [
+      'Top',
+      'Jungle',
+      'Mid',
+      'Adc',
+      'Support',
+      'Analista',
+      'Psicólogo',
+      'Coach',
+      'Head Coach',
+      'Positional Coach',
+      'Caster',
+      'Comentarista',
+    ],
   },
   address: {
     type: String,

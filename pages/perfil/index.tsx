@@ -568,6 +568,13 @@ export default function Index() {
                         <option value='Mid'>Mid</option>
                         <option value='Adc'>Adc</option>
                         <option value='Support'>Support</option>
+                        <option value='Analista'>Analista</option>
+                        <option value='Psicólogo'>Psicólogo</option>
+                        <option value='Coach'>Coach</option>
+                        <option value='Head Coach'>Head Coach</option>
+                        <option value='Positional Coach'>Positional Coach</option>
+                        <option value='Caster'>Caster</option>
+                        <option value='Comentarista'>Comentarista</option>
                       </select>
                     </div>
 
@@ -600,7 +607,10 @@ export default function Index() {
                 <div className='column pt-0'>
                   <label className='label mt-0' style={{ fontWeight: 'bolder' }}>
                     E-mail
-                    <span className='ml-1 icon is-small has-text-link-dark' title='Seu e-mail só aparece para você'>
+                    <span
+                      className='ml-1 icon is-small has-text-link-dark'
+                      title='Seu e-mail só aparece para você e para a staff'
+                    >
                       <svg
                         aria-hidden='true'
                         focusable='false'
