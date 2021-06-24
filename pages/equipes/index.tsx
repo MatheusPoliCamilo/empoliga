@@ -16,24 +16,28 @@ function Card({ team }) {
   return (
     <a href={`/equipe/${team._id}`}>
       <div className='card'>
-        <header className='card-header'>
+        <header className='card-header' style={{ minHeight: '4.5rem' }}>
           <p className='card-header-title' style={{ justifyContent: 'center' }}>
             [{team.acronym}] {team.name}
           </p>
         </header>
 
         <div className='card-image'>
-          <figure className='image is-1by1'>
-            <img src={team.logo} className='has-background-grey-lighter' />
-          </figure>
+          {team.logo && (
+            <figure className='image is-1by1'>
+              <img src={team.logo} />
+            </figure>
+          )}
+
+          {!team.logo && <figure className='image is-1by1' />}
         </div>
 
         <div className='card-content'>
-          <div className='content'>
-            <p className='title is-4' style={{ textTransform: 'none' }}>
+          <div className='content' style={{ minHeight: '3.1rem' }}>
+            <p className='subtitle is-6' style={{ textTransform: 'none' }}>
               Capitão
             </p>
-            <p className='subtitle is-6'>{team.captain.player.leagueAccounts[0].nickname}</p>
+            <p className='title is-5 pt-1'>{team.captain.player.leagueAccounts[0]?.nickname}</p>
           </div>
         </div>
       </div>
@@ -60,7 +64,7 @@ function Invite({ teamInvites, currentUserId, setCurrentUser }) {
       <div className='columns' key={key}>
         <a href={`/equipe/${team._id}`}>
           <div className='column is-one-fifth'>
-            <figure className='image has-background-grey-lighter' style={{ height: '4rem', width: '4rem' }}>
+            <figure className='image has-background-white' style={{ height: '4rem', width: '4rem' }}>
               <img src={team.logo} />
             </figure>
           </div>

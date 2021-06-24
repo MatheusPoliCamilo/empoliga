@@ -14,26 +14,14 @@ function Player({ teamPlayer, captain, currentUser }) {
       <div className='columns'>
         <div className='column has-text-centered'>
           <div>
-            <figure
-              className='image m-0 is-flex is-flex-direction-column is-justify-content-center'
-              style={{
-                width: '6rem',
-                minWidth: '6rem',
-                height: '6rem',
-                maxHeight: '6rem',
-              }}
-            >
-              <img
-                className='is-rounded'
-                src={teamPlayer.player.player.profilePicture}
-                style={{ maxHeight: '20rem' }}
-              />
+            <figure className='image is-96x96 m-0 is-flex is-flex-direction-column is-justify-content-center'>
+              <img className='is-rounded' src={teamPlayer.player.player.profilePicture} />
             </figure>
           </div>
         </div>
 
         <div className='column is-flex is-flex-direction-column is-justify-content-center has-text-centered'>
-          <p className='title'>{teamPlayer.player.player.leagueAccounts[0].nickname}</p>
+          <p className='title'>{teamPlayer?.player?.player?.leagueAccounts[0]?.nickname}</p>
         </div>
 
         <div className='column is-flex is-flex-direction-column is-justify-content-center has-text-centered'>

@@ -219,9 +219,7 @@ export default function Index() {
             <div className='content'>
               <div className='is-flex'>
                 <figure
-                  className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter ${
-                    profile && profile.player.profilePicture ? '' : 'is-hidden'
-                  }`}
+                  className='image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter'
                   style={{
                     width: '20rem',
                     minWidth: '20rem',
@@ -261,13 +259,13 @@ export default function Index() {
 
               <div className='columns'>
                 <div className='column pt-0'>
-                  <label className='label mt-0' style={{ fontWeight: 'bolder' }}>
+                  {/* <label className='label mt-0' style={{ fontWeight: 'bolder' }}>
                     E-mail
                   </label>
 
                   <h1 className='title is-4 mt-0' id='email'>
                     {profile && profile.email}
-                  </h1>
+                  </h1> */}
 
                   <label className='label' style={{ fontWeight: 'bolder' }}>
                     Gênero

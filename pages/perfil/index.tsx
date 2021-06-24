@@ -264,9 +264,7 @@ export default function Index() {
             <div className='content'>
               <div className='is-flex'>
                 <figure
-                  className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter grow-hover ${
-                    profile && profile.player.profilePicture ? '' : 'is-hidden'
-                  }`}
+                  className='image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter grow-hover'
                   style={{
                     cursor: 'pointer',
                     width: '20rem',
@@ -570,6 +568,13 @@ export default function Index() {
                         <option value='Mid'>Mid</option>
                         <option value='Adc'>Adc</option>
                         <option value='Support'>Support</option>
+                        <option value='Analista'>Analista</option>
+                        <option value='Psicólogo'>Psicólogo</option>
+                        <option value='Coach'>Coach</option>
+                        <option value='Head Coach'>Head Coach</option>
+                        <option value='Positional Coach'>Positional Coach</option>
+                        <option value='Caster'>Caster</option>
+                        <option value='Comentarista'>Comentarista</option>
                       </select>
                     </div>
 
@@ -602,6 +607,27 @@ export default function Index() {
                 <div className='column pt-0'>
                   <label className='label mt-0' style={{ fontWeight: 'bolder' }}>
                     E-mail
+                    <span
+                      className='ml-1 icon is-small has-text-link-dark'
+                      title='Seu e-mail só aparece para você e para a staff'
+                    >
+                      <svg
+                        aria-hidden='true'
+                        focusable='false'
+                        data-prefix='fas'
+                        data-icon='info-circle'
+                        role='img'
+                        xmlns='http://www.w3.org/2000/svg'
+                        viewBox='0 0 512 512'
+                        className='svg-inline--fa fa-info-circle fa-w-16 fa-3x'
+                      >
+                        <path
+                          fill='currentColor'
+                          d='M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z'
+                          className=''
+                        />
+                      </svg>
+                    </span>
                   </label>
 
                   <h1
