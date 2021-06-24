@@ -15,16 +15,16 @@ function chunkArray(array, chunkSize) {
 function Card({ team }) {
   return (
     <a href={`/equipe/${team._id}`}>
-      <div className='card'>
-        <header className='card-header' style={{ minHeight: '4.5rem' }}>
-          <p className='card-header-title' style={{ justifyContent: 'center' }}>
+      <div className='card on-hover-grow'>
+        <header className='card-header' style={{ minHeight: '5.5rem' }}>
+          <p className='card-header-title p-2' style={{ justifyContent: 'center', textAlign: 'center' }}>
             [{team.acronym}] {team.name}
           </p>
         </header>
 
         <div className='card-image'>
           {team.logo && (
-            <figure className='image is-1by1'>
+            <figure className='image is-1by1 has-background-white'>
               <img src={team.logo} />
             </figure>
           )}
@@ -32,8 +32,8 @@ function Card({ team }) {
           {!team.logo && <figure className='image is-1by1' />}
         </div>
 
-        <div className='card-content'>
-          <div className='content' style={{ minHeight: '3.1rem' }}>
+        <div className='card-content p-4'>
+          <div className='content' style={{ minHeight: '4rem' }}>
             <p className='subtitle is-6' style={{ textTransform: 'none' }}>
               Capitão
             </p>
