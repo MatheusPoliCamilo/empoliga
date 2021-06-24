@@ -14,10 +14,12 @@ export function generateRankString({ rank, tier, leaguePoints }) {
       return `Platina ${rank}`
     case 'DIAMOND':
       return `Diamante ${rank}`
+    case 'MASTER':
+      return `Mestre - ${leaguePoints} PDL`
     case 'GRANDMASTER':
-      return `Grão Mestre ${leaguePoints} PDL`
+      return `Grão Mestre - ${leaguePoints} PDL`
     case 'CHALLENGER':
-      return `Desafiante ${leaguePoints} PDL`
+      return `Desafiante - ${leaguePoints} PDL`
     default:
       return ''
   }
