@@ -23,9 +23,13 @@ function Card({ team }) {
         </header>
 
         <div className='card-image'>
-          <figure className='image is-1by1'>
-            <img src={team.logo} className='has-background-grey-lighter' />
-          </figure>
+          {team.logo && (
+            <figure className='image is-1by1'>
+              <img src={team.logo} />
+            </figure>
+          )}
+
+          {!team.logo && <figure className='image is-1by1' />}
         </div>
 
         <div className='card-content'>
@@ -60,7 +64,7 @@ function Invite({ teamInvites, currentUserId, setCurrentUser }) {
       <div className='columns' key={key}>
         <a href={`/equipe/${team._id}`}>
           <div className='column is-one-fifth'>
-            <figure className='image has-background-grey-lighter' style={{ height: '4rem', width: '4rem' }}>
+            <figure className='image has-background-white' style={{ height: '4rem', width: '4rem' }}>
               <img src={team.logo} />
             </figure>
           </div>
