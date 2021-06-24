@@ -16,7 +16,7 @@ function Card({ team }) {
   return (
     <a href={`/equipe/${team._id}`}>
       <div className='card'>
-        <header className='card-header'>
+        <header className='card-header' style={{ minHeight: '4.5rem' }}>
           <p className='card-header-title' style={{ justifyContent: 'center' }}>
             [{team.acronym}] {team.name}
           </p>
@@ -29,7 +29,7 @@ function Card({ team }) {
         </div>
 
         <div className='card-content'>
-          <div className='content'>
+          <div className='content' style={{ minHeight: '3.1rem' }}>
             <p className='title is-4' style={{ textTransform: 'none' }}>
               Capitão
             </p>
