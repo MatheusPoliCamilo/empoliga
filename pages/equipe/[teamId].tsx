@@ -83,7 +83,7 @@ export default function Index() {
               <div className='content'>
                 <div className='is-flex p-2 mb-5' style={{ border: '1px solid lightgray' }}>
                   <figure
-                    className='image ml-0 mt-0 mb-0 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter'
+                    className='image ml-0 mt-0 mb-0 is-flex is-flex-direction-column is-justify-content-center'
                     style={{
                       width: '6rem',
                       minWidth: '6rem',
