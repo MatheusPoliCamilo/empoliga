@@ -15,8 +15,7 @@ function chunkArray(array, chunkSize) {
 
 function takeCards(users) {
   return users.filter((user) => {
-    const validUser =
-      user.gender && user.birthDate && user.name && user.email && user.player && user.player.profilePicture
+    const validUser = user.gender && user.birthDate && user.name && user.email && user.player
     const player = user.player
 
     if (validUser) {
@@ -59,7 +58,7 @@ function Card({ player }) {
 
         <div className='card-image'>
           <figure className='image is-1by1'>
-            <img src={player.player.profilePicture} alt='Placeholder image' />
+            {player.player.profilePicture && <img src={player.player.profilePicture} />}
           </figure>
         </div>
 
