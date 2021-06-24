@@ -30,10 +30,10 @@ function Card({ team }) {
 
         <div className='card-content'>
           <div className='content' style={{ minHeight: '3.1rem' }}>
-            <p className='title is-4' style={{ textTransform: 'none' }}>
+            <p className='subtitle is-6' style={{ textTransform: 'none' }}>
               Capitão
             </p>
-            <p className='subtitle is-6'>{team.captain.player.leagueAccounts[0]?.nickname}</p>
+            <p className='title is-5 pt-1'>{team.captain.player.leagueAccounts[0]?.nickname}</p>
           </div>
         </div>
       </div>
