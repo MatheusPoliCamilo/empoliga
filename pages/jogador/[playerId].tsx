@@ -219,7 +219,7 @@ export default function Index() {
             <div className='content'>
               <div className='is-flex'>
                 <figure
-                  className='image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter'
+                  className='image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center'
                   style={{
                     width: '20rem',
                     minWidth: '20rem',
@@ -227,7 +227,7 @@ export default function Index() {
                   }}
                   id='profile-picture'
                 >
-                  <img src={`${profilePicture}`} style={{ maxHeight: '20rem' }} />
+                  {profilePicture && <img src={`${profilePicture}`} style={{ maxHeight: '20rem' }} />}
                 </figure>
 
                 <div className='ml-4'>
