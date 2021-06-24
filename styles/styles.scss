@@ -36,6 +36,14 @@
   }
 }
 
+.on-hover-grow-03 {
+  transition: all .2s ease-in-out;
+  
+  &:hover {
+    transform: scale(1.03);
+  }
+}
+
 .grow-hover {
   transition: all .2s ease-in-out;
   

@@ -10,8 +10,8 @@ async function fetchTeam(teamId) {
 
 function Player({ teamPlayer, captain, currentUser }) {
   return (
-    <a href={teamPlayer.player._id === currentUser._id ? '/perfil' : `/jogador/${teamPlayer.player._id}`}>
-      <div className='columns'>
+    <a href={teamPlayer.player._id === currentUser._id ? '/perfil' : `/jogador/${teamPlayer.player._id}`} className=''>
+      <div className='columns on-hover-grow-03'>
         <div className='column has-text-centered'>
           <div>
             <figure className='image is-96x96 m-0 is-flex is-flex-direction-column is-justify-content-center'>
