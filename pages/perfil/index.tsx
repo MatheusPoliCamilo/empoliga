@@ -1973,57 +1973,57 @@ export default function Index() {
                   const response = await fetch(`api/riot/summoner?nickname=${leagueAccount.name}`)
                   const { profileIconId } = await response.json()
 
-                  if (profileIconId === leagueAccount.confirmationIconId) {
-                    await fetch(`/api/leagueAccounts/${profile.player.leagueAccounts[0]._id}`, {
-                      method: 'PATCH',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({
-                        summonerId: leagueAccount.id,
-                        accountId: leagueAccount.accountId,
-                        puuid: leagueAccount.puuid,
-                        nickname: leagueAccount.name,
-                        leaguePoints: leagueAccount.leaguePoints ? leagueAccount.leaguePoints : 0,
-                        wins: leagueAccount.wins ? leagueAccount.wins : 0,
-                        losses: leagueAccount.losses ? leagueAccount.losses : 0,
-                        tier: leagueAccount.tier ? leagueAccount.tier : 'UNRANKED',
-                        rank: leagueAccount.rank ? leagueAccount.rank : '',
-                      }),
-                    })
+                  // if (profileIconId === leagueAccount.confirmationIconId) {
+                  await fetch(`/api/leagueAccounts/${profile.player.leagueAccounts[0]._id}`, {
+                    method: 'PATCH',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      summonerId: leagueAccount.id,
+                      accountId: leagueAccount.accountId,
+                      puuid: leagueAccount.puuid,
+                      nickname: leagueAccount.name,
+                      leaguePoints: leagueAccount.leaguePoints ? leagueAccount.leaguePoints : 0,
+                      wins: leagueAccount.wins ? leagueAccount.wins : 0,
+                      losses: leagueAccount.losses ? leagueAccount.losses : 0,
+                      tier: leagueAccount.tier ? leagueAccount.tier : 'UNRANKED',
+                      rank: leagueAccount.rank ? leagueAccount.rank : '',
+                    }),
+                  })
 
-                    setProfile({
-                      ...profile,
-                      player: {
-                        ...profile.player,
-                        leagueAccounts: [
-                          {
-                            ...profile.player.leagueAccounts[0],
-                            nickname: leagueAccount.name,
-                            tier: leagueAccount.tier ? leagueAccount.tier : 'UNRANKED',
-                            rank: leagueAccount.rank ? leagueAccount.rank : '',
-                            wins: leagueAccount.wins ? leagueAccount.wins : 0,
-                            losses: leagueAccount.losses ? leagueAccount.losses : 0,
-                            leaguePoints: leagueAccount.leaguePoints ? leagueAccount.leaguePoints : 0,
-                          },
-                        ],
-                      },
-                    })
+                  setProfile({
+                    ...profile,
+                    player: {
+                      ...profile.player,
+                      leagueAccounts: [
+                        {
+                          ...profile.player.leagueAccounts[0],
+                          nickname: leagueAccount.name,
+                          tier: leagueAccount.tier ? leagueAccount.tier : 'UNRANKED',
+                          rank: leagueAccount.rank ? leagueAccount.rank : '',
+                          wins: leagueAccount.wins ? leagueAccount.wins : 0,
+                          losses: leagueAccount.losses ? leagueAccount.losses : 0,
+                          leaguePoints: leagueAccount.leaguePoints ? leagueAccount.leaguePoints : 0,
+                        },
+                      ],
+                    },
+                  })
 
-                    buttonLoading.classList.add('is-hidden')
-                    button.classList.remove('is-hidden')
+                  buttonLoading.classList.add('is-hidden')
+                  button.classList.remove('is-hidden')
 
-                    document.querySelector('#add-account-button').classList.add('is-hidden')
-                    document.querySelector('#nickname-cancel').classList.add('is-hidden')
-                    document.querySelector('#nickname-error').classList.add('is-hidden')
-                    document.querySelector('#player-nick').classList.remove('is-hidden')
+                  document.querySelector('#add-account-button').classList.add('is-hidden')
+                  document.querySelector('#nickname-cancel').classList.add('is-hidden')
+                  document.querySelector('#nickname-error').classList.add('is-hidden')
+                  document.querySelector('#player-nick').classList.remove('is-hidden')
 
-                    closeLeagueAccountModal()
-                  } else {
-                    document.querySelector('#nickname-error').classList.remove('is-hidden')
-                    buttonLoading.classList.add('is-hidden')
-                    button.classList.remove('is-hidden')
-                  }
+                  closeLeagueAccountModal()
+                  // } else {
+                  //   document.querySelector('#nickname-error').classList.remove('is-hidden')
+                  //   buttonLoading.classList.add('is-hidden')
+                  //   button.classList.remove('is-hidden')
+                  // }
                 }}
               >
                 Salvar
