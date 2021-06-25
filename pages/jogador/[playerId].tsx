@@ -549,7 +549,8 @@ export default function Index() {
             !currentUser.teams[0].invites.includes(playerId) && (
               <footer className='card-footer'>
                 <a
-                  className='card-footer-item'
+                  className='card-footer-item has-background-primary has-text-white'
+                  style={{ borderRadius: '0px 0px 4px 4px' }}
                   id='contratar'
                   onClick={() => {
                     const button = document.querySelector('#contratar')
