@@ -180,6 +180,10 @@ export default function Index() {
                 <label className='label'>Jogador</label>
                 <div className='control is-flex'>
                   <input className='input is-large' type='text' id='nickname' placeholder='Digite o nick' />
+
+                  <button className='button is-large is-primary is-loading ml-3' id='search-button' disabled>
+                    Pesquisar
+                  </button>
                 </div>
               </div>
 
@@ -206,14 +210,6 @@ export default function Index() {
                   </label>
                 </div>
               </div> */}
-
-              <div className='field is-grouped'>
-                <div className='control'>
-                  <button className='button is-medium is-primary is-loading' id='search-button' disabled>
-                    Pesquisar
-                  </button>
-                </div>
-              </div>
             </form>
           </div>
 
