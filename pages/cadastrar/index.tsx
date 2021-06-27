@@ -610,10 +610,10 @@ export default function MyApp({ Component, pageProps }) {
                     return
                   }
 
-                  const date = new Date(`${year}-${month}-${day}`)
+                  const date = new Date(`${year}/${month}/${day}`)
 
                   const schema = yup.object().shape({
-                    date: yup.date().required(),
+                    date: yup.date().required('Informe sua data de nascimento').typeError('Data inválida'),
                   })
 
                   schema
