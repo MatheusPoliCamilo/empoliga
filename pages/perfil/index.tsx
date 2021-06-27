@@ -786,7 +786,7 @@ export default function Index() {
                       button.disabled = true
                       button.classList.add('is-loading')
 
-                      const birthDate = new Date(`${date.year}-${date.month}-${date.day}`).toISOString()
+                      const birthDate = new Date(`${date.year}/${date.month}/${date.day}`).toISOString()
 
                       await fetch(`/api/users/${profile._id}`, {
                         method: 'PATCH',
