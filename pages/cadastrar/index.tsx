@@ -613,7 +613,7 @@ export default function MyApp({ Component, pageProps }) {
                   const date = new Date(`${year}-${month}-${day}`)
 
                   const schema = yup.object().shape({
-                    date: yup.date().required('Informe sua data de nascimento'),
+                    date: yup.date().required('Informe sua data de nascimento').nullable(),
                   })
 
                   schema
