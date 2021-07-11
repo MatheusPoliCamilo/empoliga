@@ -334,6 +334,7 @@ export default function Index() {
                     className='input is-large'
                     value={profilePicture}
                     onChange={(event) => setProfilePicture(event.target.value)}
+                    placeholder='Link da foto de perfil'
                   />
 
                   <div className='field is-grouped is-grouped-centered mt-2'>

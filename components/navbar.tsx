@@ -46,10 +46,7 @@ function Navbar() {
             <a className='navbar-link pl-5'>Ligas</a>
 
             <div className='navbar-dropdown'>
-              <a
-                className='navbar-item'
-                href='https://empolgouesportshome.wordpress.com/2021/07/02/tabela-empoliga-major-a-2021-1/'
-              >
+              <a className='navbar-item' href='https://bit.ly/majora2021-2'>
                 Major A
               </a>
               <a
