@@ -42,19 +42,31 @@ function Navbar() {
 
       <div id='empoliga-navbar' className={active ? 'navbar-menu is-active' : 'navbar-menu'}>
         <div className='navbar-start'>
-          {/* <div className='navbar-item has-dropdown is-hoverable'>
+          <div className='navbar-item has-dropdown is-hoverable'>
             <a className='navbar-link pl-5'>Ligas</a>
 
             <div className='navbar-dropdown'>
-              <a className='navbar-item has-text-grey-light'>Minor</a>
-              <a className='navbar-item has-text-grey-light'>Tradicional</a>
-              <a className='navbar-item has-text-grey-light'>Major</a>
+              <a
+                className='navbar-item'
+                href='https://empolgouesportshome.wordpress.com/2021/07/02/tabela-empoliga-major-a-2021-1/'
+              >
+                Major A
+              </a>
+              <a
+                className='navbar-item'
+                href='https://empolgouesportshome.wordpress.com/2021/07/05/tabela-e-classificacao-empoliga-major-b-2021-2/'
+              >
+                Major B
+              </a>
               <hr className='navbar-divider' />
-              <a className='navbar-item has-text-grey-light' style={{ pointerEvents: 'none' }}>
-                Wild Rift
+              <a
+                className='navbar-item'
+                href='https://empolgouesportshome.wordpress.com/2020/11/27/oitavas-de-final-da-serie-c-da-empoliga-sao-definidos-confira-dias-horas-e-streams/'
+              >
+                Tradicional C
               </a>
             </div>
-          </div> */}
+          </div>
 
           <a className='navbar-item is-justify-content-center pl-5 pr-5' href='/equipes'>
             Equipes
