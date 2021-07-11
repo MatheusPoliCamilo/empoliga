@@ -265,7 +265,7 @@ export default function Index() {
               <div className='is-flex'>
                 <figure
                   className={`image ml-0 mt-0 mb-5 is-flex is-flex-direction-column is-justify-content-center has-background-grey-lighter grow-hover ${
-                    profilePicture ? '' : 'is-hidden'
+                    profile?.player?.profilePicture ? '' : 'is-hidden'
                   }`}
                   style={{
                     cursor: 'pointer',
@@ -280,7 +280,9 @@ export default function Index() {
                   }}
                   id='profile-picture'
                 >
-                  <img src={`${profilePicture}`} style={{ maxHeight: '20rem' }} />
+                  {profile?.player?.profilePicture && (
+                    <img src={`${profile?.player?.profilePicture}`} style={{ maxHeight: '20rem' }} />
+                  )}
                 </figure>
 
                 <form
@@ -289,8 +291,8 @@ export default function Index() {
                     minWidth: '20rem',
                     height: '20rem',
                   }}
-                  className={`is-flex is-flex-direction-column is-justify-content-center pl-6 pr-6 pb-6 mb-5 ml-4 mr-4 ${
-                    profile && profile.player.profilePicture ? 'is-hidden' : ''
+                  className={`is-flex is-flex-direction-column is-justify-content-center pb-6 mb-5 ml-4 mr-4 ${
+                    profile?.player?.profilePicture ? 'is-hidden' : ''
                   }`}
                   id='profile-picture-form'
                   onSubmit={(event) => {
@@ -300,89 +302,39 @@ export default function Index() {
                     button.classList.add('is-loading')
 
                     const form = document.querySelector('#profile-picture-form') as HTMLFormElement
-                    const profilePicture = document.querySelector('#profile-picture')
+                    const profilePictureInput = document.querySelector('#profile-picture')
 
                     const fileInput = document.querySelector('#profile') as HTMLInputElement
-                    if (fileInput.files.length > 0) {
-                      const file = (document.querySelector('#profile') as HTMLInputElement).files[0]
 
-                      const { publicRuntimeConfig } = getConfig()
-                      const formData = new FormData()
-                      formData.append('file', file)
-                      formData.append('upload_preset', publicRuntimeConfig.CLOUDINARY_UPLOAD_PRESET)
+                    fetch(`/api/players/${profile.player._id}`, {
+                      method: 'PATCH',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ profilePicture: fileInput.value }),
+                    })
+                      .then(() => {
+                        form.classList.add('is-hidden')
+                        profilePictureInput.classList.remove('is-hidden')
+                        button.disabled = false
+                        button.classList.remove('is-loading')
 
-                      fetch(publicRuntimeConfig.CLOUDINARY_URL, {
-                        method: 'POST',
-                        body: formData,
+                        setProfile({ ...profile, player: { ...profile.player, profilePicture } })
                       })
-                        .then((response) => response.json())
-                        .then(async (data) => {
-                          if (data.secure_url !== '') {
-                            await fetch(`/api/players/${profile.player._id}`, {
-                              method: 'PATCH',
-                              headers: {
-                                'Content-Type': 'application/json',
-                              },
-                              body: JSON.stringify({ profilePicture: data.secure_url }),
-                            })
-
-                            form.classList.add('is-hidden')
-                            profilePicture.classList.remove('is-hidden')
-                          }
-
-                          setProfilePicture(data.secure_url)
-
-                          button.disabled = false
-                          button.classList.remove('is-loading')
-                        })
-                        .catch((err) => {
-                          console.error(err)
-                          button.disabled = false
-                          button.classList.remove('is-loading')
-                        })
-                    }
+                      .catch((err) => {
+                        console.error(err)
+                        button.disabled = false
+                        button.classList.remove('is-loading')
+                      })
                   }}
                 >
-                  <div className='file is-centered is-boxed is-primary has-name'>
-                    <label className='file-label'>
-                      <input
-                        className='file-input'
-                        type='file'
-                        name='resume'
-                        id='profile'
-                        onChange={() => {
-                          const fileInput = document.querySelector('#profile') as HTMLInputElement
-
-                          if (fileInput.files.length > 0) {
-                            const fileName = document.querySelector('.file-name')
-                            fileName.textContent = fileInput.files[0].name
-                          }
-                        }}
-                      />
-                      <span className='file-cta'>
-                        <span className='file-icon'>
-                          <svg
-                            aria-hidden='true'
-                            focusable='false'
-                            data-prefix='fas'
-                            data-icon='upload'
-                            role='img'
-                            xmlns='http://www.w3.org/2000/svg'
-                            viewBox='0 0 512 512'
-                            className='svg-inline--fa fa-upload fa-w-16 fa-3x'
-                          >
-                            <path
-                              fill='currentColor'
-                              d='M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z'
-                              className=''
-                            />
-                          </svg>
-                        </span>
-                        <span className='file-label'>Foto de perfil</span>
-                      </span>
-                      <span className='file-name'>Escolha a foto de perfil</span>
-                    </label>
-                  </div>
+                  <input
+                    type='text'
+                    id='profile'
+                    className='input is-large'
+                    value={profilePicture}
+                    onChange={(event) => setProfilePicture(event.target.value)}
+                  />
 
                   <div className='field is-grouped is-grouped-centered mt-2'>
                     <div className='control'>
@@ -538,8 +490,6 @@ export default function Index() {
                       const button = document.querySelector('#role-save') as HTMLButtonElement
                       button.disabled = true
                       button.classList.add('is-loading')
-
-                      console.log(role)
 
                       await fetch(`/api/players/${profile.player._id}`, {
                         method: 'PATCH',
