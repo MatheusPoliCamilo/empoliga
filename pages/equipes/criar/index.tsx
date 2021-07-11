@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Navbar } from '../../../components/navbar'
 import Cookie from 'js-cookie'
-import getConfig from 'next/config'
 
 export default function Index() {
   const [currentUser, setCurrentUser] = useState({ _id: '' })

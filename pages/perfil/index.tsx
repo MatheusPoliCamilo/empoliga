@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/navbar'
 import Cookie from 'js-cookie'
 import { addDays, parseISO, getYear, differenceInYears } from 'date-fns'
-import getConfig from 'next/config'
 import Image from 'next/image'
 import { generateRankString } from '../../services/generateRankString'
 
@@ -1004,7 +1003,7 @@ export default function Index() {
                       minWidth: '20rem',
                       height: '20rem',
                     }}
-                    className={`is-flex is-flex-direction-column is-justify-content-center pl-6 pr-6 pb-6 mb-5 ml-6 mr-6 ${
+                    className={`is-flex is-flex-direction-column is-justify-content-center pb-6 mb-5 ml-6 mr-6 ${
                       profile && profile.player.setupPhoto ? 'is-hidden' : ''
                     }`}
                     id='setup-photo-form'
@@ -1019,88 +1018,36 @@ export default function Index() {
 
                       const fileInput = document.querySelector('#setup-photo-input') as HTMLInputElement
 
-                      if (fileInput.files.length > 0) {
-                        const file = fileInput.files[0]
+                      fetch(`/api/players/${profile.player._id}`, {
+                        method: 'PATCH',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ setupPhoto: fileInput.value }),
+                      })
+                        .then(() => {
+                          form.classList.add('is-hidden')
+                          setupPhoto.classList.remove('is-hidden')
 
-                        const { publicRuntimeConfig } = getConfig()
-                        const formData = new FormData()
-                        formData.append('file', file)
-                        formData.append('upload_preset', publicRuntimeConfig.CLOUDINARY_UPLOAD_PRESET)
-
-                        fetch(publicRuntimeConfig.CLOUDINARY_URL, {
-                          method: 'POST',
-                          body: formData,
+                          setProfile({ ...profile, player: { ...profile.player, setupPhoto: fileInput.value } })
                         })
-                          .then((response) => response.json())
-                          .then(async (data) => {
-                            if (data.secure_url !== '') {
-                              await fetch(`/api/players/${profile.player._id}`, {
-                                method: 'PATCH',
-                                headers: {
-                                  'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ setupPhoto: data.secure_url }),
-                              })
-
-                              form.classList.add('is-hidden')
-                              setupPhoto.classList.remove('is-hidden')
-                            }
-
-                            setSetupPhoto(data.secure_url)
-
-                            button.disabled = false
-                            button.classList.remove('is-loading')
-                          })
-                          .catch((err) => {
-                            console.error(err)
-                            button.disabled = false
-                            button.classList.remove('is-loading')
-                          })
-                      }
+                        .catch((error) => {
+                          console.error(error)
+                        })
+                        .then(() => {
+                          button.disabled = false
+                          button.classList.remove('is-loading')
+                        })
                     }}
                   >
-                    <div className='file is-centered is-boxed is-primary has-name'>
-                      <label className='file-label'>
-                        <input
-                          className='file-input'
-                          type='file'
-                          name='resume'
-                          id='setup-photo-input'
-                          onChange={() => {
-                            const fileInput = document.querySelector('#setup-photo-input') as HTMLInputElement
-
-                            if (fileInput.files.length > 0) {
-                              const fileName = document.querySelector('#setup-photo-name')
-                              fileName.textContent = fileInput.files[0].name
-                            }
-                          }}
-                        />
-                        <span className='file-cta'>
-                          <span className='file-icon'>
-                            <svg
-                              aria-hidden='true'
-                              focusable='false'
-                              data-prefix='fas'
-                              data-icon='upload'
-                              role='img'
-                              xmlns='http://www.w3.org/2000/svg'
-                              viewBox='0 0 512 512'
-                              className='svg-inline--fa fa-upload fa-w-16 fa-3x'
-                            >
-                              <path
-                                fill='currentColor'
-                                d='M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z'
-                                className=''
-                              />
-                            </svg>
-                          </span>
-                          <span className='file-label'>Foto do setup</span>
-                        </span>
-                        <span id='setup-photo-name' className='file-name'>
-                          Escolha a foto do setup
-                        </span>
-                      </label>
-                    </div>
+                    <label className='label'>Link da foto do setup</label>
+                    <input
+                      className='input'
+                      type='text'
+                      id='setup-photo-input'
+                      onChange={(event) => setSetupPhoto(event.target.value)}
+                      placeholder='Link da foto do setup'
+                    />
 
                     <div className='field is-grouped is-grouped-centered mt-2'>
                       <div className='control'>
